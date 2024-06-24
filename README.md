@@ -1,1 +1,0 @@
-# inventori_app
