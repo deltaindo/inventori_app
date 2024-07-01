@@ -34,7 +34,7 @@ class Dashboard extends CI_Controller
         }
 
         // variabel global
-        $this->gudang = $this->session->userdata('id_gudang');
+        $this->kantor = $this->session->userdata('id_kantor');
     }
     public function index()
     {
@@ -52,15 +52,15 @@ class Dashboard extends CI_Controller
             $this->pralatan_praktek();
         } else {
             $data['tittle'] = 'Daftar Produk';
-            $data['produk'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'keterangan' => $this->input->post('kalibrasi'), 'kategori' => 'praktik'])->result_array();
+            $data['produk'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'keterangan' => $this->input->post('kalibrasi'), 'kategori' => 'praktik'])->result_array();
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang]);
+            $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor]);
             $data['total_assets'] = $query->row()->harga;
 
 
             $data['kalibrasi'] = $result->row()->total;
 
-            $data['total_alat'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang])->num_rows();
+            $data['total_alat'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor])->num_rows();
             $this->load->view('template/header', $data);
             $this->load->view('template/sidebar');
             $this->load->view('dashboard/daftar_produk', $data);
@@ -74,28 +74,28 @@ class Dashboard extends CI_Controller
         $this->form_validation->set_rules('kalibrasi', 'kalibrasi', 'required');
         if ($this->form_validation->run() == FALSE) {
             $data['tittle'] = 'Pralatan Riksa Uji';
-            $data['produk'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'kategori' => 'riksa'])->result_array();
+            $data['produk'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'kategori' => 'riksa'])->result_array();
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'kategori' => 'riksa']);
+            $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'kategori' => 'riksa']);
             $data['total_assets'] = $query->row()->harga;
 
 
             $data['kalibrasi'] = $result->row()->total;
-            $data['total_alat'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'kategori' => 'riksa'])->num_rows();
+            $data['total_alat'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'kategori' => 'riksa'])->num_rows();
             $this->load->view('template/header', $data);
             $this->load->view('template/sidebar');
             $this->load->view('dashboard/pralatan_riksa_uji', $data);
             $this->load->view('template/footer');
         } else {
             $data['tittle'] = 'Pralatan Riksa Uji';
-            $data['produk'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'keterangan' => $this->input->post('kalibrasi'), 'kategori' => 'riksa'])->result_array();
+            $data['produk'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'keterangan' => $this->input->post('kalibrasi'), 'kategori' => 'riksa'])->result_array();
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'kategori' => 'riksa']);
+            $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'kategori' => 'riksa']);
             $data['total_assets'] = $query->row()->harga;
 
 
             $data['kalibrasi'] = $result->row()->total;
-            $data['total_alat'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'kategori' => 'riksa'])->num_rows();
+            $data['total_alat'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'kategori' => 'riksa'])->num_rows();
             $this->load->view('template/header', $data);
             $this->load->view('template/sidebar');
             $this->load->view('dashboard/pralatan_riksa_uji', $data);
@@ -106,16 +106,16 @@ class Dashboard extends CI_Controller
     public function pralatan_praktek()
     {
         $data['tittle'] = 'Pralatan Praktik';
-        $data['produk'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'kategori' => 'praktik'])->result_array();
+        $data['produk'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'kategori' => 'praktik'])->result_array();
         $this->db->select_sum('harga');
-        $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'kategori' => 'praktik']);
+        $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'kategori' => 'praktik']);
         $data['total_assets'] = $query->row()->harga;
 
-        // $query = "SELECT COUNT(*) as total FROM pralatan_praktek WHERE id_gudang = $this->gudang AND keterangan = 'Habis' AND kategori = 'praktik'";
+        // $query = "SELECT COUNT(*) as total FROM pralatan_praktek WHERE id_gudang = $this->kantor AND keterangan = 'Habis' AND kategori = 'praktik'";
         // $result = $this->db->query($query);
         // $data['kalibrasi'] = $result->row()->total;
 
-        $data['total_alat'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang, 'kategori' => 'praktik'])->num_rows();
+        $data['total_alat'] = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor, 'kategori' => 'praktik'])->num_rows();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/daftar_produk', $data);
@@ -253,7 +253,7 @@ class Dashboard extends CI_Controller
                             'tgl_beli'      => $tanggal_beli,
                             'lokasi_barang' => $lokasi_barang,
                             'keterangan'    => $keterangan,
-                            'id_gudang'     => $this->gudang
+                            'id_gudang'     => $this->kantor
                         );
                     } else {
                         continue;
@@ -373,7 +373,7 @@ class Dashboard extends CI_Controller
                             'lokasi_barang'             => $lokasi_barang,
                             'keterangan'                => $hasil,
                             'kategori'                  => $kategori,
-                            'id_gudang'                 => $this->gudang
+                            'id_gudang'                 => $this->kantor
                         );
                     } else {
                         continue;
@@ -443,7 +443,7 @@ class Dashboard extends CI_Controller
                     'vendor' => $vendor,
                     'keterangan' => ($jumlah < 1) ? 'Habis' : 'Tersedia',
                     'kategori' => $kategori,
-                    'id_gudang' => $this->gudang
+                    'id_gudang' => $this->kantor
                 );
                 // }
             }
@@ -463,14 +463,14 @@ class Dashboard extends CI_Controller
     public function perlengkapan_kantor()
     {
         $data['tittle'] = 'Peralatan Kantor';
-        $data['produk'] = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->gudang])->result_array();
+        $data['produk'] = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->kantor])->result_array();
         $this->db->select_sum('harga');
-        $query = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->gudang]);
+        $query = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->kantor]);
         $data['total'] = $query->row()->harga;
         $this->db->select_sum('harga');
-        $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang]);
+        $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor]);
         $data['total_kantor'] = $query->row()->harga;
-        $data['total_alat'] = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->gudang])->num_rows();
+        $data['total_alat'] = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->kantor])->num_rows();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/perlengkapan_kantor', $data);
@@ -483,11 +483,11 @@ class Dashboard extends CI_Controller
         if ($this->form_validation->run() == FALSE) {
             $data['tittle'] = 'Perlengkapan Peserta';
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->gudang, 'kategori' => 'peserta']);
+            $query = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->kantor, 'kategori' => 'peserta']);
             $data['total_assets'] = $query->row()->harga;
 
             $data['produk'] = $this->stok->getStok("peserta");
-            $data['total_alat'] = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->gudang, 'kategori' => 'peserta'])->num_rows();
+            $data['total_alat'] = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->kantor, 'kategori' => 'peserta'])->num_rows();
             $this->load->view('template/header', $data);
             $this->load->view('template/sidebar');
             $this->load->view('dashboard/perlengkapan_peserta', $data);
@@ -495,9 +495,9 @@ class Dashboard extends CI_Controller
         } else {
             $data['tittle'] = 'Perlengkapan Peserta';
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->gudang, 'kategori' => 'peserta']);
+            $query = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->kantor, 'kategori' => 'peserta']);
             $data['total_assets'] = $query->row()->harga;
-            $data['total_alat'] = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->gudang, 'kategori' => 'peserta'])->num_rows();
+            $data['total_alat'] = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->kantor, 'kategori' => 'peserta'])->num_rows();
             $data['produk'] = $this->stok->getStokMonth($this->input->post('tanggal'), 'peserta');
             $this->load->view('template/header', $data);
             $this->load->view('template/sidebar');
@@ -514,9 +514,9 @@ class Dashboard extends CI_Controller
 
             $data['tittle'] = 'Perlengkapan ATK';
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->gudang, 'kategori' => 'atk']);
+            $query = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->kantor, 'kategori' => 'atk']);
             $data['total_assets'] = $query->row()->harga;
-            $data['total_alat'] = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->gudang, 'kategori' => 'atk'])->num_rows();
+            $data['total_alat'] = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->kantor, 'kategori' => 'atk'])->num_rows();
             $data['produk'] = $this->stok->getStok("ATK");
             $this->load->view('template/header', $data);
             $this->load->view('template/sidebar');
@@ -525,9 +525,9 @@ class Dashboard extends CI_Controller
         } else {
             $data['tittle'] = 'Perlengkapan ATK';
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->gudang, 'kategori' => 'atk']);
+            $query = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->kantor, 'kategori' => 'atk']);
             $data['total_assets'] = $query->row()->harga;
-            $data['total_alat'] = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->gudang, 'kategori' => 'atk'])->num_rows();
+            $data['total_alat'] = $this->db->get_where('perlengkapan_peserta', ['id_gudang' => $this->kantor, 'kategori' => 'atk'])->num_rows();
             $bulan = date('Y-m', strtotime($this->input->post('tanggal')));
             $data['produk'] = $this->stok->getStokMonth($bulan, "ATK");
             $this->load->view('template/header', $data);
@@ -562,10 +562,10 @@ class Dashboard extends CI_Controller
         $data['peminjaman'] = $this->db->get()->row()->jumlah;
         $data['kembali'] = $this->db->get_where('peminjaman', ['status' => 'sudah dikembalikan'])->num_rows();
         $this->db->select_sum('harga');
-        $query = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->gudang]);
+        $query = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->kantor]);
         $data['total'] = $query->row()->harga;
         $this->db->select_sum('harga');
-        $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang]);
+        $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor]);
         $data['total_kantor'] = $query->row()->harga;
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -587,17 +587,17 @@ class Dashboard extends CI_Controller
                         INNER JOIN perlengkapan_peserta ON detail_barang_keluar.kode_barang = perlengkapan_peserta.kode_barang";
             $bulan = date('Y-m', strtotime($this->input->post('tanggal')));
             $data['produk'] = $this->db
-                ->where('id_gudang', $this->gudang)
+                ->where('id_gudang', $this->kantor)
                 ->like('tanggal_keluar', $bulan)
                 ->order_by('tanggal_keluar', 'ASC')
                 ->get('barang_keluar')
                 ->result_array();
 
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->gudang]);
+            $query = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->kantor]);
             $data['total'] = $query->row()->harga;
             $this->db->select_sum('harga');
-            $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang]);
+            $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor]);
             $data['total_kantor'] = $query->row()->harga;
 
             $this->db->select_sum('jumlah');
@@ -624,13 +624,13 @@ class Dashboard extends CI_Controller
                         FROM barang_keluar 
                         INNER JOIN detail_barang_keluar ON barang_keluar.id = detail_barang_keluar.id_user
                         INNER JOIN perlengkapan_peserta ON detail_barang_keluar.kode_barang = perlengkapan_peserta.kode_barang";
-        $data['produk'] = $this->db->order_by('tanggal_keluar', 'ASC')->get_where('barang_keluar', ['id_gudang' => $this->gudang])->result_array();
+        $data['produk'] = $this->db->order_by('tanggal_keluar', 'ASC')->get_where('barang_keluar', ['id_gudang' => $this->kantor])->result_array();
 
         $this->db->select_sum('harga');
-        $query = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->gudang]);
+        $query = $this->db->get_where('pralatan_kantor', ['id_gudang' => $this->kantor]);
         $data['total'] = $query->row()->harga;
         $this->db->select_sum('harga');
-        $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->gudang]);
+        $query = $this->db->get_where('pralatan_praktek', ['id_gudang' => $this->kantor]);
         $data['total_kantor'] = $query->row()->harga;
 
         $this->db->select_sum('jumlah');
@@ -655,7 +655,7 @@ class Dashboard extends CI_Controller
         $this->form_validation->set_rules('kembali', 'KEMBALI', 'required');
         if ($this->form_validation->run() == FALSE) {
             $data['tittle'] = 'Tambah Peminjaman';
-            $data['produk'] = $this->db->get_where('pralatan_praktek', ['jumlah >=', 1, 'id_gudang' => $this->gudang])->result_array();
+            $data['produk'] = $this->db->get_where('pralatan_praktek', ['jumlah >=', 1, 'id_gudang' => $this->kantor])->result_array();
             $this->db->select_sum('harga');
             $query = $this->db->get('pralatan_kantor');
             $data['total'] = $query->row()->harga;
@@ -732,7 +732,7 @@ class Dashboard extends CI_Controller
                 'nama' => $this->input->post('nama'),
                 'tanggal_keluar' => $this->input->post('pinjam'),
                 'status' => 'Sukses',
-                'id_gudang' => $this->gudang
+                'id_gudang' => $this->kantor
             ];
 
             $this->db->insert('barang_keluar', $data);
@@ -909,7 +909,7 @@ class Dashboard extends CI_Controller
             $data = [
                 'kode_barang' => $i
             ];
-            $this->db->where('id_gudang', $this->gudang);
+            $this->db->where('id_gudang', $this->kantor);
             $this->db->delete('pralatan_kantor', $data);
         }
         echo 'sukses';
@@ -1205,7 +1205,7 @@ class Dashboard extends CI_Controller
         $data = array(
             'jumlah_barang_keluar' => 0,
         );
-        $this->db->where('gudang', $this->gudang);
+        $this->db->where('gudang', $this->kantor);
         $this->db->update('perlengkapan_peserta', $data);
         $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data Berhasil di Reset 👌</div>');
         redirect($_SERVER['HTTP_REFERER']);
@@ -1324,7 +1324,7 @@ class Dashboard extends CI_Controller
             'jumlah_barang_keluar' => "",
             'stok_akhir' => "",
             'kategori' => $this->input->post('kategori'),
-            'id_gudang' => $this->gudang
+            'id_gudang' => $this->kantor
         ];
 
         $this->db->insert('perlengkapan_peserta', $data);
@@ -1343,11 +1343,94 @@ class Dashboard extends CI_Controller
 
     public function list_admin()
     {
-        $data['tittle'] = 'List Admin';
-        // $data['user'] = $this->db->get('user')->result_array();
+        $data['tittle'] = 'List Data Admin | Inventori App';
+
+        $this->db->select('user.id, user.Nama, user.email, master_kantor.nama_kantor');
+        $this->db->from('user');
+        $this->db->join('master_kantor', 'user.id_kantor = master_kantor.id');
+        $this->db->order_by('user.id', 'DESC');
+        $data['admins'] = $this->db->get()->result_array();
+
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
-        $this->load->view('auth/list_admin', $data);
+        $this->load->view('auth/admin/list', $data);
         $this->load->view('template/footer');
+    }
+
+    public function master_kantor()
+    {
+        $data['tittle'] = 'List Data Kantor | Inventori App';
+
+        $this->db->order_by('id', 'DESC');
+        $data['kantor'] = $this->db->get('master_kantor')->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/kantor/list', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_kantor()
+    {
+        $data['tittle'] = 'Tambah Data Kantor | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/kantor/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_kantor()
+    {
+        $data = [
+            'nama_kantor'   => $this->input->post('nama_kantor'),
+            'keterangan'    => $this->input->post('keterangan_kantor')
+        ];
+        $this->db->insert('master_kantor', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kantor Berhasil di tambahkan</div>');
+        redirect('dashboard/master_kantor');
+    }
+
+    public function edit_kantor($id)
+    {
+        $data['tittle'] = 'Edit Data Kantor | Inventori App';
+        $data['kantor'] = $this->db->get_where('master_kantor', ['id' => $id])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/kantor/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_kantor($id)
+    {
+        $data = [
+            'nama_kantor'   => $this->input->post('nama_kantor'),
+            'keterangan'    => $this->input->post('keterangan_kantor')
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('master_kantor', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kantor Berhasil di ubah</div>');
+        redirect('dashboard/master_kantor');
+    }
+
+    public function delete_office($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('master_kantor');
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data Kantor Berhasil di hapus</div>');
+        redirect('dashboard/master_kantor');
+    }
+
+    public function hapus_bulk_kantor()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('master_kantor', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Daftar Kantor Berhasil di Hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Daftar Kantor yang dipilih untuk dihapus</div>');
+        }
+        redirect('dashboard/master_kantor');
     }
 }

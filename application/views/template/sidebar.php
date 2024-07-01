@@ -30,8 +30,8 @@
       <div class="collapse" id="master">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
-            <a class="nav-link" href="">
-              Data
+            <a class="nav-link" href="<?= base_url('dashboard/master_kantor'); ?>">
+              Master Kantor
             </a>
           </li>
         </ul>

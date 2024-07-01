@@ -41,7 +41,7 @@
                 <div class="card">
                   <div class="card-body">
                     <h4 class="card-title">
-                      Daftar <?= $tittle; ?> <?= ($this->gudang == 1) ? 'DIP' : 'DNP'; ?>
+                      Daftar <?= $tittle; ?> <?= ($this->kantor == 1) ? 'DIP' : 'DNP'; ?>
                     </h4>
                     <form action="<?= base_url('dashboard/opname_kantor'); ?>" method="post">
                       <button class="btn btn-primary btn-sm text-white" type="submit">

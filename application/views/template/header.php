@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="<?= base_url('assets/vendors/typicons/typicons.css'); ?>" />
   <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 
-
+  <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.11.0/dist/sweetalert2.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.2.0/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/dataTables.bootstrap5.min.css">
@@ -55,7 +55,7 @@
       <ul class="navbar-nav">
         <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
           <h1 class="welcome-text">
-            Selamat Pagi, <span class="text-black fw-bold"><?= ($this->gudang == 1) ? 'DNP' : 'DIP'; ?></span>
+            Selamat Pagi, <span class="text-black fw-bold"><?= ($this->kantor == 1) ? 'DNP' : 'DIP'; ?></span>
           </h1>
           <h3 class="welcome-sub-text">
             Total Seluruh Aset : <span class="text-danger">Rp. <?= number_format($total + $total_kantor, 0, ',', '.'); ?></span>
