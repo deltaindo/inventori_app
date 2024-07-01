@@ -220,21 +220,20 @@ class Dashboard extends CI_Controller
             $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
         }
 
-
-        $spreedsheet = $reader->load($_FILES['file']['tmp_name']);
-        $sheetdata = $spreedsheet->getActiveSheet()->toArray();
-        $jumlahsheet = count($sheetdata);
+        $spreedsheet    = $reader->load($_FILES['file']['tmp_name']);
+        $sheetdata      = $spreedsheet->getActiveSheet()->toArray();
+        $jumlahsheet    = count($sheetdata);
 
         if ($jumlahsheet > 1) {
             $data = array();
             for ($i = 1; $i < $jumlahsheet; $i++) {
-                $kode_barang = isset($sheetdata[$i][1]) ? $sheetdata[$i][1] : '';
-                $nama_barang = isset($sheetdata[$i][2]) ? $sheetdata[$i][2] : '';
-                $jumlah = isset($sheetdata[$i][3]) ? $sheetdata[$i][3] : '';
-                $nilai_beli = isset($sheetdata[$i][4]) ? $sheetdata[$i][4] : '';
-                $tanggal_beli = isset($sheetdata[$i][5]) ? $sheetdata[$i][5] : '';
-                $lokasi_barang = isset($sheetdata[$i][6]) ? $sheetdata[$i][6] : '';
-                $keterangan = isset($sheetdata[$i][7]) ? $sheetdata[$i][7] : '';
+                $kode_barang    = isset($sheetdata[$i][1]) ? $sheetdata[$i][1] : '';
+                $nama_barang    = isset($sheetdata[$i][2]) ? $sheetdata[$i][2] : '';
+                $jumlah         = isset($sheetdata[$i][3]) ? $sheetdata[$i][3] : '';
+                $nilai_beli     = isset($sheetdata[$i][4]) ? $sheetdata[$i][4] : '';
+                $tanggal_beli   = isset($sheetdata[$i][5]) ? $sheetdata[$i][5] : '';
+                $lokasi_barang  = isset($sheetdata[$i][6]) ? $sheetdata[$i][6] : '';
+                $keterangan     = isset($sheetdata[$i][7]) ? $sheetdata[$i][7] : '';
 
                 if (empty($nilai_beli)) {
                     $nilai_beli = 0;
@@ -247,15 +246,14 @@ class Dashboard extends CI_Controller
 
                     if (!$existing_data) {
                         $data[] = array(
-                            'kode_barang' => 'KTR-' . substr(uniqid(), -3) . $i,
-                            'nama_barang' => $nama_barang,
-                            'jumlah' => $jumlah,
-                            'harga' => $nilai_beli,
-                            'tgl_beli' => $tanggal_beli,
-
+                            'kode_barang'   => 'KTR-' . substr(uniqid(), -3) . $i,
+                            'nama_barang'   => $nama_barang,
+                            'jumlah'        => $jumlah,
+                            'harga'         => $nilai_beli,
+                            'tgl_beli'      => $tanggal_beli,
                             'lokasi_barang' => $lokasi_barang,
-                            'keterangan' => $keterangan,
-                            'id_gudang' => $this->gudang
+                            'keterangan'    => $keterangan,
+                            'id_gudang'     => $this->gudang
                         );
                     } else {
                         continue;
@@ -316,35 +314,32 @@ class Dashboard extends CI_Controller
         }
 
 
-        $spreedsheet = $reader->load($_FILES['file']['tmp_name']);
-        $sheetdata = $spreedsheet->getActiveSheet()->toArray();
-        $jumlahsheet = count($sheetdata);
+        $spreedsheet    = $reader->load($_FILES['file']['tmp_name']);
+        $sheetdata      = $spreedsheet->getActiveSheet()->toArray();
+        $jumlahsheet    = count($sheetdata);
 
         if ($jumlahsheet > 1) {
             $data = array();
             for ($i = 1; $i < $jumlahsheet; $i++) {
 
-                $kode_barang = isset($sheetdata[$i][1]) ? $sheetdata[$i][1] : '';
-                $nama_barang = isset($sheetdata[$i][2]) ? $sheetdata[$i][2] : '';
-                $jumlah = isset($sheetdata[$i][3]) ? $sheetdata[$i][3] : '';
-                $harga = isset($sheetdata[$i][4]) ? $sheetdata[$i][4] : '';
-                $tanggal_beli = isset($sheetdata[$i][5]) ? $sheetdata[$i][5] : '';
+                $kode_barang            = isset($sheetdata[$i][1]) ? $sheetdata[$i][1] : '';
+                $nama_barang            = isset($sheetdata[$i][2]) ? $sheetdata[$i][2] : '';
+                $jumlah                 = isset($sheetdata[$i][3]) ? $sheetdata[$i][3] : '';
+                $harga                  = isset($sheetdata[$i][4]) ? $sheetdata[$i][4] : '';
+                $tanggal_beli           = isset($sheetdata[$i][5]) ? $sheetdata[$i][5] : '';
 
-                $tanggal_kalibrasi = isset($sheetdata[$i][6]) ? $sheetdata[$i][6] : '';
+                $tanggal_kalibrasi      = isset($sheetdata[$i][6]) ? $sheetdata[$i][6] : '';
                 $masa_berlaku_kalibrasi = isset($sheetdata[$i][7]) ? $sheetdata[$i][7] : '';
-                $lokasi_barang = isset($sheetdata[$i][8]) ? $sheetdata[$i][8] : '';
-                $keterangan = isset($sheetdata[$i][9]) ? $sheetdata[$i][9] : '';
-                $kategori = isset($sheetdata[$i][10]) ? $sheetdata[$i][10] : '';
+                $lokasi_barang          = isset($sheetdata[$i][8]) ? $sheetdata[$i][8] : '';
+                $keterangan             = isset($sheetdata[$i][9]) ? $sheetdata[$i][9] : '';
+                $kategori               = isset($sheetdata[$i][10]) ? $sheetdata[$i][10] : '';
 
-
-
-
-                $hasil = '';
-                $beli = strtotime($tanggal_beli);
-                $tanggal_beli = date('Y-m-d', $beli);
-                $kalibrasi = strtotime($tanggal_kalibrasi);
-                $tanggal_kalibrasi = date('Y-m-d', $kalibrasi);
-                $berlaku = strtotime($masa_berlaku_kalibrasi);
+                $hasil                  = '';
+                $beli                   = strtotime($tanggal_beli);
+                $tanggal_beli           = date('Y-m-d', $beli);
+                $kalibrasi              = strtotime($tanggal_kalibrasi);
+                $tanggal_kalibrasi      = date('Y-m-d', $kalibrasi);
+                $berlaku                = strtotime($masa_berlaku_kalibrasi);
                 $masa_berlaku_kalibrasi = date('Y-m-d', $berlaku);
 
                 // format tanggal
@@ -368,17 +363,17 @@ class Dashboard extends CI_Controller
 
                     if (!$existing_data) {
                         $data[] = array(
-                            'kode_barang' => 'BRG-' . substr(uniqid(), -3) . $i,
-                            'nama_barang' => $nama_barang,
-                            'jumlah' => $jumlah,
-                            'tgl_beli' => $tanggal_beli,
-                            'harga' => $harga,
-                            'tanggal_kalibrasi' => $tanggal_kalibrasi,
-                            'masa_berlaku_kalibrasi' => $masa_berlaku_kalibrasi,
-                            'lokasi_barang' => $lokasi_barang,
-                            'keterangan' => $hasil,
-                            'kategori' => $kategori,
-                            'id_gudang' => $this->gudang
+                            'kode_barang'               => 'BRG-' . substr(uniqid(), -3) . $i,
+                            'nama_barang'               => $nama_barang,
+                            'jumlah'                    => $jumlah,
+                            'tgl_beli'                  => $tanggal_beli,
+                            'harga'                     => $harga,
+                            'tanggal_kalibrasi'         => $tanggal_kalibrasi,
+                            'masa_berlaku_kalibrasi'    => $masa_berlaku_kalibrasi,
+                            'lokasi_barang'             => $lokasi_barang,
+                            'keterangan'                => $hasil,
+                            'kategori'                  => $kategori,
+                            'id_gudang'                 => $this->gudang
                         );
                     } else {
                         continue;
