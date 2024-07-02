@@ -11,7 +11,7 @@
       <div class="collapse" id="auth">
         <ul class="nav flex-column sub-menu">
           <li class="nav-item">
-            <a class="nav-link" href="<?= base_url('dashboard/list_admin'); ?>">
+            <a class="nav-link" href="<?= base_url('dashboard/admin'); ?>">
               List Admin
             </a>
           </li>
@@ -32,6 +32,16 @@
           <li class="nav-item">
             <a class="nav-link" href="<?= base_url('dashboard/master_kantor'); ?>">
               Master Kantor
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('dashboard/master_lokasi'); ?>">
+              Master Lokasi
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('dashboard/master_satuan'); ?>">
+              Master Satuan
             </a>
           </li>
         </ul>

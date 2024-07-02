@@ -2,19 +2,31 @@
     <div class="content-wrapper">
         <div class="row">
             <div class="col-sm-12 mt-2">
+                <div class="home-tab">
+                    <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+                        <div>
+                            <div class="btn-wrapper">
+                                <a href="" class="btn btn-primary text-white me-0">
+                                    <i class="ti-cloud-down"></i>
+                                    Download Excel
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="row tabel-produk mt-2">
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
-                            <form id="bulk-delete-form" action="<?= base_url('dashboard/hapus_bulk_admin'); ?>" method="post">
+                            <form id="bulk-delete-form" action="<?= base_url('dashboard/delete_bulk_lokasi') ?>" method="post">
                                 <div class="card-body">
                                     <h4 class="card-title">
-                                        List Data Admin
+                                        List Data Lokasi
                                     </h4>
                                     <?= $this->session->userdata('pesan');  ?>
-                                    <a href="<?= base_url('dashboard/tambah_admin'); ?>" class="btn btn-primary text-white">
+                                    <a href="<?= base_url('dashboard/tambah_lokasi') ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
-                                    <button class="btn btn-danger text-white" type="button" onclick="deleteBulkAdmin()">
+                                    <button class="btn btn-danger text-white" type="button" onclick="deleteBulkLokasi()">
                                         Hapus Bulk
                                     </button>
                                     <div class="table-responsive overflow-visible mt-3">
@@ -29,13 +41,13 @@
                                                         No.
                                                     </th>
                                                     <th>
-                                                        Nama Admin
-                                                    </th>
-                                                    <th>
-                                                        Email Admin
-                                                    </th>
-                                                    <th>
                                                         Nama Kantor
+                                                    </th>
+                                                    <th>
+                                                        Nama Lokasi
+                                                    </th>
+                                                    <th>
+                                                        Keterangan
                                                     </th>
                                                     <th>
                                                         Action
@@ -44,29 +56,29 @@
                                             </thead>
                                             <tbody>
                                                 <?php $i = 1; ?>
-                                                <?php foreach ($admins as $admin) : ?>
+                                                <?php foreach ($lokasi as $location) : ?>
                                                     <tr>
                                                         <td>
-                                                            <input type="checkbox" id="check" name="id[]" value="<?= $admin['id']; ?>" class="form-check-input check" aria-checked="false" />
+                                                            <input type="checkbox" id="check" name="id[]" value="<?= $location['id'] ?>" class="form-check-input check" aria-checked="false" />
                                                             <i class="input-helper"></i>
                                                         </td>
                                                         <td>
-                                                            <?= $i++; ?>
+                                                            <?= $i++ ?>
                                                         </td>
                                                         <td>
-                                                            <?= $admin['Nama']; ?>
+                                                            <?= $location['nama_kantor'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $admin['email']; ?>
+                                                            <?= $location['nama_lokasi'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $admin['nama_kantor']; ?>
+                                                            <?= $location['keterangan'] ?>
                                                         </td>
                                                         <td>
-                                                            <a href="<?= base_url('dashboard/edit_admin/') . $admin['id']; ?>" class="btn btn-lg btn-outline-primary">
+                                                            <a href="<?= base_url('dashboard/edit_lokasi/' . $location['id']) ?>" class="btn btn-lg btn-outline-primary">
                                                                 Edit
                                                             </a>
-                                                            <button class="btn btn-lg btn-danger" type="button" onclick="deleteAdmin(<?= $admin['id']; ?>)">
+                                                            <button class="btn btn-lg btn-danger" type="button" onclick="deleteLokasi(<?= $location['id']; ?>)">
                                                                 Hapus
                                                             </button>
                                                         </td>

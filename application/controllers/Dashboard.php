@@ -1341,7 +1341,7 @@ class Dashboard extends CI_Controller
         redirect($_SERVER['HTTP_REFERER']);
     }
 
-    public function list_admin()
+    public function admin()
     {
         $data['tittle'] = 'List Data Admin | Inventori App';
 
@@ -1355,6 +1355,86 @@ class Dashboard extends CI_Controller
         $this->load->view('template/sidebar');
         $this->load->view('auth/admin/list', $data);
         $this->load->view('template/footer');
+    }
+
+    public function tambah_admin()
+    {
+        $data['tittle'] = 'Tambah Data Admin | Inventori App';
+        $data["kantor"] = $this->db->get('master_kantor')->result_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('auth/admin/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_admin()
+    {
+        $data = [
+            'id_kantor'     => $this->input->post('id_kantor'),
+            'Nama'          => $this->input->post('nama_admin'),
+            'email'         => $this->input->post('email_admin'),
+            'password'      => md5($this->input->post('password_admin')),
+            'image'         => 'https://i.pravatar.cc/150?img=33'
+        ];
+
+        $this->db->insert('user', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Admin Berhasil di tambahkan</div>');
+        redirect('dashboard/admin');
+    }
+
+    public function edit_admin($id)
+    {
+        $data['tittle'] = 'Edit Data Admin | Inventori App';
+        $data["kantor"] = $this->db->get('master_kantor')->result_array();
+        $data['admin']  = $this->db->get_where('user', ['id' => $id])->row_array();
+        $data['kantor'] = $this->db->get('master_kantor')->result_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('auth/admin/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_admin($id)
+    {
+        if ($this->input->post('password_admin') == null) {
+            $data = [
+                'id_kantor'     => $this->input->post('id_kantor'),
+                'Nama'          => $this->input->post('nama_admin'),
+                'email'         => $this->input->post('email_admin'),
+            ];
+        } else {
+            $data = [
+                'id_kantor'     => $this->input->post('id_kantor'),
+                'Nama'          => $this->input->post('nama_admin'),
+                'email'         => $this->input->post('email_admin'),
+                'password'      => md5($this->input->post('password_admin')),
+            ];
+        }
+        $this->db->where('id', $id);
+        $this->db->update('user', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Admin Berhasil di Update</div>');
+        redirect('dashboard/admin');
+    }
+
+    public function delete_admin($id)
+    {
+        $this->db->delete('user', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data Admin Berhasil di Hapus</div>');
+        redirect('dashboard/admin');
+    }
+
+    public function hapus_bulk_admin()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('user', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Daftar Admin Berhasil di Hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Daftar Admin yang dipilih untuk dihapus</div>');
+        }
+        redirect('dashboard/admin');
     }
 
     public function master_kantor()
@@ -1432,5 +1512,111 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Daftar Kantor yang dipilih untuk dihapus</div>');
         }
         redirect('dashboard/master_kantor');
+    }
+
+    public function master_lokasi()
+    {
+        $data['tittle'] = 'List Data Lokasi | Inventori App';
+
+        $this->db->select('master_lokasi.id, master_kantor.nama_kantor, master_lokasi.nama_lokasi, master_lokasi.keterangan');
+        $this->db->from('master_lokasi');
+        $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+        $this->db->order_by('master_lokasi.id', 'DESC');
+        $data['lokasi'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/lokasi/list', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_lokasi()
+    {
+        $data['tittle'] = 'List Data Lokasi | Inventori App';
+        $data['kantor'] = $this->db->get('master_kantor')->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/lokasi/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_lokasi()
+    {
+        $data = [
+            'id_kantor'     => $this->input->post('id_kantor'),
+            'nama_lokasi'   => $this->input->post('nama_lokasi'),
+            'keterangan'    => $this->input->post('keterangan_lokasi')
+        ];
+        $this->db->insert('master_lokasi', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Lokasi Berhasil di tambahkan</div>');
+        redirect('dashboard/master_lokasi');
+    }
+
+    public function edit_lokasi($id)
+    {
+        $data['tittle'] = 'Edit Data Lokasi | Inventori App';
+        $data['kantor'] = $this->db->get('master_kantor')->result_array();
+        $data['lokasi'] = $this->db->get_where('master_lokasi', ['id' => $id])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/lokasi/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_lokasi($id)
+    {
+        $data = [
+            'id_kantor'     => $this->input->post('id_kantor'),
+            'nama_lokasi'   => $this->input->post('nama_lokasi'),
+            'keterangan'    => $this->input->post('keterangan_lokasi')
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('master_lokasi', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Lokasi Berhasil di ubah</div>');
+        redirect('dashboard/master_lokasi');
+    }
+
+    public function delete_lokasi($id)
+    {
+        $this->db->delete('master_lokasi', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data Lokasi Berhasil di hapus</div>');
+        redirect('dashboard/master_lokasi');
+    }
+
+    public function delete_bulk_lokasi()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('master_lokasi', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Daftar Lokasi Berhasil di Hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Daftar Lokasi yang dipilih untuk dihapus</div>');
+        }
+        redirect('dashboard/master_lokasi');
+    }
+
+    public function master_satuan()
+    {
+        $data['tittle'] = 'List Data Satuan | Inventori App';
+
+        $this->db->order_by('id', 'DESC');
+        $data['satuan'] = $this->db->get('master_satuan')->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/satuan/list', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_satuan()
+    {
+        $data['tittle'] = 'Tambah Data Satuan | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/satuan/add', $data);
+        $this->load->view('template/footer');
     }
 }
