@@ -1749,4 +1749,150 @@ class Dashboard extends CI_Controller
         }
         redirect('dashboard/master_merek');
     }
+
+    public function master_kategori()
+    {
+        $data['tittle'] = 'List Data Kategori | Inventori App';
+        $this->db->order_by('id', 'DESC');
+        $data['kategori'] = $this->db->get('master_kategori')->result_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/kategori/list', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_kategori()
+    {
+        $data['tittle'] = 'Tambah Data Kategori | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/kategori/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_kategori()
+    {
+        $data = [
+            'nama_kategori' => $this->input->post('nama_kategori'),
+            'keterangan'    => $this->input->post('keterangan_kategori')
+        ];
+        $this->db->insert('master_kategori', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kategori Berhasil di tambahkan</div>');
+        redirect('dashboard/master_kategori');
+    }
+
+    public function edit_kategori($id)
+    {
+        $data['tittle'] = 'Edit Data Kategori | Inventori App';
+        $data['kategori'] = $this->db->get_where('master_kategori', ['id' => $id])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/kategori/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_kategori($id)
+    {
+        $data = [
+            'nama_kategori' => $this->input->post('nama_kategori'),
+            'keterangan'    => $this->input->post('keterangan_kategori')
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('master_kategori', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kategori Berhasil di ubah</div>');
+        redirect('dashboard/master_kategori');
+    }
+
+    public function delete_kategori($id)
+    {
+        $this->db->delete('master_kategori', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data Kategori Berhasil di hapus</div>');
+        redirect('dashboard/master_kategori');
+    }
+
+    public function hapus_bulk_kategori()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('master_kategori', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Daftar Kategori Berhasil di Hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Daftar Kategori yang dipilih untuk dihapus</div>');
+        }
+        redirect('dashboard/master_kategori');
+    }
+
+    public function master_barang()
+    {
+        $data['tittle'] = 'List Data Barang | Inventori App';
+        $this->db->order_by('id', 'DESC');
+        $data['barang'] = $this->db->get('master_barang')->result_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/barang/list', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_barang()
+    {
+        $data['tittle'] = 'Tambah Data Barang | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/barang/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_barang()
+    {
+        $data = [
+            'nama_barang' => $this->input->post('nama_barang')
+        ];
+        $this->db->insert('master_barang', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Barang Berhasil di tambahkan</div>');
+        redirect('dashboard/master_barang');
+    }
+
+    public function edit_barang($id)
+    {
+        $data['tittle'] = 'Edit Data Barang | Inventori App';
+        $data['barang'] = $this->db->get_where('master_barang', ['id' => $id])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/barang/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_barang($id)
+    {
+        $data = [
+            'nama_barang' => $this->input->post('nama_barang')
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('master_barang', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Barang Berhasil di ubah</div>');
+        redirect('dashboard/master_barang');
+    }
+
+    public function delete_barang($id)
+    {
+        $this->db->delete('master_barang', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data Barang Berhasil di hapus</div>');
+        redirect('dashboard/master_barang');
+    }
+
+    public function hapus_bulk_barang()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('master_barang', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Daftar Barang Berhasil di Hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Daftar Barang yang dipilih untuk dihapus</div>');
+        }
+        redirect('dashboard/master_barang');
+    }
 }
