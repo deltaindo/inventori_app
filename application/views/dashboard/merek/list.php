@@ -17,16 +17,16 @@
                 <div class="row tabel-produk mt-2">
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
-                            <form id="bulk-delete-form" action="<?= base_url('dashboard/delete_bulk_satuan'); ?>" method="post">
+                            <form id="bulk-delete-form" action="<?= base_url('dashboard/hapus_bulk_merek') ?>" method="post">
                                 <div class="card-body">
                                     <h4 class="card-title">
-                                        List Data Satuan
+                                        List Data Merek
                                     </h4>
                                     <?= $this->session->userdata('pesan');  ?>
-                                    <a href="<?= base_url('dashboard/tambah_satuan'); ?>" class="btn btn-primary text-white">
+                                    <a href="<?= base_url('dashboard/tambah_merek') ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
-                                    <button class="btn btn-danger text-white" type="button" onclick="bulkDeleteSatuan()">
+                                    <button class="btn btn-danger text-white" type="button" onclick="deleteBulkMerek()">
                                         Hapus Bulk
                                     </button>
                                     <div class="table-responsive overflow-visible mt-3">
@@ -41,7 +41,7 @@
                                                         No.
                                                     </th>
                                                     <th>
-                                                        Nama Satuan
+                                                        Nama Merek
                                                     </th>
                                                     <th>
                                                         Keterangan
@@ -53,26 +53,26 @@
                                             </thead>
                                             <tbody>
                                                 <?php $i = 1; ?>
-                                                <?php foreach ($satuan as $units) : ?>
+                                                <?php foreach ($merek as $mark) : ?>
                                                     <tr>
                                                         <td>
-                                                            <input type="checkbox" id="check" name="id[]" value="<?= $units['id']; ?>" class="form-check-input check" aria-checked="false" />
+                                                            <input type="checkbox" id="check" name="id[]" value="<?= $mark['id'] ?>" class="form-check-input check" aria-checked="false" />
                                                             <i class="input-helper"></i>
                                                         </td>
                                                         <td>
                                                             <?= $i++ ?>
                                                         </td>
                                                         <td>
-                                                            <?= $units['nama_satuan'] ?>
+                                                            <?= $mark["nama_merek"] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $units['keterangan'] ?>
+                                                            <?= $mark["keterangan"] ?>
                                                         </td>
                                                         <td>
-                                                            <a href="<?= base_url('dashboard/edit_satuan/' . $units['id']); ?>" class="btn btn-lg btn-outline-primary">
+                                                            <a href="<?= base_url('dashboard/edit_merek/' . $mark['id']) ?>" class="btn btn-lg btn-outline-primary">
                                                                 Edit
                                                             </a>
-                                                            <button class="btn btn-lg btn-danger" type="button" onclick="deleteSatuan(<?= $units['id']; ?>)">
+                                                            <button class="btn btn-lg btn-danger" type="button" onclick="deleteMerek(<?= $mark['id']; ?>)">
                                                                 Hapus
                                                             </button>
                                                         </td>

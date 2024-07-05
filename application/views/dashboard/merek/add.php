@@ -10,26 +10,26 @@
                                 <div class="row tabel-produk mt-2">
                                     <div class="col-lg-8 grid-margin stretch-card">
                                         <div class="card">
-                                            <form method="post" action="<?= base_url('dashboard/simpan_satuan'); ?>">
+                                            <form method="post" action="<?= base_url('dashboard/simpan_merek'); ?>">
                                                 <div class="card-body">
                                                     <h4 class="card-title">
-                                                        Tambah Data Satuan
+                                                        Tambah Data Merek
                                                     </h4>
-                                                    <label for="nama_satuan" class="text-primary fs-6 mb-1">
-                                                        Nama Satuan
+                                                    <label for="nama_merek" class="text-primary fs-6 mb-1">
+                                                        Nama Merek
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="nama_satuan" placeholder="Inputkan Nama Satuan" autofocus>
+                                                        <input type="text" class="form-control" name="nama_merek" placeholder="Inputkan Nama Merek" autofocus>
                                                     </div>
-                                                    <label for="keterangan_satuan" class="text-primary fs-6 mb-1">
-                                                        Keterangan Satuan (Contoh:)
+                                                    <label for="keterangan_merek" class="text-primary fs-6 mb-1">
+                                                        Keterangan Merek
                                                     </label>
                                                     <div class="mb-3">
-                                                        <textarea name="keterangan_satuan" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Satuan"></textarea>
+                                                        <textarea name="keterangan_merek" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Merek"></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
-                                                    <a href="<?= base_url('dashboard/master_satuan'); ?>" class="btn btn-outline-secondary text-black">
+                                                    <a href="<?= base_url('dashboard/master_merek'); ?>" class="btn btn-outline-secondary text-black">
                                                         Kembali
                                                     </a>
                                                     <button type="submit" class="btn btn-primary text-white">

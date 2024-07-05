@@ -1619,4 +1619,134 @@ class Dashboard extends CI_Controller
         $this->load->view('dashboard/satuan/add', $data);
         $this->load->view('template/footer');
     }
+
+    public function simpan_satuan()
+    {
+        $data = [
+            'nama_satuan'   => $this->input->post('nama_satuan'),
+            'keterangan'    => $this->input->post('keterangan_satuan')
+        ];
+        $this->db->insert('master_satuan', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Satuan Berhasil di tambahkan</div>');
+        redirect('dashboard/master_satuan');
+    }
+
+    public function edit_satuan($id)
+    {
+        $data['tittle'] = 'Edit Data Satuan | Inventori App';
+        $data['satuan'] = $this->db->get_where('master_satuan', ['id' => $id])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/satuan/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_satuan($id)
+    {
+        $data = [
+            'nama_satuan'   => $this->input->post('nama_satuan'),
+            'keterangan'    => $this->input->post('keterangan_satuan')
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('master_satuan', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Satuan Berhasil di ubah</div>');
+        redirect('dashboard/master_satuan');
+    }
+
+    public function delete_satuan($id)
+    {
+        $this->db->delete('master_satuan', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data Satuan Berhasil di hapus</div>');
+        redirect('dashboard/master_satuan');
+    }
+
+    public function delete_bulk_satuan()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('master_satuan', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Daftar Satuan Berhasil di Hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Daftar Satuan yang dipilih untuk dihapus</div>');
+        }
+        redirect('dashboard/master_satuan');
+    }
+
+    public function master_merek()
+    {
+        $data['tittle'] = 'List Data Merek | Inventori App';
+
+        $this->db->order_by('id', 'DESC');
+        $data['merek'] = $this->db->get('master_merek')->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/merek/list', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_merek()
+    {
+        $data['tittle'] = 'List Data Merek | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/merek/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_merek()
+    {
+        $data = [
+            'nama_merek'   => $this->input->post('nama_merek'),
+            'keterangan'    => $this->input->post('keterangan_merek')
+        ];
+        $this->db->insert('master_merek', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Merek Berhasil di tambahkan</div>');
+        redirect('dashboard/master_merek');
+    }
+
+    public function edit_merek($id)
+    {
+        $data['tittle'] = 'Edit Data Merek | Inventori App';
+        $data['merek'] = $this->db->get_where('master_merek', ['id' => $id])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/merek/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_merek($id)
+    {
+        $data = [
+            'nama_merek'   => $this->input->post('nama_merek'),
+            'keterangan'    => $this->input->post('keterangan_merek')
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('master_merek', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Merek Berhasil di ubah</div>');
+        redirect('dashboard/master_merek');
+    }
+
+    public function delete_merek($id)
+    {
+        $this->db->delete('master_merek', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Data Merek Berhasil di hapus</div>');
+        redirect('dashboard/master_merek');
+    }
+
+    public function hapus_bulk_merek()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('master_merek', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Daftar Merek Berhasil di Hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Daftar Merek yang dipilih untuk dihapus</div>');
+        }
+        redirect('dashboard/master_merek');
+    }
 }
