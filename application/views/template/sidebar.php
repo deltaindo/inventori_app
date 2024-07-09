@@ -65,6 +65,40 @@
   </li>
 
   <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="collapse" href="#form-penjualan" aria-expanded="false" aria-controls="form-penjualan">
+      <i class="menu-icon mdi mdi-chart-areaspline"></i>
+      <span class="menu-title">
+        Transaksi
+      </span>
+      <i class="menu-arrow"></i>
+    </a>
+    <div class="collapse" id="form-penjualan">
+      <ul class="nav flex-column sub-menu">
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/jurnal_barang'); ?>">
+            Jurnal Barang
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/barang_masuk'); ?>">
+            Barang Masuk
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/barang_keluar'); ?>">
+            Barang Keluar
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/peminjaman'); ?>">
+            Peminjaman
+          </a>
+        </li>
+      </ul>
+    </div>
+  </li>
+
+  <li class="nav-item">
     <a class="nav-link" data-bs-toggle="collapse" href="#form-produk" aria-expanded="false" aria-controls="form-produk">
       <i class="menu-icon mdi mdi-package-variant-closed"></i>
       <span class="menu-title">
@@ -114,34 +148,6 @@
     </div>
   </li>
 
-  <li class="nav-item">
-    <a class="nav-link" data-bs-toggle="collapse" href="#form-penjualan" aria-expanded="false" aria-controls="form-penjualan">
-      <i class="menu-icon mdi mdi-chart-areaspline"></i>
-      <span class="menu-title">
-        Transaksi
-      </span>
-      <i class="menu-arrow"></i>
-    </a>
-    <div class="collapse" id="form-penjualan">
-      <ul class="nav flex-column sub-menu">
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('dashboard/barang_masuk'); ?>">
-            Barang Masuk
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('dashboard/barang_keluar'); ?>">
-            Barang Keluar
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('dashboard/peminjaman'); ?>">
-            Peminjaman
-          </a>
-        </li>
-      </ul>
-    </div>
-  </li>
 
   <li class="nav-item nav-category">
     User

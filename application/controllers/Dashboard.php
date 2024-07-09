@@ -1895,4 +1895,91 @@ class Dashboard extends CI_Controller
         }
         redirect('dashboard/master_barang');
     }
+
+    public function jurnal_barang()
+    {
+        $data['tittle'] = 'Jurnal Barang | Inventori App';
+
+        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang, master_barang.nama_barang, master_lokasi.nama_lokasi, master_kantor.nama_kantor, master_merek.nama_merek, master_kategori.nama_kategori, master_satuan.nama_satuan');
+        $this->db->from('jurnal_barang');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->order_by('jurnal_barang.id', 'DESC');
+        $data['jurnal_barang'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_barang/list', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_jurnal_barang()
+    {
+        $data['tittle'] = 'Tambah Jurnal Barang | Inventori App';
+
+        $data['barang']     = $this->db->order_by('id', 'DESC')->get('master_barang')->result_array();
+        $data['merek']      = $this->db->order_by('id', 'DESC')->get('master_merek')->result_array();
+        $data['lokasi']     = $this->db->order_by('id', 'DESC')->get('master_lokasi')->result_array();
+        $data['satuan']     = $this->db->order_by('id', 'DESC')->get('master_satuan')->result_array();
+        $data['kategori']   = $this->db->order_by('id', 'DESC')->get('master_kategori')->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_barang/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_jurnal_barang()
+    {
+        $config['upload_path'] = './images/barang/';
+        $config['allowed_types'] = 'gif|jpg|png|jpeg';
+        $config['max_size'] = 2048; // 2MB
+        $config['encrypt_name'] = TRUE;
+
+        $this->load->library('upload', $config);
+
+        if (!$this->upload->do_upload('foto_barang')) {
+            $error = $this->upload->display_errors();
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . $error . '</div>');
+            redirect('dashboard/jurnal_barang');
+        } else {
+            $upload_data = $this->upload->data();
+            $file_name = $upload_data['file_name'];
+
+            $data = [
+                'kode_barang'   => 'BRG-' . substr(uniqid(), -3),
+                'id_barang'     => $this->input->post('id_barang'),
+                'id_lokasi'     => $this->input->post('id_lokasi'),
+                'id_satuan'     => $this->input->post('id_satuan'),
+                'id_kategori'   => $this->input->post('id_kategori'),
+                'id_merek'      => $this->input->post('id_merek'),
+                'foto_barang'   => $file_name,
+                'keterangan'    => $this->input->post('keterangan_barang'),
+            ];
+
+            $this->db->insert('jurnal_barang', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di tambahkan</div>');
+            redirect('dashboard/jurnal_barang');
+        }
+    }
+
+    public function edit_jurnal_barang($id)
+    {
+        $data['tittle']         = 'Edit Jurnal Barang | Inventori App';
+        $data['jurnal_barang']  = $this->db->get_where('jurnal_barang', ['id' => $id])->row_array();
+        $data['barang']         = $this->db->order_by('id', 'DESC')->get('master_barang')->result_array();
+        $data['merek']          = $this->db->order_by('id', 'DESC')->get('master_merek')->result_array();
+        $data['lokasi']         = $this->db->order_by('id', 'DESC')->get('master_lokasi')->result_array();
+        $data['satuan']         = $this->db->order_by('id', 'DESC')->get('master_satuan')->result_array();
+        $data['kategori']       = $this->db->order_by('id', 'DESC')->get('master_kategori')->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_barang/edit', $data);
+        $this->load->view('template/footer');
+    }
 }
