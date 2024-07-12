@@ -1982,4 +1982,42 @@ class Dashboard extends CI_Controller
         $this->load->view('dashboard/jurnal_barang/edit', $data);
         $this->load->view('template/footer');
     }
+
+    public function update_jurnal_barang($id)
+    {
+        $data = [
+            'id_barang'     => $this->input->post('id_barang'),
+            'id_lokasi'     => $this->input->post('id_lokasi'),
+            'id_satuan'     => $this->input->post('id_satuan'),
+            'id_kategori'   => $this->input->post('id_kategori'),
+            'id_merek'      => $this->input->post('id_merek'),
+            'keterangan'    => $this->input->post('keterangan_barang'),
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('jurnal_barang', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di update</div>');
+        redirect('dashboard/jurnal_barang');
+    }
+
+    public function delete_jurnal_barang($id)
+    {
+        $this->db->where('id', $id);
+        $this->db->delete('jurnal_barang');
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jurnal Barang Berhasil di hapus</div>');
+        redirect('dashboard/jurnal_barang');
+    }
+
+    public function hapus_bulk_jurnal_barang()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('jurnal_barang', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jurnal Barang Berhasil di hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Jurnal Barang Berhasil di hapus</div>');
+        }
+        redirect('dashboard/jurnal_barang');
+    }
 }
