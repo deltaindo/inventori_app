@@ -2026,7 +2026,7 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk, jurnal_barang_masuk.jumlah_masuk, jurnal_barang_masuk.keterangan');
+        $this->db->select('jurnal_barang_masuk.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk, jurnal_barang_masuk.jumlah_masuk, jurnal_barang_masuk.keterangan');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
@@ -2084,5 +2084,26 @@ class Dashboard extends CI_Controller
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_masuk_barang/edit');
         $this->load->view('template/footer');
+    }
+
+    public function delete_jurnal_barang_masuk($id)
+    {
+        $this->db->delete('jurnal_barang_masuk', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jurnal Barang Berhasil di hapus</div>');
+        redirect('dashboard/jurnal_masuk_barang');
+    }
+
+    public function hapus_bulk_jurnal_barang_masuk()
+    {
+        $ids = $this->input->post('id');
+        if ($ids) {
+            foreach ($ids as $id) {
+                $this->db->delete('jurnal_barang_masuk', ['id' => $id]);
+            }
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jurnal Barang Masuk Berhasil di hapus</div>');
+        } else {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Jurnal Barang Masuk Berhasil di hapus</div>');
+        }
+        redirect('dashboard/jurnal_masuk_barang');
     }
 }

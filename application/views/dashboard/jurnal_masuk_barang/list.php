@@ -17,7 +17,7 @@
                 <div class="row tabel-produk mt-2">
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
-                            <form id="bulk-delete-form" action="<?= base_url('dashboard/hapus_bulk_jurnal_barang'); ?>" method="post">
+                            <form id="bulk-delete-form" action="<?= base_url('dashboard/hapus_bulk_jurnal_barang_masuk'); ?>" method="post">
                                 <div class="card-body table-responsive">
                                     <h4 class="card-title">
                                         List Barang Masuk
@@ -26,7 +26,7 @@
                                     <a href="<?= base_url('dashboard/tambah_masuk_barang'); ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
-                                    <button class="btn btn-danger text-white" type="button" onclick="">
+                                    <button class="btn btn-danger text-white" type="button" onclick="bulkDeleteJurnalBarangMasuk()">
                                         Hapus Bulk
                                     </button>
                                     <div class="overflow-visible mt-3">
@@ -74,7 +74,7 @@
                                                 <?php foreach ($jurnal_barang_masuk as $barang_masuk) : ?>
                                                     <tr>
                                                         <td>
-                                                            <input type="checkbox" id="check" name="id[]" value="#" class="form-check-input check" aria-checked="false" />
+                                                            <input type="checkbox" id="check" name="id[]" value="<?= $barang_masuk['id']; ?>" class="form-check-input check" aria-checked="false" />
                                                             <i class="input-helper"></i>
                                                         </td>
                                                         <td>
@@ -108,7 +108,7 @@
                                                             <a href="<?= base_url('dashboard/edit_jurnal_barang_masuk/' . $barang_masuk['id']); ?>" class="btn btn-lg btn-outline-primary">
                                                                 Edit
                                                             </a>
-                                                            <button class="btn btn-lg btn-danger" type="button" onclick="">
+                                                            <button class="btn btn-lg btn-danger" type="button" onclick="deleteJurnalBarangMasuk(<?= $barang_masuk['id']; ?>)">
                                                                 Hapus
                                                             </button>
                                                         </td>
