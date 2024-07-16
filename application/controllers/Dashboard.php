@@ -2026,7 +2026,7 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang_masuk.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan');
+        $this->db->select('jurnal_barang_masuk.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
@@ -2068,6 +2068,8 @@ class Dashboard extends CI_Controller
         $data = [
             'id_jurnal_barang'  => $this->input->post('id_jurnal_barang'),
             'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
+            'jenis_pakai'       => $this->input->post('jenis_pakai'),
+            'status_barang'     => $this->input->post('status_barang'),
             'jumlah_masuk'      => $this->input->post('jumlah_masuk'),
             'keterangan'        => $this->input->post('keterangan'),
         ];

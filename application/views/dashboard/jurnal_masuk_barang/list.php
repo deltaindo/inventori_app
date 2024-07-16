@@ -52,6 +52,12 @@
                                                         Tanggal Masuk
                                                     </th>
                                                     <th>
+                                                        Jenis Pakai
+                                                    </th>
+                                                    <th>
+                                                        Status Barang
+                                                    </th>
+                                                    <th>
                                                         Jumlah Masuk
                                                     </th>
                                                     <th>
@@ -86,6 +92,12 @@
                                                         </td>
                                                         <td>
                                                             <?= $barang_masuk['tanggal_masuk']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $barang_masuk['jenis_pakai']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $barang_masuk['status_barang']; ?>
                                                         </td>
                                                         <td>
                                                             <?= $barang_masuk['jumlah_masuk']; ?> <?= $barang_masuk['nama_satuan']; ?>

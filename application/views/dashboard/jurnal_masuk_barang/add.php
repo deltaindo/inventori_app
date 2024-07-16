@@ -42,6 +42,18 @@
                                                         </select>
                                                     </div>
 
+                                                    <label for="status_barang" class="text-primary fs-6 mb-1">
+                                                        Status Barang
+                                                    </label>
+                                                    <div class="mb-3">
+                                                        <select class="form-control" name="status_barang">
+                                                            <option selected>Pilih Jenis Pakai...</option>
+                                                            <option value="Baik">Baik</option>
+                                                            <option value="Layak Pakai">Layak Pakai</option>
+                                                            <option value="Rusak">Rusak</option>
+                                                        </select>
+                                                    </div>
+
                                                     <label for="tanggal_masuk" class="text-primary fs-6 mb-1">
                                                         Tanggal Masuk
                                                     </label>
