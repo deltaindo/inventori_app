@@ -26,17 +26,10 @@
                                     <a href="<?= base_url('dashboard/tambah_masuk_barang'); ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
-                                    <button class="btn btn-danger text-white" type="button" onclick="bulkDeleteJurnalBarangMasuk()">
-                                        Hapus Bulk
-                                    </button>
                                     <div class="overflow-visible mt-3">
                                         <table class="table table-hover" id="example">
                                             <thead>
                                                 <tr>
-                                                    <th>
-                                                        <input type="checkbox" id="check-all" class="form-check-input check" aria-checked="false" />
-                                                        <i class="input-helper"></i>
-                                                    </th>
                                                     <th>
                                                         No.
                                                     </th>
@@ -74,10 +67,6 @@
                                                 <?php foreach ($jurnal_barang_masuk as $barang_masuk) : ?>
                                                     <tr>
                                                         <td>
-                                                            <input type="checkbox" id="check" name="id[]" value="<?= $barang_masuk['id']; ?>" class="form-check-input check" aria-checked="false" />
-                                                            <i class="input-helper"></i>
-                                                        </td>
-                                                        <td>
                                                             <?= $i++ ?>
                                                         </td>
                                                         <td>
@@ -99,7 +88,7 @@
                                                             <?= $barang_masuk['tanggal_masuk']; ?>
                                                         </td>
                                                         <td>
-                                                            <?= $barang_masuk['jumlah_masuk']; ?>
+                                                            <?= $barang_masuk['jumlah_masuk']; ?> <?= $barang_masuk['nama_satuan']; ?>
                                                         </td>
                                                         <td>
                                                             <?= $barang_masuk['keterangan']; ?>

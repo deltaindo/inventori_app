@@ -30,6 +30,18 @@
                                                         </select>
                                                     </div>
 
+                                                    <label for="jenis_pakai" class="text-primary fs-6 mb-1">
+                                                        Jenis Pakai
+                                                    </label>
+                                                    <div class="mb-3">
+                                                        <select class="form-control" name="jenis_pakai">
+                                                            <option selected>Pilih Jenis Pakai...</option>
+                                                            <option value="Normal">Normal</option>
+                                                            <option value="Inventaris">Inventaris</option>
+                                                            <option value="Peminjaman">Peminjaman</option>
+                                                        </select>
+                                                    </div>
+
                                                     <label for="tanggal_masuk" class="text-primary fs-6 mb-1">
                                                         Tanggal Masuk
                                                     </label>

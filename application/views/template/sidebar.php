@@ -61,8 +61,6 @@
           </li>
     </li>
   </ul>
-  </div>
-  </li>
 
   <li class="nav-item">
     <a class="nav-link" data-bs-toggle="collapse" href="#form-penjualan" aria-expanded="false" aria-controls="form-penjualan">
@@ -97,6 +95,25 @@
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('dashboard/peminjaman'); ?>">
             Peminjaman
+          </a>
+        </li>
+      </ul>
+    </div>
+  </li>
+
+  <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="collapse" href="#report" aria-expanded="false" aria-controls="report">
+      <i class="menu-icon mdi mdi-folder-open"></i>
+      <span class="menu-title">
+        Report
+      </span>
+      <i class="menu-arrow"></i>
+    </a>
+    <div class="collapse" id="report">
+      <ul class="nav flex-column sub-menu">
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/jurnal_stok_barang'); ?>">
+            Jurnal Stok Barang
           </a>
         </li>
       </ul>

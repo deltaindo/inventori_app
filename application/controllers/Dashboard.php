@@ -2026,15 +2026,16 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang_masuk.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk, jurnal_barang_masuk.jumlah_masuk, jurnal_barang_masuk.keterangan');
+        $this->db->select('jurnal_barang_masuk.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('jurnal_barang_masuk', 'jurnal_barang.id = jurnal_barang_masuk.id_jurnal_barang');
         $this->db->where('master_kantor.id', $this->kantor);
-        $this->db->order_by('jurnal_barang.id', 'DESC');
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
         $data['jurnal_barang_masuk'] = $this->db->get()->result_array();
 
         $this->load->view('template/header', $data);
@@ -2070,15 +2071,35 @@ class Dashboard extends CI_Controller
             'jumlah_masuk'      => $this->input->post('jumlah_masuk'),
             'keterangan'        => $this->input->post('keterangan'),
         ];
+
         $this->db->insert('jurnal_barang_masuk', $data);
+
+        $jumlah_masuk = $this->input->post('jumlah_masuk');
+        $id_jurnal_barang = $this->input->post('id_jurnal_barang');
+
+        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+        $query = $this->db->get('jurnal_stok_barang');
+
+        if ($query->num_rows() > 0) {
+            $this->db->set('jumlah_stok_masuk', 'jumlah_stok_masuk + ' . (int)$jumlah_masuk, FALSE);
+            $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+            $this->db->update('jurnal_stok_barang');
+        } else {
+            $data_stok = [
+                'id_jurnal_barang' => $id_jurnal_barang,
+                'jumlah_stok_masuk' => $jumlah_masuk
+            ];
+            $this->db->insert('jurnal_stok_barang', $data_stok);
+        }
+
         $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di tambahkan</div>');
         redirect('dashboard/jurnal_masuk_barang');
     }
 
+
     public function edit_jurnal_barang_masuk($id)
     {
         $data['tittle'] = 'Edit Jurnal Barang Masuk | Inventori App';
-        // $data["jur"]
         $data['jurnal_barang_masuk'] = $this->db->get_where('jurnal_barang_masuk', ['id' => $id])->row_array();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -2105,5 +2126,14 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-warning" role="alert">Tidak ada Jurnal Barang Masuk Berhasil di hapus</div>');
         }
         redirect('dashboard/jurnal_masuk_barang');
+    }
+
+    public function jurnal_stok_barang()
+    {
+        $data['tittle'] = 'List Jurnal Stok Barang | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_stok_barang/list');
+        $this->load->view('template/footer');
     }
 }
