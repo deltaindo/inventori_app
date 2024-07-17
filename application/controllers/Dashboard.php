@@ -2076,20 +2076,20 @@ class Dashboard extends CI_Controller
 
         $this->db->insert('jurnal_barang_masuk', $data);
 
-        $jumlah_masuk = $this->input->post('jumlah_masuk');
-        $id_jurnal_barang = $this->input->post('id_jurnal_barang');
+        $jumlah_masuk       = $this->input->post('jumlah_masuk');
+        $id_jurnal_barang   = $this->input->post('id_jurnal_barang');
 
         $this->db->where('id_jurnal_barang', $id_jurnal_barang);
         $query = $this->db->get('jurnal_stok_barang');
 
         if ($query->num_rows() > 0) {
-            $this->db->set('jumlah_stok_masuk', 'jumlah_stok_masuk + ' . (int)$jumlah_masuk, FALSE);
+            $this->db->set('jumlah_masuk', 'jumlah_masuk + ' . (int)$jumlah_masuk, FALSE);
             $this->db->where('id_jurnal_barang', $id_jurnal_barang);
             $this->db->update('jurnal_stok_barang');
         } else {
             $data_stok = [
-                'id_jurnal_barang' => $id_jurnal_barang,
-                'jumlah_stok_masuk' => $jumlah_masuk
+                'id_jurnal_barang'  => $id_jurnal_barang,
+                'jumlah_masuk'      => $jumlah_masuk
             ];
             $this->db->insert('jurnal_stok_barang', $data_stok);
         }
@@ -2130,12 +2130,144 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_masuk_barang');
     }
 
-    public function jurnal_stok_barang()
+    public function report_stok_barang()
     {
         $data['tittle'] = 'List Jurnal Stok Barang | Inventori App';
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_stok_barang/list');
         $this->load->view('template/footer');
+    }
+
+    public function master_divisi()
+    {
+        $data['tittle'] = 'List Data Divisi | Inventori App';
+
+        $this->db->order_by('id', 'DESC');
+        $data['divisis'] = $this->db->get('master_divisi')->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/divisi/list');
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_divisi()
+    {
+        $data['tittle'] = 'List Data Divisi | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/divisi/add');
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_divisi()
+    {
+        $data = [
+            'nama_divisi'   => $this->input->post('nama_divisi'),
+            'keterangan'    => $this->input->post('keterangan_divisi'),
+        ];
+        $this->db->insert('master_divisi', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Divisi Berhasil di tambahkan</div>');
+        redirect('dashboard/master_divisi');
+    }
+
+    public function edit_divisi($id)
+    {
+        $data['tittle'] = 'Edit Divisi | Inventori App';
+        $data['divisi'] = $this->db->get_where('master_divisi', ['id' => $id])->row_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/divisi/edit');
+        $this->load->view('template/footer');
+    }
+
+    public function update_divisi($id)
+    {
+        $data = [
+            'nama_divisi'   => $this->input->post('nama_divisi'),
+            'keterangan'    => $this->input->post('keterangan_divisi'),
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('master_divisi', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Divisi Berhasil di ubah</div>');
+        redirect('dashboard/master_divisi');
+    }
+
+    public function delete_divisi($id)
+    {
+        $this->db->delete('master_divisi', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Divisi Berhasil di hapus</div>');
+        redirect('dashboard/master_divisi');
+    }
+
+    public function master_karyawan()
+    {
+        $data['tittle'] = 'List Data Karyawan | Inventori App';
+        $this->db->select('master_karyawan.id, master_karyawan.nama_karyawan, master_divisi.nama_divisi');
+        $this->db->from('master_karyawan');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->order_by('master_karyawan.id', 'DESC');
+        $data['karyawans'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/karyawan/list');
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_karyawan()
+    {
+        $data['tittle'] = 'Tambah Data Karyawan | Inventori App';
+        $data['divisis'] = $this->db->order_by('id', 'DESC')
+            ->get('master_divisi')
+            ->result_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/karyawan/add');
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_karyawan()
+    {
+        $data = [
+            'id_divisi'     => $this->input->post('nama_divisi'),
+            'nama_karyawan' => $this->input->post('nama_karyawan'),
+        ];
+        $this->db->insert('master_karyawan', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Karyawan Berhasil di tambahkan</div>');
+        redirect('dashboard/master_karyawan');
+    }
+
+    public function edit_karyawan($id)
+    {
+        $data['tittle'] = 'Edit Karyawan | Inventori App';
+        $data['karyawan'] = $this->db->get_where('master_karyawan', ['id' => $id])->row_array();
+        $data['divisis'] = $this->db->order_by('id', 'DESC')
+            ->get('master_divisi')
+            ->result_array();
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/karyawan/edit');
+        $this->load->view('template/footer');
+    }
+
+    public function update_karyawan($id)
+    {
+        $data = [
+            'id_divisi'     => $this->input->post('nama_divisi'),
+            'nama_karyawan' => $this->input->post('nama_karyawan'),
+        ];
+        $this->db->where('id', $id);
+        $this->db->update('master_karyawan', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Karyawan Berhasil di ubah</div>');
+        redirect('dashboard/master_karyawan');
+    }
+
+    public function delete_karyawan($id)
+    {
+        $this->db->delete('master_karyawan', ['id' => $id]);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Karyawan Berhasil di hapus</div>');
+        redirect('dashboard/master_karyawan');
     }
 }
