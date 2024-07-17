@@ -4,7 +4,7 @@
       <a class="nav-link" data-bs-toggle="collapse" href="#auth" aria-expanded="false" aria-controls="auth">
         <i class="menu-icon mdi mdi-account-key"></i>
         <span class="menu-title">
-          Auth
+          Auth System
         </span>
         <i class="menu-arrow"></i>
       </a>
@@ -20,10 +20,34 @@
     </li>
 
     <li class="nav-item">
+      <a class="nav-link" data-bs-toggle="collapse" href="#master_pengguna" aria-expanded="false" aria-controls="master_pengguna">
+        <i class="menu-icon mdi mdi-database"></i>
+        <span class="menu-title">
+          Master Pengguna
+        </span>
+        <i class="menu-arrow"></i>
+      </a>
+      <div class="collapse" id="master_pengguna">
+        <ul class="nav flex-column sub-menu">
+          <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('dashboard/master_divisi'); ?>">
+              Master Divisi
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?= base_url('dashboard/master_karyawan'); ?>">
+              Master Karyawan
+            </a>
+          </li>
+        </ul>
+      </div>
+    </li>
+
+    <li class="nav-item">
       <a class="nav-link" data-bs-toggle="collapse" href="#master" aria-expanded="false" aria-controls="master">
         <i class="menu-icon mdi mdi-database"></i>
         <span class="menu-title">
-          Master Barang
+          Master Assets
         </span>
         <i class="menu-arrow"></i>
       </a>
@@ -61,32 +85,6 @@
           </li>
     </li>
   </ul>
-
-  <li class="nav-item">
-    <a class="nav-link" data-bs-toggle="collapse" href="#master_pengguna" aria-expanded="false" aria-controls="master_pengguna">
-      <i class="menu-icon mdi mdi-database"></i>
-      <span class="menu-title">
-        Master Pengguna
-      </span>
-      <i class="menu-arrow"></i>
-    </a>
-    <div class="collapse" id="master_pengguna">
-      <ul class="nav flex-column sub-menu">
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('dashboard/master_divisi'); ?>">
-            Master Divisi
-          </a>
-        </li>
-      </ul>
-      <ul class="nav flex-column sub-menu">
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('dashboard/master_karyawan'); ?>">
-            Master Karyawan
-          </a>
-        </li>
-      </ul>
-    </div>
-  </li>
 
   <li class="nav-item">
     <a class="nav-link" data-bs-toggle="collapse" href="#form-penjualan" aria-expanded="false" aria-controls="form-penjualan">

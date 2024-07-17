@@ -51,41 +51,55 @@
                                                         Jumlah Masuk
                                                     </th>
                                                     <th>
+                                                        Jumlah Keluar
+                                                    </th>
+                                                    <th>
+                                                        Stok Akhir
+                                                    </th>
+                                                    <th>
                                                         Keterangan
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php $i = 1; ?>
-                                                <tr>
-                                                    <td>
-                                                        <?= $i++ ?>
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                </tr>
+                                                <?php foreach ($jurnal_stok as $stok) : ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?= $i++ ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['kode_barang'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['nama_barang'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['nama_merek'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['nama_lokasi'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['nama_kantor'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['tanggal_update'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['jumlah_masuk'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['jumlah_keluar'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['stok_akhir'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['keterangan'] ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>

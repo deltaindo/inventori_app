@@ -2133,6 +2133,30 @@ class Dashboard extends CI_Controller
     public function report_stok_barang()
     {
         $data['tittle'] = 'List Jurnal Stok Barang | Inventori App';
+
+        $this->db->select('
+            jurnal_stok_barang.id, 
+            jurnal_barang.kode_barang, 
+            master_barang.nama_barang, 
+            master_merek.nama_merek, 
+            master_lokasi.nama_lokasi, 
+            master_kantor.nama_kantor, 
+            jurnal_stok_barang.jumlah_masuk, 
+            jurnal_stok_barang.jumlah_keluar, 
+            jurnal_stok_barang.stok_akhir, 
+            jurnal_stok_barang.tanggal_update,
+            jurnal_barang.keterangan
+        ');
+        $this->db->from('jurnal_stok_barang');
+        $this->db->join('jurnal_barang', 'jurnal_stok_barang.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+
+        $this->db->order_by('jurnal_stok_barang.id', 'DESC');
+        $data['jurnal_stok'] = $this->db->get()->result_array();
+
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_stok_barang/list');
