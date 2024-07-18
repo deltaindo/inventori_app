@@ -30,16 +30,19 @@
                                                         No.
                                                     </th>
                                                     <th>
-                                                        Kode Barang
+                                                        Kode Barang Masuk
                                                     </th>
                                                     <th>
                                                         Nama Barang
                                                     </th>
                                                     <th>
+                                                        Nama Merek
+                                                    </th>
+                                                    <th>
                                                         Spesifikasi
                                                     </th>
                                                     <th>
-                                                        Nama Karyawan
+                                                        Karyawan
                                                     </th>
                                                     <th>
                                                         Divisi
@@ -82,6 +85,9 @@
                                                         </td>
                                                         <td>
                                                             <?= $asset['nama_barang'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['nama_merek'] ?>
                                                         </td>
                                                         <td>
                                                             <?= $asset['spesifikasi'] ?>

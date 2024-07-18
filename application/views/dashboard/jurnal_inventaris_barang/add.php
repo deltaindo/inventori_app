@@ -8,7 +8,7 @@
                             <div class="tab-content tab-content-basic">
                                 <?= $this->session->flashdata('message'); ?>
                                 <div class="row tabel-produk mt-2">
-                                    <div class="col-lg-8 grid-margin stretch-card">
+                                    <div class="col-lg-12 grid-margin stretch-card">
                                         <div class="card">
                                             <form method="post" action="<?= base_url('dashboard/simpan_inventaris_barang'); ?>" enctype="multipart/form-data">
                                                 <div class="card-body">
@@ -21,16 +21,22 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="nama_karyawan">
-                                                            <option selected>Pilih Nama Karyawan...</option>
+                                                            <option selected>Pilih Karyawan...</option>
+                                                            <?php foreach ($employees as $employee) : ?>
+                                                                <option value="<?= $employee['id']; ?>"><?= $employee['nama_karyawan']; ?> - <?= $employee['nama_divisi']; ?></option>
+                                                            <?php endforeach; ?>
                                                         </select>
                                                     </div>
 
-                                                    <label for="nama_barang" class="text-primary fs-6 mb-1">
-                                                        Nama Barang
+                                                    <label for="nama_inventaris" class="text-primary fs-6 mb-1">
+                                                        Nama Inventaris [Tanggal Masuk Barang]
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="nama_barang">
-                                                            <option selected>Pilih Nama Barang...</option>
+                                                        <select class="form-control" name="nama_inventaris">
+                                                            <option selected>Pilih Nama Inventaris...</option>
+                                                            <?php foreach ($items as $item) : ?>
+                                                                <option value="<?= $item['id']; ?>">[<?= $item['kode_barang']; ?>] <?= $item['tanggal_masuk']; ?> - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['keterangan']; ?></option>
+                                                            <?php endforeach; ?>
                                                         </select>
                                                     </div>
 
@@ -56,14 +62,14 @@
                                                         Jumlah Assets
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="number" class="form-control" name="jumlah_assets" placeholder="Inputkan Tanggal">
+                                                        <input type="number" class="form-control" name="jumlah_assets" placeholder="Inputkan Jumlah Asset">
                                                     </div>
 
                                                     <label for="keterangan_barang" class="text-primary fs-6 mb-1">
                                                         Keterangan
                                                     </label>
                                                     <div class="mb-3">
-                                                        <textarea name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Inventaris"></textarea>
+                                                        <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Inventaris"></textarea>
                                                         <span class="text-small">
                                                             <i>
                                                                 Contoh: Asset dalam kondisi layak digunakan.

@@ -20,7 +20,7 @@
                             <form id="bulk-delete-form" action="<?= base_url('dashboard/hapus_bulk_jurnal_barang_masuk'); ?>" method="post">
                                 <div class="card-body table-responsive">
                                     <h4 class="card-title">
-                                        List Barang Masuk
+                                        Jurnal Barang Masuk
                                     </h4>
                                     <?= $this->session->userdata('pesan');  ?>
                                     <a href="<?= base_url('dashboard/tambah_masuk_barang'); ?>" class="btn btn-primary text-white">
@@ -34,13 +34,16 @@
                                                         No.
                                                     </th>
                                                     <th>
-                                                        Kode Barang
+                                                        Barang Masuk
                                                     </th>
                                                     <th>
                                                         Nama Barang
                                                     </th>
                                                     <th>
                                                         Merek
+                                                    </th>
+                                                    <th>
+                                                        Keterangan [Spesifikasi]
                                                     </th>
                                                     <th>
                                                         Lokasi
@@ -55,13 +58,13 @@
                                                         Jenis Pakai
                                                     </th>
                                                     <th>
+                                                        Kategori
+                                                    </th>
+                                                    <th>
                                                         Status Barang
                                                     </th>
                                                     <th>
                                                         Jumlah Masuk
-                                                    </th>
-                                                    <th>
-                                                        Keterangan
                                                     </th>
                                                     <th>
                                                         Action
@@ -76,13 +79,16 @@
                                                             <?= $i++ ?>
                                                         </td>
                                                         <td>
-                                                            <?= $barang_masuk['kode_barang']; ?>
+                                                            <?= $barang_masuk['kode_barang_masuk']; ?>
                                                         </td>
                                                         <td>
                                                             <?= $barang_masuk['nama_barang']; ?>
                                                         </td>
                                                         <td>
                                                             <?= $barang_masuk['nama_merek']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $barang_masuk['keterangan']; ?>
                                                         </td>
                                                         <td>
                                                             <?= $barang_masuk['nama_lokasi']; ?>
@@ -97,13 +103,13 @@
                                                             <?= $barang_masuk['jenis_pakai']; ?>
                                                         </td>
                                                         <td>
+                                                            <?= $barang_masuk['nama_kategori']; ?>
+                                                        </td>
+                                                        <td>
                                                             <?= $barang_masuk['status_barang']; ?>
                                                         </td>
                                                         <td>
                                                             <?= $barang_masuk['jumlah_masuk']; ?> <?= $barang_masuk['nama_satuan']; ?>
-                                                        </td>
-                                                        <td>
-                                                            <?= $barang_masuk['keterangan']; ?>
                                                         </td>
                                                         <td>
                                                             <a href="<?= base_url('dashboard/edit_jurnal_barang_masuk/' . $barang_masuk['id']); ?>" class="btn btn-lg btn-outline-primary">

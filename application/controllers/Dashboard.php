@@ -2026,9 +2026,10 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang_masuk.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan');
+        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
@@ -2067,6 +2068,7 @@ class Dashboard extends CI_Controller
     {
         $data = [
             'id_jurnal_barang'  => $this->input->post('id_jurnal_barang'),
+            'kode_barang_masuk' => 'JBM-' . substr(uniqid(), -5),
             'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
             'jenis_pakai'       => $this->input->post('jenis_pakai'),
             'status_barang'     => $this->input->post('status_barang'),
@@ -2301,10 +2303,10 @@ class Dashboard extends CI_Controller
 
         $this->db->select('
             jurnal_inventaris.id,
-            jurnal_barang.kode_barang,
             master_barang.nama_barang,
             master_karyawan.nama_karyawan,
             master_divisi.nama_divisi,
+            master_merek.nama_merek,
             jurnal_inventaris.tanggal_assign,
             jurnal_inventaris.tanggal_return,
             history_assets.kondisi_awal,
@@ -2313,6 +2315,7 @@ class Dashboard extends CI_Controller
             jurnal_inventaris.status_assets,
             jurnal_inventaris.keterangan as keterangan_inventaris,
             jurnal_barang_masuk.jenis_pakai,
+            jurnal_barang_masuk.kode_barang_masuk as kode_barang,
             jurnal_barang_masuk.keterangan as spesifikasi
         ');
         $this->db->from('jurnal_inventaris');
@@ -2347,6 +2350,24 @@ class Dashboard extends CI_Controller
     public function tambah_inventaris_barang()
     {
         $data['tittle'] = 'Tambah Jurnal Inventaris | Inventori App';
+
+        $this->db->select('master_karyawan.id, master_karyawan.nama_karyawan, master_divisi.nama_divisi');
+        $this->db->from('master_karyawan');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->order_by('master_karyawan.id', 'DESC');
+        $data['employees'] = $this->db->get()->result_array();
+
+        $this->db->select('jurnal_barang_masuk.id, jurnal_barang.kode_barang, master_barang.nama_barang, master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.keterangan');
+        $this->db->from('jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Inventaris');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
+        $data['items'] = $this->db->get()->result_array();
+
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_inventaris_barang/add');

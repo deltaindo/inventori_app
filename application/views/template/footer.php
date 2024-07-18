@@ -559,6 +559,14 @@
     });
   }
 </script>
+
+<script>
+  document.getElementById('keterangan_masuk_barang').addEventListener('keydown', function(event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+    }
+  });
+</script>
 </body>
 
 </html>
