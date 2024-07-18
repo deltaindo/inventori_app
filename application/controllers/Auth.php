@@ -35,7 +35,7 @@ class Auth extends CI_Controller
                 ];
 
                 $this->session->set_userdata($data);
-                redirect('dashboard/perlengkapan_kantor');
+                redirect('dashboard/report_stok_barang');
             } else {
                 $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">Password salah!</div>');
                 redirect('auth');

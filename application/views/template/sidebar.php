@@ -88,7 +88,7 @@
 
   <li class="nav-item">
     <a class="nav-link" data-bs-toggle="collapse" href="#form-penjualan" aria-expanded="false" aria-controls="form-penjualan">
-      <i class="menu-icon mdi mdi-chart-areaspline"></i>
+      <i class="menu-icon mdi mdi-truck-delivery"></i>
       <span class="menu-title">
         Transaksi
       </span>
@@ -126,6 +126,30 @@
   </li>
 
   <li class="nav-item">
+    <a class="nav-link" data-bs-toggle="collapse" href="#inventaris" aria-expanded="false" aria-controls="inventaris">
+      <i class="menu-icon mdi mdi-calendar-multiple-check"></i>
+      <span class="menu-title">
+        Inventaris
+      </span>
+      <i class="menu-arrow"></i>
+    </a>
+    <div class="collapse" id="inventaris">
+      <ul class="nav flex-column sub-menu">
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/jurnal_inventaris_barang'); ?>">
+            Jurnal Inventaris Barang
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/jurnal_mutasi_inventaris'); ?>">
+            Jurnal Mutasi Inventaris
+          </a>
+        </li>
+      </ul>
+    </div>
+  </li>
+
+  <li class="nav-item">
     <a class="nav-link" data-bs-toggle="collapse" href="#report" aria-expanded="false" aria-controls="report">
       <i class="menu-icon mdi mdi-folder-open"></i>
       <span class="menu-title">
@@ -138,6 +162,11 @@
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('dashboard/report_stok_barang'); ?>">
             Jurnal Stok Barang
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/report_history_inventaris'); ?>">
+            Jurnal History Inventaris
           </a>
         </li>
       </ul>

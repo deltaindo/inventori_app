@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-sm-12 mt-2">
                 <div class="home-tab">
-                    <div class="d-sm-flex align-items-center justify-content-between border-bottom">
+                    <div class="d-sm-flex align-items-right justify-content-between border-bottom">
                         <div>
                             <div class="btn-wrapper">
                                 <a href="" class="btn btn-primary text-white me-0">
@@ -20,7 +20,7 @@
                             <form id="bulk-delete-form" action="#" method="post">
                                 <div class="card-body table-responsive">
                                     <h4 class="card-title">
-                                        Report Jurnal Stok Barang
+                                        Report History Inventaris
                                     </h4>
                                     <div class="overflow-visible mt-3">
                                         <table class="table table-hover" id="example">
@@ -36,67 +36,85 @@
                                                         Nama Barang
                                                     </th>
                                                     <th>
-                                                        Merek
+                                                        Spesifikasi
                                                     </th>
                                                     <th>
-                                                        Lokasi
+                                                        Nama Karyawan
                                                     </th>
                                                     <th>
-                                                        Kantor
+                                                        Divisi
                                                     </th>
                                                     <th>
-                                                        Tanggal Update
+                                                        Tanggal Assign
                                                     </th>
                                                     <th>
-                                                        Jumlah Masuk
+                                                        Kondisi Awal
                                                     </th>
                                                     <th>
-                                                        Jumlah Keluar
+                                                        Jumlah Assets
                                                     </th>
                                                     <th>
-                                                        Stok Akhir
+                                                        Status Assets
                                                     </th>
                                                     <th>
-                                                        Keterangan
+                                                        Keterangan Inventaris
+                                                    </th>
+                                                    <th>
+                                                        Jenis Pakai
+                                                    </th>
+                                                    <th>
+                                                        Tanggal Return
+                                                    </th>
+                                                    <th>
+                                                        Kondisi Akhir
                                                     </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
                                                 <?php $i = 1; ?>
-                                                <?php foreach ($jurnal_stok as $stok) : ?>
+                                                <?php foreach ($history_inventaris as $asset) : ?>
                                                     <tr>
                                                         <td>
                                                             <?= $i++ ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['kode_barang'] ?>
+                                                            <?= $asset['kode_barang'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['nama_barang'] ?>
+                                                            <?= $asset['nama_barang'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['nama_merek'] ?>
+                                                            <?= $asset['spesifikasi'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['nama_lokasi'] ?>
+                                                            <?= $asset['nama_karyawan'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['nama_kantor'] ?>
+                                                            <?= $asset['nama_divisi'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['tanggal_update'] ?>
+                                                            <?= $asset['tanggal_assign'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['jumlah_masuk'] ?>
+                                                            <?= $asset['kondisi_awal'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['jumlah_keluar'] ?>
+                                                            <?= $asset['jumlah_assets'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['stok_akhir'] ?>
+                                                            <?= $asset['status_assets'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['keterangan'] ?>
+                                                            <?= $asset['keterangan_inventaris'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['jenis_pakai'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['tanggal_return'] == Null ? '-' : $asset['tanggal_return'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['kondisi_akhir'] == Null ? '-' : $asset['kondisi_akhir'] ?>
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>

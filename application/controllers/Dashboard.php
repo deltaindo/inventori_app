@@ -2294,4 +2294,62 @@ class Dashboard extends CI_Controller
         $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Karyawan Berhasil di hapus</div>');
         redirect('dashboard/master_karyawan');
     }
+
+    public function report_history_inventaris()
+    {
+        $data['tittle'] = 'Report History Inventaris | Inventori App';
+
+        $this->db->select('
+            jurnal_inventaris.id,
+            jurnal_barang.kode_barang,
+            master_barang.nama_barang,
+            master_karyawan.nama_karyawan,
+            master_divisi.nama_divisi,
+            jurnal_inventaris.tanggal_assign,
+            jurnal_inventaris.tanggal_return,
+            history_assets.kondisi_awal,
+            history_assets.kondisi_akhir,
+            jurnal_inventaris.jumlah_assets,
+            jurnal_inventaris.status_assets,
+            jurnal_inventaris.keterangan as keterangan_inventaris,
+            jurnal_barang_masuk.jenis_pakai,
+            jurnal_barang_masuk.keterangan as spesifikasi
+        ');
+        $this->db->from('jurnal_inventaris');
+        $this->db->join('history_assets', 'history_assets.id_jurnal_inventaris = jurnal_inventaris.id');
+        $this->db->join('master_karyawan', 'master_karyawan.id = jurnal_inventaris.id_karyawan');
+        $this->db->join('master_divisi', 'master_divisi.id = master_karyawan.id_divisi');
+        $this->db->join('jurnal_barang_masuk', 'jurnal_barang_masuk.id = jurnal_inventaris.id_jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang.id = jurnal_barang_masuk.id_jurnal_barang');
+        $this->db->join('master_barang', 'master_barang.id = jurnal_barang.id_barang');
+        $this->db->join('master_merek', 'master_merek.id = jurnal_barang.id_merek');
+        $this->db->join('master_lokasi', 'master_lokasi.id = jurnal_barang.id_lokasi');
+        $this->db->join('master_kantor', 'master_kantor.id = master_lokasi.id_kantor');
+
+        $this->db->order_by('jurnal_inventaris.id', 'DESC');
+        $data['history_inventaris'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_history_inventaris/list');
+        $this->load->view('template/footer');
+    }
+
+    public function jurnal_inventaris_barang()
+    {
+        $data['tittle'] = 'List Jurnal Inventaris | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_inventaris_barang/list');
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_inventaris_barang()
+    {
+        $data['tittle'] = 'Tambah Jurnal Inventaris | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_inventaris_barang/add');
+        $this->load->view('template/footer');
+    }
 }
