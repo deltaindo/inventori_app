@@ -34,8 +34,8 @@ class Dashboard extends CI_Controller
         }
 
         // variabel global
-        $this->kantor       = $this->session->userdata('id_kantor');
-        $this->nama_kantor = $this->db->get('master_kantor', ['id' => '3'])->row_array()['nama_kantor'];
+        $this->kantor           = $this->session->userdata('id_kantor');
+        $this->nama_kantor      = $this->db->get_where('master_kantor', ['id' => $this->kantor])->row()->nama_kantor;
     }
     public function index()
     {

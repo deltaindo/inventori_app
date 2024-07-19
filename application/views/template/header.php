@@ -55,7 +55,7 @@
       <ul class="navbar-nav">
         <li class="nav-item font-weight-semibold d-none d-lg-block ms-0">
           <h1 class="welcome-text">
-            <span class="text-black fw-bold"><?= $this->nama_kantor; ?></span>
+            <span class="text-black fw-bold"><?= $this->nama_kantor == null ? 'Selamat Pagi' : $this->nama_kantor; ?></span>
           </h1>
           <h3 class="welcome-sub-text">
             Total Seluruh Aset : <span class="text-danger">Rp. <?= number_format($total + $total_kantor, 0, ',', '.'); ?></span>
