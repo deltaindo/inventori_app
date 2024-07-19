@@ -34,7 +34,8 @@ class Dashboard extends CI_Controller
         }
 
         // variabel global
-        $this->kantor = $this->session->userdata('id_kantor');
+        $this->kantor       = $this->session->userdata('id_kantor');
+        $this->nama_kantor = $this->db->get('master_kantor', ['id' => '3'])->row_array()['nama_kantor'];
     }
     public function index()
     {
@@ -1348,6 +1349,7 @@ class Dashboard extends CI_Controller
         $this->db->select('user.id, user.Nama, user.email, master_kantor.nama_kantor');
         $this->db->from('user');
         $this->db->join('master_kantor', 'user.id_kantor = master_kantor.id');
+        $this->db->where('user.id_kantor', $this->kantor);
         $this->db->order_by('user.id', 'DESC');
         $data['admins'] = $this->db->get()->result_array();
 
@@ -1360,7 +1362,9 @@ class Dashboard extends CI_Controller
     public function tambah_admin()
     {
         $data['tittle'] = 'Tambah Data Admin | Inventori App';
-        $data["kantor"] = $this->db->get('master_kantor')->result_array();
+        $data["kantor"] = $this->db->where('id', $this->kantor)
+            ->get('master_kantor')
+            ->result_array();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('auth/admin/add', $data);
@@ -1442,7 +1446,9 @@ class Dashboard extends CI_Controller
         $data['tittle'] = 'List Data Kantor | Inventori App';
 
         $this->db->order_by('id', 'DESC');
-        $data['kantor'] = $this->db->get('master_kantor')->result_array();
+        $data['kantor'] = $this->db->where('id', $this->kantor)
+            ->get('master_kantor')
+            ->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -1521,6 +1527,7 @@ class Dashboard extends CI_Controller
         $this->db->select('master_lokasi.id, master_kantor.nama_kantor, master_lokasi.nama_lokasi, master_lokasi.keterangan');
         $this->db->from('master_lokasi');
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
         $this->db->order_by('master_lokasi.id', 'DESC');
         $data['lokasi'] = $this->db->get()->result_array();
 
@@ -1977,9 +1984,12 @@ class Dashboard extends CI_Controller
         $data['jurnal_barang']  = $this->db->get_where('jurnal_barang', ['id' => $id])->row_array();
         $data['barang']         = $this->db->order_by('id', 'DESC')->get('master_barang')->result_array();
         $data['merek']          = $this->db->order_by('id', 'DESC')->get('master_merek')->result_array();
-        $data['lokasi']         = $this->db->order_by('id', 'DESC')->get('master_lokasi')->result_array();
         $data['satuan']         = $this->db->order_by('id', 'DESC')->get('master_satuan')->result_array();
         $data['kategori']       = $this->db->order_by('id', 'DESC')->get('master_kategori')->result_array();
+        $data['lokasi']         = $this->db->where('id_kantor', $this->kantor)
+            ->order_by('id', 'DESC')
+            ->get('master_lokasi')
+            ->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -2160,6 +2170,8 @@ class Dashboard extends CI_Controller
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
 
+        $this->db->where('master_kantor.id', $this->kantor);
+
         $this->db->order_by('jurnal_stok_barang.id', 'DESC');
         $data['jurnal_stok'] = $this->db->get()->result_array();
 
@@ -2171,10 +2183,12 @@ class Dashboard extends CI_Controller
 
     public function master_divisi()
     {
-        $data['tittle'] = 'List Data Divisi | Inventori App';
-
+        $data['tittle']  = 'List Data Divisi | Inventori App';
         $this->db->order_by('id', 'DESC');
-        $data['divisis'] = $this->db->get('master_divisi')->result_array();
+        $data['divisis'] = $this->db->where('id_kantor', $this->kantor)
+            ->order_by('id')
+            ->get('master_divisi')
+            ->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -2194,6 +2208,7 @@ class Dashboard extends CI_Controller
     public function simpan_divisi()
     {
         $data = [
+            'id_kantor'     => $this->kantor,
             'nama_divisi'   => $this->input->post('nama_divisi'),
             'keterangan'    => $this->input->post('keterangan_divisi'),
         ];
@@ -2237,6 +2252,7 @@ class Dashboard extends CI_Controller
         $this->db->select('master_karyawan.id, master_karyawan.nama_karyawan, master_divisi.nama_divisi');
         $this->db->from('master_karyawan');
         $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->where('master_divisi.id_kantor', $this->kantor);
         $this->db->order_by('master_karyawan.id', 'DESC');
         $data['karyawans'] = $this->db->get()->result_array();
 
@@ -2333,6 +2349,8 @@ class Dashboard extends CI_Controller
         $this->db->join('master_lokasi', 'master_lokasi.id = jurnal_barang.id_lokasi');
         $this->db->join('master_kantor', 'master_kantor.id = master_lokasi.id_kantor');
 
+        $this->db->where('master_kantor.id', $this->kantor);
+
         $this->db->order_by('jurnal_inventaris.id', 'DESC');
         $data['history_inventaris'] = $this->db->get()->result_array();
 
@@ -2372,6 +2390,8 @@ class Dashboard extends CI_Controller
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id', 'left');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id', 'left');
 
+        $this->db->where('master_divisi.id_kantor', $this->kantor);
+
         $this->db->order_by('jurnal_inventaris.id', 'DESC');
         $data['inventaris'] = $this->db->get()->result_array();
 
@@ -2388,6 +2408,7 @@ class Dashboard extends CI_Controller
         $this->db->select('master_karyawan.id, master_karyawan.nama_karyawan, master_divisi.nama_divisi');
         $this->db->from('master_karyawan');
         $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->where('master_divisi.id_kantor', $this->kantor);
         $this->db->order_by('master_karyawan.id', 'DESC');
         $data['employees'] = $this->db->get()->result_array();
 
