@@ -2407,4 +2407,38 @@ class Dashboard extends CI_Controller
         $this->load->view('dashboard/jurnal_inventaris_barang/add');
         $this->load->view('template/footer');
     }
+
+    public function report_assets_inventaris()
+    {
+        $data['tittle'] = 'Report Assets Inventaris | Inventori App';
+
+        $this->db->select('
+            jurnal_barang_masuk.kode_barang_masuk,
+            jurnal_barang.kode_barang,
+            master_barang.nama_barang,
+            master_merek.nama_merek,
+            jurnal_barang_masuk.keterangan as spesifikasi,
+            jurnal_barang_masuk.tanggal_masuk,
+            jurnal_barang_masuk.jenis_pakai,
+            jurnal_barang_masuk.status_barang,
+            jurnal_barang_masuk.jumlah_masuk,
+            master_satuan.nama_satuan
+        ');
+
+        $this->db->from('jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Inventaris');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
+        $data['assets'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_assets_inventaris/list');
+        $this->load->view('template/footer');
+    }
 }
