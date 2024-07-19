@@ -30,7 +30,7 @@
                                                         No.
                                                     </th>
                                                     <th>
-                                                        Kode Barang Masuk
+                                                        Barang Masuk
                                                     </th>
                                                     <th>
                                                         Nama Barang

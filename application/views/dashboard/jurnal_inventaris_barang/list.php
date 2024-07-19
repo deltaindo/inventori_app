@@ -26,6 +26,9 @@
                                     <a href="<?= base_url('dashboard/tambah_inventaris_barang'); ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
+                                    <a href="<?= base_url('dashboard/mutasi_inventaris_barang'); ?>" class="btn btn-success text-white">
+                                        Mutasi Inventaris
+                                    </a>
                                     <div class="overflow-visible mt-3">
                                         <table class="table table-hover" id="example">
                                             <thead>
@@ -34,13 +37,22 @@
                                                         No.
                                                     </th>
                                                     <th>
+                                                        Kode Inventaris
+                                                    </th>
+                                                    <th>
                                                         Kode Barang
                                                     </th>
                                                     <th>
                                                         Nama Barang
                                                     </th>
                                                     <th>
+                                                        Merek
+                                                    </th>
+                                                    <th>
                                                         Spesifikasi
+                                                    </th>
+                                                    <th>
+                                                        Masuk Assets
                                                     </th>
                                                     <th>
                                                         Karyawan
@@ -64,38 +76,49 @@
                                             </thead>
                                             <tbody>
                                                 <?php $i = 1; ?>
-                                                <tr>
-                                                    <td>
-                                                        <?= $i++ ?>
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                    <td>
-
-                                                    </td>
-                                                </tr>
+                                                <?php foreach ($inventaris as $asset) : ?>
+                                                    <tr>
+                                                        <td>
+                                                            <?= $i++ ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['kode_inventaris'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['kode_barang'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['nama_barang'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['nama_merek'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['spesifikasi'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['tanggal_masuk'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['nama_karyawan'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['nama_divisi'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['tanggal_assign'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['jumlah_assets'] . ' ' . $asset['nama_satuan'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['keterangan'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $asset['tanggal_return'] == Null ? '-' : $asset['tanggal_return'] ?>
+                                                        </td>
+                                                    </tr>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>

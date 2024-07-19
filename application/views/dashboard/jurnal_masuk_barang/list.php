@@ -37,7 +37,7 @@
                                                         Barang Masuk
                                                     </th>
                                                     <th>
-                                                        Nama Barang
+                                                        Barang
                                                     </th>
                                                     <th>
                                                         Merek

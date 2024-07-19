@@ -1924,9 +1924,12 @@ class Dashboard extends CI_Controller
 
         $data['barang']     = $this->db->order_by('id', 'DESC')->get('master_barang')->result_array();
         $data['merek']      = $this->db->order_by('id', 'DESC')->get('master_merek')->result_array();
-        $data['lokasi']     = $this->db->order_by('id', 'DESC')->get('master_lokasi')->result_array();
         $data['satuan']     = $this->db->order_by('id', 'DESC')->get('master_satuan')->result_array();
         $data['kategori']   = $this->db->order_by('id', 'DESC')->get('master_kategori')->result_array();
+        $data['lokasi']     = $this->db->where('id_kantor', $this->kantor)
+            ->order_by('id', 'DESC')
+            ->get('master_lokasi')
+            ->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -2049,11 +2052,12 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang.id,master_barang.nama_barang,master_lokasi.nama_lokasi');
+        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_merek.nama_merek,master_lokasi.nama_lokasi');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
         $this->db->where('master_kantor.id', $this->kantor);
         $this->db->order_by('jurnal_barang.id', 'DESC');
         $data['jurnal_barang'] = $this->db->get()->result_array();
@@ -2341,6 +2345,36 @@ class Dashboard extends CI_Controller
     public function jurnal_inventaris_barang()
     {
         $data['tittle'] = 'List Jurnal Inventaris | Inventori App';
+
+        $this->db->select('
+            jurnal_inventaris.id,
+            jurnal_inventaris.kode_inventaris,
+            jurnal_barang.kode_barang,
+            master_barang.nama_barang,
+            master_satuan.nama_satuan,
+            master_merek.nama_merek,
+            jurnal_barang_masuk.keterangan as spesifikasi,
+            jurnal_barang_masuk.tanggal_masuk,
+            master_karyawan.nama_karyawan,
+            master_divisi.nama_divisi,
+            jurnal_inventaris.tanggal_assign,
+            jurnal_inventaris.jumlah_assets,
+            jurnal_inventaris.keterangan,
+            jurnal_inventaris.tanggal_return
+        ');
+
+        $this->db->from('jurnal_inventaris');
+        $this->db->join('master_karyawan', 'jurnal_inventaris.id_karyawan = master_karyawan.id', 'left');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id', 'left');
+        $this->db->join('jurnal_barang_masuk', 'jurnal_inventaris.id_jurnal_barang_masuk = jurnal_barang_masuk.id', 'left');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id', 'left');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id', 'left');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id', 'left');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id', 'left');
+
+        $this->db->order_by('jurnal_inventaris.id', 'DESC');
+        $data['inventaris'] = $this->db->get()->result_array();
+
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_inventaris_barang/list');

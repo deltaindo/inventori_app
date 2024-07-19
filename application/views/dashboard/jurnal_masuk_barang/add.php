@@ -17,14 +17,14 @@
                                                     </h4>
 
                                                     <label for="id_jurnal_barang" class="text-primary fs-6 mb-1">
-                                                        Nama Barang
+                                                        Nama Barang [Merek]
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="id_jurnal_barang">
                                                             <option selected>Pilih Nama Barang...</option>
                                                             <?php foreach ($jurnal_barang as $item) : ?>
                                                                 <option value="<?= $item['id']; ?>">
-                                                                    <?= $item['nama_barang']; ?> - <?= $item['nama_lokasi']; ?>
+                                                                    <?= '[' . $item['kode_barang'] . '] ' . $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['nama_lokasi']; ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         </select>

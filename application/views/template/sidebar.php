@@ -140,11 +140,6 @@
             Jurnal Inventaris Barang
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('dashboard/jurnal_mutasi_inventaris'); ?>">
-            Jurnal Mutasi Inventaris
-          </a>
-        </li>
       </ul>
     </div>
   </li>
@@ -167,6 +162,11 @@
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('dashboard/report_history_inventaris'); ?>">
             Jurnal History Inventaris
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/report_assets_inventaris'); ?>">
+            Jurnal Assets Inventaris
           </a>
         </li>
       </ul>
