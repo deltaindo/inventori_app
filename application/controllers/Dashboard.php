@@ -2550,17 +2550,18 @@ class Dashboard extends CI_Controller
 
     public function simpan_mutasi_inventaris()
     {
-        // $update = [
-        //     'kondisi_akhir' => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-        //     'updated_at'    => date('Y-m-d H:i:s')
-        // ];
+        $id = $this->input->post('pengguna_lama');
+        $update = [
+            'kondisi_asset' => 'Tercatat',
+            'updated_at'    => date('Y-m-d H:i:s')
+        ];
 
-        // $this->db->where('id_jurnal_inventaris', $id);
-        // $this->db->update('history_assets', $update);
+        $this->db->where('id', $id);
+        $this->db->update('jurnal_inventaris', $update);
 
         $data = [
             'kode_inventaris'           => 'KJI-' . substr(uniqid(), -5),
-            'id_jurnal_barang_masuk'    => $this->input->post('id_jurnal_barang_masuk'),
+            'id_jurnal_barang_masuk'    => $this->input->post('nama_inventaris'),
             'id_karyawan'               => $this->input->post('nama_karyawan'),
             'tanggal_assign'            => $this->input->post('tanggal_assign'),
             'status_assets'             => $this->input->post('status_assets'),
@@ -2577,7 +2578,7 @@ class Dashboard extends CI_Controller
         $this->db->insert('history_assets', $history);
 
         $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Mutasi Assets Inventaris Berhasil di simpan</div>');
-        redirect('dashboard/mutasi_inventaris_barang');
+        redirect('dashboard/jurnal_inventaris_barang');
     }
 
     public function report_assets_inventaris()

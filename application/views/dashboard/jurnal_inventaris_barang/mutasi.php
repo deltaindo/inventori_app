@@ -37,11 +37,11 @@
                                                         </select>
                                                     </div>
 
-                                                    <label for="nama_inventaris" class="text-primary fs-6 mb-1">
+                                                    <label for="pengguna_lama" class="text-primary fs-6 mb-1">
                                                         [Tanggal Return Asset] Pengguna Lama
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="nama_inventaris">
+                                                        <select class="form-control" name="pengguna_lama">
                                                             <option selected>Pilih Pengguna Lama...</option>
                                                             <?php foreach ($items as $item) : ?>
                                                                 <option value="<?= $item['id']; ?>">[<?= $item['tanggal_return']; ?>] <?= $item['nama_karyawan']; ?> - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['spesifikasi']; ?></option>
