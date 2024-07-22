@@ -10,7 +10,7 @@
                                 <div class="row tabel-produk mt-2">
                                     <div class="col-lg-12 grid-margin stretch-card">
                                         <div class="card">
-                                            <form method="post" action="<?= base_url('dashboard/simpan_inventaris_barang'); ?>" enctype="multipart/form-data">
+                                            <form method="post" action="<?= base_url('dashboard/simpan_inventaris_barang'); ?>">
                                                 <div class="card-body">
                                                     <h4 class="card-title">
                                                         Tambah Jurnal Inventaris
@@ -66,10 +66,10 @@
                                                     </div>
 
                                                     <label for="keterangan_barang" class="text-primary fs-6 mb-1">
-                                                        Keterangan
+                                                        Keterangan [Kondisi Awal]
                                                     </label>
                                                     <div class="mb-3">
-                                                        <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Inventaris"></textarea>
+                                                        <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Inventaris atau Kondisi Awal"></textarea>
                                                         <span class="text-small">
                                                             <i>
                                                                 Contoh: Asset dalam kondisi layak digunakan.

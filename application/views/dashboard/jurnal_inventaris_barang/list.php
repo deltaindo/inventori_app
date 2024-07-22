@@ -72,6 +72,9 @@
                                                     <th>
                                                         Tanggal Return
                                                     </th>
+                                                    <th>
+                                                        Action
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -116,6 +119,16 @@
                                                         </td>
                                                         <td>
                                                             <?= $asset['tanggal_return'] == Null ? '-' : $asset['tanggal_return'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php if ($asset['tanggal_return'] == Null) : ?>
+                                                                <a href="<?= base_url('dashboard/return_jurnal_inventaris/' . $asset['id']) ?>" class="btn btn-primary text-white">
+                                                                    Return
+                                                                </a>
+                                                            <?php else : ?>
+                                                                -
+                                                            <?php endif; ?>
+
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>
