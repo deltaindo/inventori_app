@@ -2521,10 +2521,63 @@ class Dashboard extends CI_Controller
     public function mutasi_inventaris_barang()
     {
         $data['tittle'] = 'Mutasi Inventaris | Inventori App';
+
+        $this->db->select('master_karyawan.id, master_karyawan.nama_karyawan, master_divisi.nama_divisi');
+        $this->db->from('master_karyawan');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->where('master_divisi.id_kantor', $this->kantor);
+        $this->db->order_by('master_karyawan.id', 'DESC');
+        $data['employees'] = $this->db->get()->result_array();
+
+        $this->db->select('jurnal_inventaris.id,jurnal_inventaris.id_jurnal_barang_masuk,master_karyawan.nama_karyawan,jurnal_inventaris.tanggal_return,master_barang.nama_barang,master_merek.nama_merek,jurnal_barang_masuk.keterangan as spesifikasi');
+        $this->db->from('jurnal_inventaris');
+        $this->db->join('jurnal_barang_masuk', 'jurnal_inventaris.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
+        $this->db->join('master_karyawan', 'jurnal_inventaris.id_karyawan = master_karyawan.id');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->where('jurnal_inventaris.kondisi_asset', 'Aktif');
+        $this->db->order_by('jurnal_inventaris.id', 'DESC');
+        $data['items'] = $this->db->get()->result_array();
+
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_inventaris_barang/mutasi');
         $this->load->view('template/footer');
+    }
+
+    public function simpan_mutasi_inventaris()
+    {
+        // $update = [
+        //     'kondisi_akhir' => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+        //     'updated_at'    => date('Y-m-d H:i:s')
+        // ];
+
+        // $this->db->where('id_jurnal_inventaris', $id);
+        // $this->db->update('history_assets', $update);
+
+        $data = [
+            'kode_inventaris'           => 'KJI-' . substr(uniqid(), -5),
+            'id_jurnal_barang_masuk'    => $this->input->post('id_jurnal_barang_masuk'),
+            'id_karyawan'               => $this->input->post('nama_karyawan'),
+            'tanggal_assign'            => $this->input->post('tanggal_assign'),
+            'status_assets'             => $this->input->post('status_assets'),
+            'jumlah_assets'             => $this->input->post('jumlah_assets'),
+            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+        ];
+        $this->db->insert('jurnal_inventaris', $data);
+
+        $history = [
+            'id_jurnal_inventaris' => $this->db->insert_id(),
+            'kondisi_awal'         => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+            'created_at'           => date('Y-m-d H:i:s')
+        ];
+        $this->db->insert('history_assets', $history);
+
+        $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Mutasi Assets Inventaris Berhasil di simpan</div>');
+        redirect('dashboard/mutasi_inventaris_barang');
     }
 
     public function report_assets_inventaris()
