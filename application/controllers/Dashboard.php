@@ -2039,7 +2039,7 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan');
+        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
@@ -2087,6 +2087,8 @@ class Dashboard extends CI_Controller
             'jenis_pakai'       => $this->input->post('jenis_pakai'),
             'status_barang'     => $this->input->post('status_barang'),
             'jumlah_masuk'      => $this->input->post('jumlah_masuk'),
+            'harga_barang'      => $this->input->post('harga_barang'),
+            'total'             => $this->input->post('jumlah_masuk') * $this->input->post('harga_barang'),
             'keterangan'        => $this->input->post('keterangan'),
         ];
 
@@ -2119,10 +2121,41 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Edit Jurnal Barang Masuk | Inventori App';
         $data['jurnal_barang_masuk'] = $this->db->get_where('jurnal_barang_masuk', ['id' => $id])->row_array();
+
+        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_merek.nama_merek,master_lokasi.nama_lokasi');
+        $this->db->from('jurnal_barang');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->where('master_kantor.id', $this->kantor);
+        $this->db->order_by('jurnal_barang.id', 'DESC');
+        $data['jurnal_barang'] = $this->db->get()->result_array();
+
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_masuk_barang/edit');
         $this->load->view('template/footer');
+    }
+
+    public function update_jurnal_masuk_barang($id)
+    {
+        $data = [
+            'id_jurnal_barang'  => $this->input->post('id_jurnal_barang'),
+            'kode_barang_masuk' => 'JBM-' . substr(uniqid(), -5),
+            'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
+            'jenis_pakai'       => $this->input->post('jenis_pakai'),
+            'status_barang'     => $this->input->post('status_barang'),
+            'jumlah_masuk'      => $this->input->post('jumlah_masuk'),
+            'harga_barang'      => $this->input->post('harga_barang'),
+            'total'             => $this->input->post('jumlah_masuk') * $this->input->post('harga_barang'),
+            'keterangan'        => $this->input->post('keterangan'),
+        ];
+
+        $this->db->where('id', $id);
+        $this->db->update('jurnal_barang_masuk', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di Update</div>');
+        redirect('dashboard/jurnal_masuk_barang');
     }
 
     public function delete_jurnal_barang_masuk($id)

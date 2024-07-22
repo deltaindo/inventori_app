@@ -68,6 +68,13 @@
                                                         <input type="number" class="form-control" name="jumlah_masuk" placeholder="Inputkan Jumlah Barang" autofocus>
                                                     </div>
 
+                                                    <label for="harga_barang" class="text-primary fs-6 mb-1">
+                                                        Harga Asset Satuan <b>[Rp]</b>
+                                                    </label>
+                                                    <div class="mb-3">
+                                                        <input type="number" class="form-control" name="harga_barang" placeholder="Inputkan Harga Asset Satuan" autofocus>
+                                                    </div>
+
                                                     <label for="keterangan" class="text-primary fs-6 mb-1">
                                                         Keterangan
                                                         [

@@ -67,6 +67,12 @@
                                                         Jumlah Masuk
                                                     </th>
                                                     <th>
+                                                        Harga Asset
+                                                    </th>
+                                                    <th>
+                                                        Total Harga Asset
+                                                    </th>
+                                                    <th>
                                                         Action
                                                     </th>
                                                 </tr>
@@ -110,6 +116,12 @@
                                                         </td>
                                                         <td>
                                                             <?= $barang_masuk['jumlah_masuk']; ?> <?= $barang_masuk['nama_satuan']; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= 'Rp ' . number_format($barang_masuk['harga_barang'], 0, ',', '.'); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= 'Rp ' . number_format($barang_masuk['total'], 0, ',', '.'); ?>
                                                         </td>
                                                         <td>
                                                             <a href="<?= base_url('dashboard/edit_jurnal_barang_masuk/' . $barang_masuk['id']); ?>" class="btn btn-lg btn-outline-primary">
