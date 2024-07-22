@@ -87,13 +87,13 @@
                                                             <?= $stok['tanggal_update'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['jumlah_masuk'] ?>
+                                                            <?= $stok['jumlah_masuk'] ?> <?= $stok['nama_satuan'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['jumlah_keluar'] ?>
+                                                            <?= $stok['jumlah_keluar'] ?> <?= $stok['nama_satuan'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['stok_akhir'] ?>
+                                                            <?= $stok['stok_akhir'] ?> <?= $stok['nama_satuan'] ?>
                                                         </td>
                                                         <td>
                                                             <?= $stok['keterangan'] ?>
