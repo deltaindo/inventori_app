@@ -61,11 +61,18 @@
                                                         <input type="date" class="form-control" name="tanggal_masuk" value="<?= $jurnal_barang_masuk['tanggal_masuk']; ?>" placeholder="Inputkan Tanggal">
                                                     </div>
 
-                                                    <label for="jumlah_masuk" class="text-primary fs-6 mb-1">
-                                                        Jumlah Masuk
+                                                    <label for="jumlah_masuk_lama" class="text-primary fs-6 mb-1">
+                                                        Jumlah Masuk (Data Lama)
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="number" class="form-control" name="jumlah_masuk" value="<?= $jurnal_barang_masuk['jumlah_masuk']; ?>" placeholder="Inputkan Jumlah Barang" autofocus>
+                                                        <input type="number" class="form-control" name="jumlah_masuk_lama" value="<?= $jurnal_barang_masuk['jumlah_masuk']; ?>" placeholder="Inputkan Jumlah Barang" readonly>
+                                                    </div>
+
+                                                    <label for="jumlah_masuk" class="text-primary fs-6 mb-1">
+                                                        Jumlah Masuk (Data Baru)
+                                                    </label>
+                                                    <div class="mb-3">
+                                                        <input type="number" class="form-control" name="jumlah_masuk_baru" placeholder="Inputkan Data Baru Jumlah Barang" autofocus>
                                                     </div>
 
                                                     <label for="harga_barang" class="text-primary fs-6 mb-1">

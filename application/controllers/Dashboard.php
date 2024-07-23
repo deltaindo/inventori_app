@@ -2155,14 +2155,31 @@ class Dashboard extends CI_Controller
             'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
             'jenis_pakai'       => $this->input->post('jenis_pakai'),
             'status_barang'     => $this->input->post('status_barang'),
-            'jumlah_masuk'      => $this->input->post('jumlah_masuk'),
+            'jumlah_masuk'      => $this->input->post('jumlah_masuk_baru'),
             'harga_barang'      => $this->input->post('harga_barang'),
-            'total'             => $this->input->post('jumlah_masuk') * $this->input->post('harga_barang'),
+            'total'             => $this->input->post('jumlah_masuk_baru') * $this->input->post('harga_barang'),
             'keterangan'        => $this->input->post('keterangan'),
         ];
 
         $this->db->where('id', $id);
         $this->db->update('jurnal_barang_masuk', $data);
+
+        $jumlah_masuk_lama = $this->input->post('jumlah_masuk_lama');
+        $jumlah_masuk_baru = $this->input->post('jumlah_masuk_baru');
+        $id_jurnal_barang  = $this->input->post('id_jurnal_barang');
+
+        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+        $query = $this->db->get('jurnal_stok_barang');
+        $stok = $query->row();
+
+        $jumlah_masuk_sekarang = ($stok->jumlah_masuk - (int)$jumlah_masuk_lama) + (int)$jumlah_masuk_baru;
+        $stok_akhir_sekarang = (($stok->jumlah_masuk - (int)$jumlah_masuk_lama) + (int)$jumlah_masuk_baru) - $stok->jumlah_keluar;
+
+        $this->db->set('jumlah_masuk', $jumlah_masuk_sekarang, FALSE);
+        $this->db->set('stok_akhir', $stok_akhir_sekarang, FALSE);
+        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+        $this->db->update('jurnal_stok_barang');
+
         $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di Update</div>');
         redirect('dashboard/jurnal_masuk_barang');
     }
