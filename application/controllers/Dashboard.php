@@ -2101,13 +2101,22 @@ class Dashboard extends CI_Controller
         $query = $this->db->get('jurnal_stok_barang');
 
         if ($query->num_rows() > 0) {
-            $this->db->set('jumlah_masuk', 'jumlah_masuk + ' . (int)$jumlah_masuk, FALSE);
+            $data = $query->row();
+            $jumlah_masuk_sekarang = $data->jumlah_masuk + (int)$jumlah_masuk;
+            $stok_akhir_sekarang = $jumlah_masuk_sekarang - $data->jumlah_keluar;
+
+            $this->db->set('jumlah_masuk', $jumlah_masuk_sekarang, FALSE);
+            $this->db->set('stok_akhir', $stok_akhir_sekarang, FALSE);
             $this->db->where('id_jurnal_barang', $id_jurnal_barang);
             $this->db->update('jurnal_stok_barang');
         } else {
+            $stok_akhir = $jumlah_masuk - 0;
+
             $data_stok = [
                 'id_jurnal_barang'  => $id_jurnal_barang,
-                'jumlah_masuk'      => $jumlah_masuk
+                'jumlah_masuk'      => $jumlah_masuk,
+                'jumlah_keluar'     => 0,
+                'stok_akhir'        => $stok_akhir
             ];
             $this->db->insert('jurnal_stok_barang', $data_stok);
         }
@@ -2195,11 +2204,11 @@ class Dashboard extends CI_Controller
             jurnal_stok_barang.jumlah_keluar, 
             jurnal_stok_barang.stok_akhir, 
             jurnal_stok_barang.tanggal_update,
-            jurnal_barang_masuk.keterangan
+            jurnal_barang.keterangan,
         ');
+
         $this->db->from('jurnal_stok_barang');
         $this->db->join('jurnal_barang', 'jurnal_stok_barang.id_jurnal_barang = jurnal_barang.id');
-        $this->db->join('jurnal_barang_masuk', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
@@ -2207,6 +2216,20 @@ class Dashboard extends CI_Controller
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
 
         $this->db->where('master_kantor.id', $this->kantor);
+
+        $this->db->group_by('
+            jurnal_stok_barang.id, 
+            jurnal_barang.kode_barang, 
+            master_barang.nama_barang, 
+            master_merek.nama_merek, 
+            master_lokasi.nama_lokasi, 
+            master_satuan.nama_satuan, 
+            master_kantor.nama_kantor, 
+            jurnal_stok_barang.jumlah_masuk, 
+            jurnal_stok_barang.jumlah_keluar, 
+            jurnal_stok_barang.stok_akhir, 
+            jurnal_stok_barang.tanggal_update
+        ');
 
         $this->db->order_by('jurnal_stok_barang.id', 'DESC');
         $data['jurnal_stok'] = $this->db->get()->result_array();
