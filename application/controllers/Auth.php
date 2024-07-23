@@ -4,6 +4,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 class Auth extends CI_Controller
 {
 
+    /**
+     * Index function that loads the form validation library,
+     * sets rules for email and password validation,
+     * and loads the login view if validation fails.
+     */
     public function index()
     {
 
@@ -19,6 +24,19 @@ class Auth extends CI_Controller
         }
     }
 
+    /**
+     * Logs in a user based on their email and password.
+     *
+     * This function retrieves the email and password from the POST request,
+     * queries the 'user' table in the database to find a matching user,
+     * and checks if the provided password matches the stored password.
+     * If the user is found and the password is correct, the user's data
+     * is stored in the session and they are redirected to the dashboard.
+     * If the user is not found or the password is incorrect, a flash message
+     * is set and the user is redirected back to the login page.
+     *
+     * @return void
+     */
     public function _login()
     {
         $email = $this->input->post('email');
@@ -46,7 +64,12 @@ class Auth extends CI_Controller
         }
     }
 
-
+    /**
+     * Logs out the user by unsetting the 'email' and 'role_id' session data,
+     * setting a flash message, and redirecting to the 'auth' page.
+     *
+     * @return void
+     */
     public function logout()
     {
         $this->session->unset_userdata('email');
