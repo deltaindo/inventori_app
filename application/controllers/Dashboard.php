@@ -2184,13 +2184,6 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_masuk_barang');
     }
 
-    public function delete_jurnal_barang_masuk($id)
-    {
-        $this->db->delete('jurnal_barang_masuk', ['id' => $id]);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jurnal Barang Berhasil di hapus</div>');
-        redirect('dashboard/jurnal_masuk_barang');
-    }
-
     public function hapus_bulk_jurnal_barang_masuk()
     {
         $ids = $this->input->post('id');

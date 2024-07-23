@@ -127,9 +127,6 @@
                                                             <a href="<?= base_url('dashboard/edit_jurnal_barang_masuk/' . $barang_masuk['id']); ?>" class="btn btn-lg btn-outline-primary">
                                                                 Edit
                                                             </a>
-                                                            <button class="btn btn-lg btn-danger" type="button" onclick="deleteJurnalBarangMasuk(<?= $barang_masuk['id']; ?>)">
-                                                                Hapus
-                                                            </button>
                                                         </td>
                                                     </tr>
                                             </tbody>

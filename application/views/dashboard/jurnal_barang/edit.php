@@ -89,9 +89,19 @@
 
                                                     <label for="keterangan_barang" class="text-primary fs-6 mb-1">
                                                         Keterangan
+                                                        [
+                                                        <b>
+                                                            Jangan Pakai Enter
+                                                        </b>
+                                                        ]
                                                     </label>
                                                     <div class="mb-3">
-                                                        <textarea name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Barang"><?= $jurnal_barang['keterangan']; ?></textarea>
+                                                        <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Contoh: Ideapad Slim 3, Ryzen 5 6500U, Ram 8 GB, SSD 512 GB"><?= $jurnal_barang['keterangan']; ?></textarea>
+                                                        <span class="text-small">
+                                                            <i>
+                                                                Jangan Pakai Enter
+                                                            </i>
+                                                        </span>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">
