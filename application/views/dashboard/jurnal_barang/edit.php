@@ -21,7 +21,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="id_barang">
-                                                            <option selected>Pilih Nama Barang...</option>
+                                                            <option value="" selected>Pilih Nama Barang...</option>
                                                             <?php foreach ($barang as $items) : ?>
                                                                 <option value="<?= $items['id'] ?>" <?= $items['id'] == $jurnal_barang['id_barang'] ? 'selected' : '' ?>>
                                                                     <?= $items['nama_barang'] ?>
@@ -35,7 +35,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="id_merek">
-                                                            <option selected>Pilih Merek Barang...</option>
+                                                            <option value="" selected>Pilih Merek Barang...</option>
                                                             <?php foreach ($merek as $brand) : ?>
                                                                 <option value="<?= $brand['id'] ?>" <?= $brand['id'] == $jurnal_barang['id_merek'] ? 'selected' : '' ?>>
                                                                     <?= $brand['nama_merek'] ?>
@@ -49,7 +49,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="id_satuan">
-                                                            <option selected>Pilih Satuan Barang...</option>
+                                                            <option value="" selected>Pilih Satuan Barang...</option>
                                                             <?php foreach ($satuan as $unit) : ?>
                                                                 <option value="<?= $unit['id'] ?>" <?= $unit['id'] == $jurnal_barang['id_satuan'] ? 'selected' : '' ?>>
                                                                     <?= $unit['nama_satuan'] ?>
@@ -63,7 +63,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="id_lokasi">
-                                                            <option selected>Pilih Lokasi Barang...</option>
+                                                            <option value="" selected>Pilih Lokasi Barang...</option>
                                                             <?php foreach ($lokasi as $location) : ?>
                                                                 <option value="<?= $location['id'] ?>" <?= $location['id'] == $jurnal_barang['id_lokasi'] ? 'selected' : '' ?>>
                                                                     <?= $location['nama_lokasi']; ?>
@@ -78,7 +78,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="id_kategori">
-                                                            <option selected>Pilih Kategori...</option>
+                                                            <option value="" selected>Pilih Kategori...</option>
                                                             <?php foreach ($kategori as $category) : ?>
                                                                 <option value="<?= $category['id'] ?>" <?= $category['id'] == $jurnal_barang['id_kategori'] ? 'selected' : '' ?>>
                                                                     <?= $category['nama_kategori'] ?>

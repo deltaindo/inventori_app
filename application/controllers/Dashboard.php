@@ -1539,13 +1539,22 @@ class Dashboard extends CI_Controller
      */
     public function simpan_kantor()
     {
-        $data = [
-            'nama_kantor'   => $this->input->post('nama_kantor'),
-            'keterangan'    => $this->input->post('keterangan_kantor')
-        ];
-        $this->db->insert('master_kantor', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kantor Berhasil di tambahkan</div>');
-        redirect('dashboard/master_kantor');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_kantor', 'Offcie Name', 'required');
+        $this->form_validation->set_rules('keterangan_kantor', 'Description Office', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_kantor');
+        } else {
+            $data = [
+                'nama_kantor'   => $this->input->post('nama_kantor'),
+                'keterangan'    => $this->input->post('keterangan_kantor')
+            ];
+            $this->db->insert('master_kantor', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kantor Berhasil ditambahkan</div>');
+            redirect('dashboard/master_kantor');
+        }
     }
 
     /**
@@ -1581,14 +1590,23 @@ class Dashboard extends CI_Controller
      */
     public function update_kantor($id)
     {
-        $data = [
-            'nama_kantor'   => $this->input->post('nama_kantor'),
-            'keterangan'    => $this->input->post('keterangan_kantor')
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('master_kantor', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kantor Berhasil di ubah</div>');
-        redirect('dashboard/master_kantor');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_kantor', 'Offcie Name', 'required');
+        $this->form_validation->set_rules('keterangan_kantor', 'Description Office', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_kantor');
+        } else {
+            $data = [
+                'nama_kantor'   => $this->input->post('nama_kantor'),
+                'keterangan'    => $this->input->post('keterangan_kantor')
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('master_kantor', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kantor Berhasil di ubah</div>');
+            redirect('dashboard/master_kantor');
+        }
     }
 
     /**
@@ -1671,14 +1689,24 @@ class Dashboard extends CI_Controller
      */
     public function simpan_lokasi()
     {
-        $data = [
-            'id_kantor'     => $this->input->post('id_kantor'),
-            'nama_lokasi'   => $this->input->post('nama_lokasi'),
-            'keterangan'    => $this->input->post('keterangan_lokasi')
-        ];
-        $this->db->insert('master_lokasi', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Lokasi Berhasil di tambahkan</div>');
-        redirect('dashboard/master_lokasi');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_kantor', 'Offcie Name', 'required');
+        $this->form_validation->set_rules('nama_lokasi', 'Location Name', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Location', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_lokasi');
+        } else {
+            $data = [
+                'id_kantor'     => $this->input->post('id_kantor'),
+                'nama_lokasi'   => $this->input->post('nama_lokasi'),
+                'keterangan'    => $this->input->post('keterangan_lokasi')
+            ];
+            $this->db->insert('master_lokasi', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Lokasi Berhasil di tambahkan</div>');
+            redirect('dashboard/master_lokasi');
+        }
     }
 
     /**
@@ -1706,15 +1734,25 @@ class Dashboard extends CI_Controller
      */
     public function update_lokasi($id)
     {
-        $data = [
-            'id_kantor'     => $this->input->post('id_kantor'),
-            'nama_lokasi'   => $this->input->post('nama_lokasi'),
-            'keterangan'    => $this->input->post('keterangan_lokasi')
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('master_lokasi', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Lokasi Berhasil di ubah</div>');
-        redirect('dashboard/master_lokasi');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_kantor', 'Offcie Name', 'required');
+        $this->form_validation->set_rules('nama_lokasi', 'Location Name', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Location', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_lokasi');
+        } else {
+            $data = [
+                'id_kantor'     => $this->input->post('id_kantor'),
+                'nama_lokasi'   => $this->input->post('nama_lokasi'),
+                'keterangan'    => $this->input->post('keterangan_lokasi')
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('master_lokasi', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Lokasi Berhasil di ubah</div>');
+            redirect('dashboard/master_lokasi');
+        }
     }
 
     /**
@@ -1795,13 +1833,22 @@ class Dashboard extends CI_Controller
      */
     public function simpan_satuan()
     {
-        $data = [
-            'nama_satuan'   => $this->input->post('nama_satuan'),
-            'keterangan'    => $this->input->post('keterangan_satuan')
-        ];
-        $this->db->insert('master_satuan', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Satuan Berhasil di tambahkan</div>');
-        redirect('dashboard/master_satuan');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_satuan', 'Unit Name', 'required');
+        $this->form_validation->set_rules('keterangan_satuan', 'Description Unit Name', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_satuan');
+        } else {
+            $data = [
+                'nama_satuan'   => $this->input->post('nama_satuan'),
+                'keterangan'    => $this->input->post('keterangan_satuan')
+            ];
+            $this->db->insert('master_satuan', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Satuan Berhasil di tambahkan</div>');
+            redirect('dashboard/master_satuan');
+        }
     }
 
     /**
@@ -1833,14 +1880,23 @@ class Dashboard extends CI_Controller
      */
     public function update_satuan($id)
     {
-        $data = [
-            'nama_satuan'   => $this->input->post('nama_satuan'),
-            'keterangan'    => $this->input->post('keterangan_satuan')
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('master_satuan', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Satuan Berhasil di ubah</div>');
-        redirect('dashboard/master_satuan');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_satuan', 'Unit Name', 'required');
+        $this->form_validation->set_rules('keterangan_satuan', 'Description Unit Name', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_satuan');
+        } else {
+            $data = [
+                'nama_satuan'   => $this->input->post('nama_satuan'),
+                'keterangan'    => $this->input->post('keterangan_satuan')
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('master_satuan', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Satuan Berhasil di ubah</div>');
+            redirect('dashboard/master_satuan');
+        }
     }
 
     /**
@@ -1918,13 +1974,22 @@ class Dashboard extends CI_Controller
      */
     public function simpan_merek()
     {
-        $data = [
-            'nama_merek'   => $this->input->post('nama_merek'),
-            'keterangan'    => $this->input->post('keterangan_merek')
-        ];
-        $this->db->insert('master_merek', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Merek Berhasil di tambahkan</div>');
-        redirect('dashboard/master_merek');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_merek', 'Brand Name', 'required');
+        $this->form_validation->set_rules('keterangan_merek', 'Description Brand Name', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_merek');
+        } else {
+            $data = [
+                'nama_merek'   => $this->input->post('nama_merek'),
+                'keterangan'    => $this->input->post('keterangan_merek')
+            ];
+            $this->db->insert('master_merek', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Merek Berhasil di tambahkan</div>');
+            redirect('dashboard/master_merek');
+        }
     }
 
     /**
@@ -1955,14 +2020,23 @@ class Dashboard extends CI_Controller
      */
     public function update_merek($id)
     {
-        $data = [
-            'nama_merek'   => $this->input->post('nama_merek'),
-            'keterangan'    => $this->input->post('keterangan_merek')
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('master_merek', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Merek Berhasil di ubah</div>');
-        redirect('dashboard/master_merek');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_merek', 'Brand Name', 'required');
+        $this->form_validation->set_rules('keterangan_merek', 'Description Brand Name', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_merek');
+        } else {
+            $data = [
+                'nama_merek'   => $this->input->post('nama_merek'),
+                'keterangan'    => $this->input->post('keterangan_merek')
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('master_merek', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Merek Berhasil di ubah</div>');
+            redirect('dashboard/master_merek');
+        }
     }
 
     /**
@@ -2038,13 +2112,22 @@ class Dashboard extends CI_Controller
      */
     public function simpan_kategori()
     {
-        $data = [
-            'nama_kategori' => $this->input->post('nama_kategori'),
-            'keterangan'    => $this->input->post('keterangan_kategori')
-        ];
-        $this->db->insert('master_kategori', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kategori Berhasil di tambahkan</div>');
-        redirect('dashboard/master_kategori');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_kategori', 'Category Name', 'required');
+        $this->form_validation->set_rules('keterangan_kategori', 'Description Category', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_kategori');
+        } else {
+            $data = [
+                'nama_kategori' => $this->input->post('nama_kategori'),
+                'keterangan'    => $this->input->post('keterangan_kategori')
+            ];
+            $this->db->insert('master_kategori', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kategori Berhasil di tambahkan</div>');
+            redirect('dashboard/master_kategori');
+        }
     }
 
     /**
@@ -2075,14 +2158,22 @@ class Dashboard extends CI_Controller
      */
     public function update_kategori($id)
     {
-        $data = [
-            'nama_kategori' => $this->input->post('nama_kategori'),
-            'keterangan'    => $this->input->post('keterangan_kategori')
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('master_kategori', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kategori Berhasil di ubah</div>');
-        redirect('dashboard/master_kategori');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_kategori', 'Category Name', 'required');
+        $this->form_validation->set_rules('keterangan_kategori', 'Description Category', 'required');
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_kategori');
+        } else {
+            $data = [
+                'nama_kategori' => $this->input->post('nama_kategori'),
+                'keterangan'    => $this->input->post('keterangan_kategori')
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('master_kategori', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Kategori Berhasil di ubah</div>');
+            redirect('dashboard/master_kategori');
+        }
     }
 
     /**
@@ -2166,12 +2257,20 @@ class Dashboard extends CI_Controller
      */
     public function simpan_barang()
     {
-        $data = [
-            'nama_barang' => $this->input->post('nama_barang')
-        ];
-        $this->db->insert('master_barang', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Barang Berhasil di tambahkan</div>');
-        redirect('dashboard/master_barang');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_barang', 'Item Name', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_barang');
+        } else {
+            $data = [
+                'nama_barang' => $this->input->post('nama_barang')
+            ];
+            $this->db->insert('master_barang', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Barang Berhasil di tambahkan</div>');
+            redirect('dashboard/master_barang');
+        }
     }
 
     /**
@@ -2203,13 +2302,21 @@ class Dashboard extends CI_Controller
      */
     public function update_barang($id)
     {
-        $data = [
-            'nama_barang' => $this->input->post('nama_barang')
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('master_barang', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Barang Berhasil di ubah</div>');
-        redirect('dashboard/master_barang');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_barang', 'Item Name', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_barang');
+        } else {
+            $data = [
+                'nama_barang' => $this->input->post('nama_barang')
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('master_barang', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Barang Berhasil di ubah</div>');
+            redirect('dashboard/master_barang');
+        }
     }
 
     /**
@@ -2316,28 +2423,42 @@ class Dashboard extends CI_Controller
 
         $this->load->library('upload', $config);
 
-        if (!$this->upload->do_upload('foto_barang')) {
-            $error = $this->upload->display_errors();
+        $this->form_validation->set_rules('id_barang', 'Item Name', 'required');
+        $this->form_validation->set_rules('id_lokasi', 'Location Name', 'required');
+        $this->form_validation->set_rules('id_satuan', 'Unit Name', 'required');
+        $this->form_validation->set_rules('id_kategori', 'Category Name', 'required');
+        $this->form_validation->set_rules('id_merek', 'Brand Name', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Description Item', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $error = validation_errors();
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . $error . '</div>');
             redirect('dashboard/jurnal_barang');
         } else {
-            $upload_data = $this->upload->data();
-            $file_name = $upload_data['file_name'];
 
-            $data = [
-                'kode_barang'   => 'BRG-' . substr(uniqid(), -3),
-                'id_barang'     => $this->input->post('id_barang'),
-                'id_lokasi'     => $this->input->post('id_lokasi'),
-                'id_satuan'     => $this->input->post('id_satuan'),
-                'id_kategori'   => $this->input->post('id_kategori'),
-                'id_merek'      => $this->input->post('id_merek'),
-                'foto_barang'   => $file_name,
-                'keterangan'    => $this->input->post('keterangan_barang'),
-            ];
+            if (!$this->upload->do_upload('foto_barang')) {
+                $error = $this->upload->display_errors();
+                $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . $error . '</div>');
+                redirect('dashboard/jurnal_barang');
+            } else {
+                $upload_data = $this->upload->data();
+                $file_name = $upload_data['file_name'];
 
-            $this->db->insert('jurnal_barang', $data);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di tambahkan</div>');
-            redirect('dashboard/jurnal_barang');
+                $data = [
+                    'kode_barang'   => 'BRG-' . substr(uniqid(), -3),
+                    'id_barang'     => $this->input->post('id_barang'),
+                    'id_lokasi'     => $this->input->post('id_lokasi'),
+                    'id_satuan'     => $this->input->post('id_satuan'),
+                    'id_kategori'   => $this->input->post('id_kategori'),
+                    'id_merek'      => $this->input->post('id_merek'),
+                    'foto_barang'   => $file_name,
+                    'keterangan'    => $this->input->post('keterangan_barang'),
+                ];
+
+                $this->db->insert('jurnal_barang', $data);
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di tambahkan</div>');
+                redirect('dashboard/jurnal_barang');
+            }
         }
     }
 
@@ -2382,18 +2503,31 @@ class Dashboard extends CI_Controller
      */
     public function update_jurnal_barang($id)
     {
-        $data = [
-            'id_barang'     => $this->input->post('id_barang'),
-            'id_lokasi'     => $this->input->post('id_lokasi'),
-            'id_satuan'     => $this->input->post('id_satuan'),
-            'id_kategori'   => $this->input->post('id_kategori'),
-            'id_merek'      => $this->input->post('id_merek'),
-            'keterangan'    => $this->input->post('keterangan_barang'),
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('jurnal_barang', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di update</div>');
-        redirect('dashboard/jurnal_barang');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_barang', 'Item Name', 'required');
+        $this->form_validation->set_rules('id_lokasi', 'Location Name', 'required');
+        $this->form_validation->set_rules('id_satuan', 'Unit Name', 'required');
+        $this->form_validation->set_rules('id_kategori', 'Category Name', 'required');
+        $this->form_validation->set_rules('id_merek', 'Brand Name', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Item', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_barang');
+        } else {
+            $data = [
+                'id_barang'     => $this->input->post('id_barang'),
+                'id_lokasi'     => $this->input->post('id_lokasi'),
+                'id_satuan'     => $this->input->post('id_satuan'),
+                'id_kategori'   => $this->input->post('id_kategori'),
+                'id_merek'      => $this->input->post('id_merek'),
+                'keterangan'    => $this->input->post('keterangan_barang'),
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('jurnal_barang', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di update</div>');
+            redirect('dashboard/jurnal_barang');
+        }
     }
 
     /**
@@ -2506,49 +2640,63 @@ class Dashboard extends CI_Controller
      */
     public function simpan_jurnal_masuk_barang()
     {
-        $data = [
-            'id_jurnal_barang'  => $this->input->post('id_jurnal_barang'),
-            'kode_barang_masuk' => 'JBM-' . substr(uniqid(), -5),
-            'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
-            'jenis_pakai'       => $this->input->post('jenis_pakai'),
-            'status_barang'     => $this->input->post('status_barang'),
-            'jumlah_masuk'      => $this->input->post('jumlah_masuk'),
-            'harga_barang'      => $this->input->post('harga_barang'),
-            'total'             => $this->input->post('jumlah_masuk') * $this->input->post('harga_barang'),
-            'keterangan'        => $this->input->post('keterangan'),
-        ];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_jurnal_barang', 'Jurnal Barang', 'required');
+        $this->form_validation->set_rules('tanggal_masuk', 'Date of Entry', 'required');
+        $this->form_validation->set_rules('jenis_pakai', 'Type Use', 'required');
+        $this->form_validation->set_rules('status_barang', 'Status Item', 'required');
+        $this->form_validation->set_rules('jumlah_masuk', 'Quantity', 'required');
+        $this->form_validation->set_rules('harga_barang', 'Unit Price', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Item', 'required');
 
-        $this->db->insert('jurnal_barang_masuk', $data);
-
-        $jumlah_masuk       = $this->input->post('jumlah_masuk');
-        $id_jurnal_barang   = $this->input->post('id_jurnal_barang');
-
-        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
-        $query = $this->db->get('jurnal_stok_barang');
-
-        if ($query->num_rows() > 0) {
-            $data = $query->row();
-            $jumlah_masuk_sekarang = $data->jumlah_masuk + (int)$jumlah_masuk;
-            $stok_akhir_sekarang = $jumlah_masuk_sekarang - $data->jumlah_keluar;
-
-            $this->db->set('jumlah_masuk', $jumlah_masuk_sekarang, FALSE);
-            $this->db->set('stok_akhir', $stok_akhir_sekarang, FALSE);
-            $this->db->where('id_jurnal_barang', $id_jurnal_barang);
-            $this->db->update('jurnal_stok_barang');
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_masuk_barang');
         } else {
-            $stok_akhir = $jumlah_masuk - 0;
-
-            $data_stok = [
-                'id_jurnal_barang'  => $id_jurnal_barang,
-                'jumlah_masuk'      => $jumlah_masuk,
-                'jumlah_keluar'     => 0,
-                'stok_akhir'        => $stok_akhir
+            $data = [
+                'id_jurnal_barang'  => $this->input->post('id_jurnal_barang'),
+                'kode_barang_masuk' => 'JBM-' . substr(uniqid(), -5),
+                'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
+                'jenis_pakai'       => $this->input->post('jenis_pakai'),
+                'status_barang'     => $this->input->post('status_barang'),
+                'jumlah_masuk'      => $this->input->post('jumlah_masuk'),
+                'harga_barang'      => $this->input->post('harga_barang'),
+                'total'             => $this->input->post('jumlah_masuk') * $this->input->post('harga_barang'),
+                'keterangan'        => $this->input->post('keterangan'),
             ];
-            $this->db->insert('jurnal_stok_barang', $data_stok);
-        }
 
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di tambahkan</div>');
-        redirect('dashboard/jurnal_masuk_barang');
+            $this->db->insert('jurnal_barang_masuk', $data);
+
+            $jumlah_masuk       = $this->input->post('jumlah_masuk');
+            $id_jurnal_barang   = $this->input->post('id_jurnal_barang');
+
+            $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+            $query = $this->db->get('jurnal_stok_barang');
+
+            if ($query->num_rows() > 0) {
+                $data = $query->row();
+                $jumlah_masuk_sekarang = $data->jumlah_masuk + (int)$jumlah_masuk;
+                $stok_akhir_sekarang = $jumlah_masuk_sekarang - $data->jumlah_keluar;
+
+                $this->db->set('jumlah_masuk', $jumlah_masuk_sekarang, FALSE);
+                $this->db->set('stok_akhir', $stok_akhir_sekarang, FALSE);
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $this->db->update('jurnal_stok_barang');
+            } else {
+                $stok_akhir = $jumlah_masuk - 0;
+
+                $data_stok = [
+                    'id_jurnal_barang'  => $id_jurnal_barang,
+                    'jumlah_masuk'      => $jumlah_masuk,
+                    'jumlah_keluar'     => 0,
+                    'stok_akhir'        => $stok_akhir
+                ];
+                $this->db->insert('jurnal_stok_barang', $data_stok);
+            }
+
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di tambahkan</div>');
+            redirect('dashboard/jurnal_masuk_barang');
+        }
     }
 
     /**
@@ -2587,39 +2735,71 @@ class Dashboard extends CI_Controller
      */
     public function update_jurnal_masuk_barang($id)
     {
-        $data = [
-            'id_jurnal_barang'  => $this->input->post('id_jurnal_barang'),
-            'kode_barang_masuk' => 'JBM-' . substr(uniqid(), -5),
-            'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
-            'jenis_pakai'       => $this->input->post('jenis_pakai'),
-            'status_barang'     => $this->input->post('status_barang'),
-            'jumlah_masuk'      => $this->input->post('jumlah_masuk_baru'),
-            'harga_barang'      => $this->input->post('harga_barang'),
-            'total'             => $this->input->post('jumlah_masuk_baru') * $this->input->post('harga_barang'),
-            'keterangan'        => $this->input->post('keterangan'),
-        ];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_jurnal_barang', 'Jurnal Barang', 'required');
+        $this->form_validation->set_rules('tanggal_masuk', 'Date of Entry', 'required');
+        $this->form_validation->set_rules('jenis_pakai', 'Type Use', 'required');
+        $this->form_validation->set_rules('status_barang', 'Status Item', 'required');
+        $this->form_validation->set_rules('harga_barang', 'Unit Price', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Item', 'required');
 
-        $this->db->where('id', $id);
-        $this->db->update('jurnal_barang_masuk', $data);
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_masuk_barang');
+        } else {
 
-        $jumlah_masuk_lama = $this->input->post('jumlah_masuk_lama');
-        $jumlah_masuk_baru = $this->input->post('jumlah_masuk_baru');
-        $id_jurnal_barang  = $this->input->post('id_jurnal_barang');
+            if (!$this->input->post('jumlah_masuk_baru')) {
+                $data = [
+                    'id_jurnal_barang'  => $this->input->post('id_jurnal_barang'),
+                    'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
+                    'jenis_pakai'       => $this->input->post('jenis_pakai'),
+                    'status_barang'     => $this->input->post('status_barang'),
+                    'jumlah_masuk'      => $this->input->post('jumlah_masuk_lama'),
+                    'harga_barang'      => $this->input->post('harga_barang'),
+                    'total'             => $this->input->post('jumlah_masuk_lama') * $this->input->post('harga_barang'),
+                    'keterangan'        => $this->input->post('keterangan'),
+                ];
 
-        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
-        $query = $this->db->get('jurnal_stok_barang');
-        $stok = $query->row();
+                $this->db->where('id', $id);
+                $this->db->update('jurnal_barang_masuk', $data);
 
-        $jumlah_masuk_sekarang = ($stok->jumlah_masuk - (int)$jumlah_masuk_lama) + (int)$jumlah_masuk_baru;
-        $stok_akhir_sekarang = (($stok->jumlah_masuk - (int)$jumlah_masuk_lama) + (int)$jumlah_masuk_baru) - $stok->jumlah_keluar;
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di Update</div>');
+                redirect('dashboard/jurnal_masuk_barang');
+            }
 
-        $this->db->set('jumlah_masuk', $jumlah_masuk_sekarang, FALSE);
-        $this->db->set('stok_akhir', $stok_akhir_sekarang, FALSE);
-        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
-        $this->db->update('jurnal_stok_barang');
+            $data = [
+                'id_jurnal_barang'  => $this->input->post('id_jurnal_barang'),
+                'tanggal_masuk'     => $this->input->post('tanggal_masuk'),
+                'jenis_pakai'       => $this->input->post('jenis_pakai'),
+                'status_barang'     => $this->input->post('status_barang'),
+                'jumlah_masuk'      => $this->input->post('jumlah_masuk_baru'),
+                'harga_barang'      => $this->input->post('harga_barang'),
+                'total'             => $this->input->post('jumlah_masuk_baru') * $this->input->post('harga_barang'),
+                'keterangan'        => $this->input->post('keterangan'),
+            ];
 
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di Update</div>');
-        redirect('dashboard/jurnal_masuk_barang');
+            $this->db->where('id', $id);
+            $this->db->update('jurnal_barang_masuk', $data);
+
+            $jumlah_masuk_lama = $this->input->post('jumlah_masuk_lama');
+            $jumlah_masuk_baru = $this->input->post('jumlah_masuk_baru');
+            $id_jurnal_barang  = $this->input->post('id_jurnal_barang');
+
+            $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+            $query = $this->db->get('jurnal_stok_barang');
+            $stok = $query->row();
+
+            $jumlah_masuk_sekarang = ($stok->jumlah_masuk - (int)$jumlah_masuk_lama) + (int)$jumlah_masuk_baru;
+            $stok_akhir_sekarang = (($stok->jumlah_masuk - (int)$jumlah_masuk_lama) + (int)$jumlah_masuk_baru) - $stok->jumlah_keluar;
+
+            $this->db->set('jumlah_masuk', $jumlah_masuk_sekarang, FALSE);
+            $this->db->set('stok_akhir', $stok_akhir_sekarang, FALSE);
+            $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+            $this->db->update('jurnal_stok_barang');
+
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di Update</div>');
+            redirect('dashboard/jurnal_masuk_barang');
+        }
     }
 
     /**

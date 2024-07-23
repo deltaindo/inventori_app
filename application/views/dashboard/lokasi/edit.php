@@ -48,7 +48,7 @@
                                                         Kembali
                                                     </a>
                                                     <button type="submit" class="btn btn-primary text-white">
-                                                        Simpan
+                                                        Edit
                                                     </button>
                                                 </div>
                                             </form>
