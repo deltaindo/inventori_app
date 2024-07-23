@@ -1342,6 +1342,11 @@ class Dashboard extends CI_Controller
         redirect($_SERVER['HTTP_REFERER']);
     }
 
+    /**
+     * Retrieves a list of admin users and renders the admin list view.
+     *
+     * @return void
+     */
     public function admin()
     {
         $data['tittle'] = 'List Data Admin | Inventori App';
@@ -1359,6 +1364,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new admin user.
+     *
+     * Retrieves the master_kantor data for the current user's kantor ID and loads the 'auth/admin/add' view.
+     *
+     * @return void
+     */
     public function tambah_admin()
     {
         $data['tittle'] = 'Tambah Data Admin | Inventori App';
@@ -1371,6 +1383,14 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves a new admin user.
+     *
+     * Retrieves the input data from the form and inserts it into the 'user' table.
+     * If the insertion is successful, a success message is set in the session and the user is redirected to the admin list.
+     *
+     * @return void
+     */
     public function simpan_admin()
     {
         $data = [
@@ -1386,6 +1406,19 @@ class Dashboard extends CI_Controller
         redirect('dashboard/admin');
     }
 
+    /**
+     * Edit an admin user.
+     *
+     * Retrieves the admin user data from the database based on the provided ID.
+     * Retrieves the list of kantor data from the database.
+     * Loads the 'template/header' view with the data.
+     * Loads the 'template/sidebar' view.
+     * Loads the 'auth/admin/edit' view with the data.
+     * Loads the 'template/footer' view.
+     *
+     * @param int $id The ID of the admin user to edit.
+     * @return void
+     */
     public function edit_admin($id)
     {
         $data['tittle'] = 'Edit Data Admin | Inventori App';
@@ -1398,6 +1431,12 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates an admin user in the database.
+     *
+     * @param int $id The ID of the admin user to update.
+     * @return void
+     */
     public function update_admin($id)
     {
         if ($this->input->post('password_admin') == null) {
@@ -1420,6 +1459,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/admin');
     }
 
+    /**
+     * Deletes an admin user from the database.
+     *
+     * @param int $id The ID of the admin user to delete.
+     * @return void
+     */
     public function delete_admin($id)
     {
         $this->db->delete('user', ['id' => $id]);
@@ -1427,6 +1472,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/admin');
     }
 
+    /**
+     * Deletes multiple admin users from the database based on the provided IDs.
+     *
+     * @throws No specific exception is thrown by this function.
+     * @return void
+     */
     public function hapus_bulk_admin()
     {
         $ids = $this->input->post('id');
@@ -1441,6 +1492,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/admin');
     }
 
+    /**
+     * Retrieves and displays a list of data related to Kantor.
+     *
+     * @param None
+     * @throws None
+     * @return None
+     */
     public function master_kantor()
     {
         $data['tittle'] = 'List Data Kantor | Inventori App';
@@ -1456,6 +1514,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new data Kantor.
+     *
+     * @param None
+     * @throws None
+     * @return None
+     */
     public function tambah_kantor()
     {
         $data['tittle'] = 'Tambah Data Kantor | Inventori App';
@@ -1465,6 +1530,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new data Kantor.
+     *
+     * @param None
+     * @throws None
+     * @return None
+     */
     public function simpan_kantor()
     {
         $data = [
@@ -1476,6 +1548,20 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_kantor');
     }
 
+    /**
+     * Edit an admin user.
+     *
+     * Retrieves the admin user data from the database based on the provided ID.
+     * Retrieves the list of kantor data from the database.
+     * Loads the 'template/header' view with the data.
+     * Loads the 'template/sidebar' view.
+     * Loads the 'auth/admin/edit' view with the data.
+     * Loads the 'template/footer' view.
+     *
+     * @param int $id The ID of the admin user to edit.
+     * @throws None
+     * @return None
+     */
     public function edit_kantor($id)
     {
         $data['tittle'] = 'Edit Data Kantor | Inventori App';
@@ -1486,6 +1572,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a Kantor in the database.
+     *
+     * @param int $id The ID of the Kantor to update.
+     * @throws None
+     * @return None
+     */
     public function update_kantor($id)
     {
         $data = [
@@ -1498,6 +1591,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_kantor');
     }
 
+    /**
+     * Deletes an office from the database based on the provided ID.
+     *
+     * @param int $id The ID of the office to delete.
+     * @throws None
+     * @return None
+     */
     public function delete_office($id)
     {
         $this->db->where('id', $id);
@@ -1506,6 +1606,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_kantor');
     }
 
+    /**
+     * Deletes multiple offices from the database based on the provided IDs.
+     *
+     * @throws No specific exception is thrown by this function.
+     * @return void
+     */
     public function hapus_bulk_kantor()
     {
         $ids = $this->input->post('id');
@@ -1520,6 +1626,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_kantor');
     }
 
+    /**
+     * Retrieves the list of locations from the database and renders the view.
+     *
+     * @return void
+     */
     public function master_lokasi()
     {
         $data['tittle'] = 'List Data Lokasi | Inventori App';
@@ -1537,6 +1648,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Retrieves the list of locations and renders the view.
+     *
+     * @return void
+     */
     public function tambah_lokasi()
     {
         $data['tittle'] = 'List Data Lokasi | Inventori App';
@@ -1548,6 +1664,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves the location data to the database.
+     *
+     * @return void
+     */
     public function simpan_lokasi()
     {
         $data = [
@@ -1560,6 +1681,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_lokasi');
     }
 
+    /**
+     * Edit a location entry based on the provided ID.
+     *
+     * @param int $id The ID of the location entry to edit.
+     * @return void
+     */
     public function edit_lokasi($id)
     {
         $data['tittle'] = 'Edit Data Lokasi | Inventori App';
@@ -1571,6 +1698,12 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a location entry in the database based on the provided ID.
+     *
+     * @param int $id The ID of the location entry to update.
+     * @return void
+     */
     public function update_lokasi($id)
     {
         $data = [
@@ -1584,6 +1717,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_lokasi');
     }
 
+    /**
+     * Deletes a location entry from the database based on the provided ID.
+     *
+     * @param int $id The ID of the location entry to delete.
+     * @return void
+     */
     public function delete_lokasi($id)
     {
         $this->db->delete('master_lokasi', ['id' => $id]);
@@ -1591,6 +1730,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_lokasi');
     }
 
+    /**
+     * Deletes multiple location entries from the database based on the provided IDs.
+     *
+     * @throws No specific exception is thrown by this function.
+     * @return void
+     */
     public function delete_bulk_lokasi()
     {
         $ids = $this->input->post('id');
@@ -1605,6 +1750,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_lokasi');
     }
 
+    /**
+     * Retrieves and displays a list of data for Satuan in the inventory application.
+     *
+     * @return void
+     */
     public function master_satuan()
     {
         $data['tittle'] = 'List Data Satuan | Inventori App';
@@ -1618,6 +1768,15 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new data Satuan in the inventory application.
+     *
+     * This function displays the form to add a new Satuan data. It loads the necessary views
+     * to display the header, sidebar, add form, and footer. The function does not accept any
+     * parameters and does not return any value.
+     *
+     * @return void
+     */
     public function tambah_satuan()
     {
         $data['tittle'] = 'Tambah Data Satuan | Inventori App';
@@ -1627,6 +1786,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new data Satuan in the inventory application.
+     *
+     * @param None
+     * @throws None
+     * @return None
+     */
     public function simpan_satuan()
     {
         $data = [
@@ -1638,6 +1804,16 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_satuan');
     }
 
+    /**
+     * Edit a data Satuan in the inventory application.
+     *
+     * This function retrieves the Satuan data with the specified ID from the 'master_satuan' table
+     * and loads the necessary views to display the header, sidebar, edit form, and footer.
+     *
+     * @param int $id The ID of the Satuan data to be edited.
+     * @throws None
+     * @return void
+     */
     public function edit_satuan($id)
     {
         $data['tittle'] = 'Edit Data Satuan | Inventori App';
@@ -1648,6 +1824,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a satuan in the database.
+     *
+     * @param int $id The ID of the satuan to be updated.
+     * @throws None
+     * @return void
+     */
     public function update_satuan($id)
     {
         $data = [
@@ -1660,6 +1843,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_satuan');
     }
 
+    /**
+     * Deletes a satuan from the 'master_satuan' table in the database.
+     *
+     * @param int $id The ID of the satuan to be deleted.
+     * @throws None
+     * @return void
+     */
     public function delete_satuan($id)
     {
         $this->db->delete('master_satuan', ['id' => $id]);
@@ -1667,6 +1857,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_satuan');
     }
 
+    /**
+     * Deletes multiple satuan entries from the database based on the provided IDs.
+     *
+     * @throws None
+     * @return void
+     */
     public function delete_bulk_satuan()
     {
         $ids = $this->input->post('id');
@@ -1681,6 +1877,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_satuan');
     }
 
+    /**
+     * Retrieves the list of data from the 'master_merek' table and displays it in the 'List Data Merek' view.
+     *
+     * @return void
+     */
     public function master_merek()
     {
         $data['tittle'] = 'List Data Merek | Inventori App';
@@ -1694,6 +1895,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new 'merek' entry to the database and displays the 'Add Merek' view.
+     *
+     * @param None
+     * @throws None
+     * @return void
+     */
     public function tambah_merek()
     {
         $data['tittle'] = 'List Data Merek | Inventori App';
@@ -1703,6 +1911,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves a new brand to the database and redirects to the brand list page.
+     *
+     * @return void
+     */
     public function simpan_merek()
     {
         $data = [
@@ -1714,6 +1927,15 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_merek');
     }
 
+    /**
+     * Edit Data Merek | Inventori App.
+     *
+     * Retrieves the data of a specific brand from the 'master_merek' table and displays it in the 'Edit' view.
+     *
+     * @param int $id The ID of the brand to be edited.
+     * @throws None
+     * @return void
+     */
     public function edit_merek($id)
     {
         $data['tittle'] = 'Edit Data Merek | Inventori App';
@@ -1724,6 +1946,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a 'merek' entry in the database based on the provided ID.
+     *
+     * @param int $id The ID of the 'merek' entry to update.
+     * @throws None
+     * @return void
+     */
     public function update_merek($id)
     {
         $data = [
@@ -1736,6 +1965,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_merek');
     }
 
+    /**
+     * Deletes a 'merek' entry from the database based on the provided ID.
+     *
+     * @param int $id The ID of the 'merek' entry to delete.
+     * @throws None
+     * @return void
+     */
     public function delete_merek($id)
     {
         $this->db->delete('master_merek', ['id' => $id]);
@@ -1743,6 +1979,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_merek');
     }
 
+    /**
+     * Deletes multiple 'merek' entries from the database based on the provided IDs.
+     *
+     * @throws None
+     * @return void
+     */
     public function hapus_bulk_merek()
     {
         $ids = $this->input->post('id');
@@ -1757,6 +1999,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_merek');
     }
 
+    /**
+     * Retrieves a list of categories from the database and displays them in the 'List Data Kategori' view.
+     *
+     * @return void
+     */
     public function master_kategori()
     {
         $data['tittle'] = 'List Data Kategori | Inventori App';
@@ -1768,6 +2015,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Retrieves a list of categories from the database and displays them in the 'Tambah Data Kategori' view.
+     *
+     * @param None
+     * @throws None
+     * @return void
+     */
     public function tambah_kategori()
     {
         $data['tittle'] = 'Tambah Data Kategori | Inventori App';
@@ -1777,6 +2031,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves the category data to the database and redirects to the 'List Data Kategori' view.
+     *
+     * @return void
+     */
     public function simpan_kategori()
     {
         $data = [
@@ -1788,6 +2047,15 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_kategori');
     }
 
+    /**
+     * Edit a category.
+     *
+     * Retrieves the category data from the database based on the provided ID.
+     * Displays the category data in the 'Edit Data Kategori' view.
+     *
+     * @param int $id The ID of the category to edit.
+     * @return void
+     */
     public function edit_kategori($id)
     {
         $data['tittle'] = 'Edit Data Kategori | Inventori App';
@@ -1798,6 +2066,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a category in the database.
+     *
+     * @param int $id The ID of the category to update.
+     * @throws None
+     * @return void
+     */
     public function update_kategori($id)
     {
         $data = [
@@ -1810,6 +2085,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_kategori');
     }
 
+    /**
+     * Deletes a category from the 'master_kategori' table in the database.
+     *
+     * @param int $id The ID of the category to be deleted.
+     * @throws None
+     * @return void
+     */
     public function delete_kategori($id)
     {
         $this->db->delete('master_kategori', ['id' => $id]);
@@ -1817,6 +2099,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_kategori');
     }
 
+    /**
+     * Deletes multiple categories from the 'master_kategori' table in the database.
+     *
+     * @throws None
+     * @return void
+     */
     public function hapus_bulk_kategori()
     {
         $ids = $this->input->post('id');
@@ -1831,6 +2119,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_kategori');
     }
 
+    /**
+     * Retrieves the list of barang from the 'master_barang' table in the database and displays it in the 'List Data Barang' page.
+     *
+     * @return void
+     */
     public function master_barang()
     {
         $data['tittle'] = 'List Data Barang | Inventori App';
@@ -1842,6 +2135,15 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new barang to the inventory application.
+     *
+     * This function displays the form to add a new barang. It loads the necessary views
+     * to display the header, sidebar, add form, and footer. The function does not accept any
+     * parameters and does not return any value.
+     *
+     * @return void
+     */
     public function tambah_barang()
     {
         $data['tittle'] = 'Tambah Data Barang | Inventori App';
@@ -1851,6 +2153,17 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new barang to the inventory application.
+     *
+     * This function adds a new item to the 'master_barang' table in the database
+     * based on the 'nama_barang' input received through POST data. It sets a flash message
+     * to indicate successful addition and redirects to the 'List Data Barang' page on success.
+     *
+     * @param None
+     * @throws None
+     * @return None
+     */
     public function simpan_barang()
     {
         $data = [
@@ -1861,6 +2174,16 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_barang');
     }
 
+    /**
+     * Edit a data Barang in the inventory application.
+     *
+     * Retrieves the Barang data with the specified ID from the 'master_barang' table
+     * and loads the necessary views to display the header, sidebar, edit form, and footer.
+     *
+     * @param int $id The ID of the Barang data to be edited.
+     * @throws None
+     * @return void
+     */
     public function edit_barang($id)
     {
         $data['tittle'] = 'Edit Data Barang | Inventori App';
@@ -1871,6 +2194,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a barang entry in the database based on the provided ID.
+     *
+     * @param int $id The ID of the barang entry to update.
+     * @throws None
+     * @return void
+     */
     public function update_barang($id)
     {
         $data = [
@@ -1882,6 +2212,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_barang');
     }
 
+    /**
+     * Deletes a barang entry from the 'master_barang' table in the database based on the provided ID.
+     *
+     * @param int $id The ID of the barang entry to delete.
+     * @throws None
+     * @return void
+     */
     public function delete_barang($id)
     {
         $this->db->delete('master_barang', ['id' => $id]);
@@ -1889,6 +2226,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_barang');
     }
 
+    /**
+     * Deletes multiple barang entries from the 'master_barang' table in the database.
+     *
+     * @throws None
+     * @return void
+     */
     public function hapus_bulk_barang()
     {
         $ids = $this->input->post('id');
@@ -1903,6 +2246,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_barang');
     }
 
+    /**
+     * Retrieves the list of journal barang entries from the database and displays them in the dashboard.
+     *
+     * @return void
+     */
     public function jurnal_barang()
     {
         $data['tittle'] = 'Jurnal Barang | Inventori App';
@@ -1925,6 +2273,12 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * A function to add a new journal entry for a particular item.
+     *
+     * @throws None
+     * @return void
+     */
     public function tambah_jurnal_barang()
     {
         $data['tittle'] = 'Tambah Jurnal Barang | Inventori App';
@@ -1944,6 +2298,15 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves a new journal entry for a particular item.
+     *
+     * This function handles the upload of an image file for the item and saves it to the 'images/barang/' directory.
+     * It then creates a new entry in the 'jurnal_barang' table with the provided item details and the uploaded image file name.
+     * After successful insertion, it sets a flash message and redirects to the 'dashboard/jurnal_barang' page.
+     *
+     * @return void
+     */
     public function simpan_jurnal_barang()
     {
         $config['upload_path'] = './images/barang/';
@@ -1978,6 +2341,16 @@ class Dashboard extends CI_Controller
         }
     }
 
+    /**
+     * Edit a journal entry for a particular item.
+     *
+     * This function retrieves the journal entry data for a specific item based on the provided ID.
+     * It then retrieves additional data such as the list of available barang, merek, satuan, kategori, and lokasi.
+     * The retrieved data is then passed to the 'dashboard/jurnal_barang/edit' view for editing.
+     *
+     * @param int $id The ID of the journal entry to edit.
+     * @return void
+     */
     public function edit_jurnal_barang($id)
     {
         $data['tittle']         = 'Edit Jurnal Barang | Inventori App';
@@ -1997,6 +2370,16 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a journal entry for a particular item.
+     *
+     * This function updates the journal entry data for a specific item based on the provided ID.
+     * It updates the 'jurnal_barang' table with the new data provided in the $data array.
+     * After successful update, it sets a flash message and redirects to the 'dashboard/jurnal_barang' page.
+     *
+     * @param int $id The ID of the journal entry to update.
+     * @return void
+     */
     public function update_jurnal_barang($id)
     {
         $data = [
@@ -2013,6 +2396,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_barang');
     }
 
+    /**
+     * Deletes a journal entry from the 'jurnal_barang' table in the database based on the provided ID.
+     *
+     * @param int $id The ID of the journal entry to delete.
+     * @return void
+     */
     public function delete_jurnal_barang($id)
     {
         $this->db->where('id', $id);
@@ -2021,6 +2410,16 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_barang');
     }
 
+    /**
+     * Deletes multiple journal entries from the 'jurnal_barang' table in the database.
+     *
+     * This function deletes multiple journal entries from the 'jurnal_barang' table in the database based on the provided IDs.
+     * It retrieves the IDs from the POST request and iterates over them, deleting each entry from the table using the 'id' column.
+     * After successful deletion, it sets a flash message indicating the success or failure of the deletion.
+     * Finally, it redirects to the 'dashboard/jurnal_barang' page.
+     *
+     * @return void
+     */
     public function hapus_bulk_jurnal_barang()
     {
         $ids = $this->input->post('id');
@@ -2035,6 +2434,15 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_barang');
     }
 
+    /**
+     * Retrieves and displays the journal entries for inbound goods in the inventory system.
+     *
+     * This function fetches relevant data from the database tables 'jurnal_barang', 'master_barang', 'master_kategori', 'master_lokasi', 'master_kantor', 'master_merek', 'master_satuan', and 'jurnal_barang_masuk'.
+     * It selects specific columns for display, performs necessary joins, applies filters, orders the data, and retrieves it as an array in '$data'.
+     * Finally, it loads specific views to render the content on the webpage.
+     *
+     * @return void
+     */
     public function jurnal_masuk_barang()
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
@@ -2058,6 +2466,15 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Retrieves and displays the form to add inbound goods in the inventory system.
+     *
+     * This function fetches the necessary data from the database tables 'jurnal_barang', 'master_barang', 'master_lokasi', 'master_kantor', and 'master_merek' to populate the form.
+     * It selects specific columns for display, performs necessary joins, applies filters, and retrieves the data as an array in '$data'.
+     * Finally, it loads specific views to render the content on the webpage.
+     *
+     * @return void
+     */
     public function tambah_masuk_barang()
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
@@ -2078,6 +2495,15 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Retrieves and displays the form to add inbound goods in the inventory system.
+     *
+     * This function fetches the necessary data from the database tables 'jurnal_barang', 'master_barang', 'master_lokasi', 'master_kantor', and 'master_merek' to populate the form.
+     * It selects specific columns for display, performs necessary joins, applies filters, and retrieves the data as an array in '$data'.
+     * Finally, it loads specific views to render the content on the webpage.
+     *
+     * @return void
+     */
     public function simpan_jurnal_masuk_barang()
     {
         $data = [
@@ -2125,7 +2551,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_masuk_barang');
     }
 
-
+    /**
+     * Retrieves and displays the data for editing a journal entry of incoming goods in the inventory system.
+     *
+     * @param int $id The ID of the journal entry to be edited
+     * @return void
+     */
     public function edit_jurnal_barang_masuk($id)
     {
         $data['tittle'] = 'Edit Jurnal Barang Masuk | Inventori App';
@@ -2147,6 +2578,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates the journal entry for incoming goods in the inventory system.
+     *
+     * @param datatype $id The ID of the journal entry to be updated
+     * @throws Some_Exception_Class description of exception
+     * @return Some_Return_Value
+     */
     public function update_jurnal_masuk_barang($id)
     {
         $data = [
@@ -2184,6 +2622,14 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_masuk_barang');
     }
 
+    /**
+     * Deletes multiple journal entries from the 'jurnal_barang_masuk' table in the database.
+     *
+     * This function deletes multiple journal entries from the 'jurnal_barang_masuk' table in the database based on the provided IDs.
+     * It retrieves the IDs from the POST request and iterates over them, deleting each entry from the table using the 'id' column.
+     * After successful deletion, it sets a flash message indicating the success or failure of the deletion.
+     * Finally, it redirects to the 'dashboard/jurnal_masuk_barang' page.
+     */
     public function hapus_bulk_jurnal_barang_masuk()
     {
         $ids = $this->input->post('id');
@@ -2198,6 +2644,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_masuk_barang');
     }
 
+    /**
+     * Retrieves and displays the stock report for inventory items.
+     *
+     * @return array Returns an array containing stock report data.
+     */
     public function report_stok_barang()
     {
         $data['tittle'] = 'List Jurnal Stok Barang | Inventori App';
@@ -2250,6 +2701,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * A function to retrieve and display a list of data divisions.
+     *
+     * @return array List of data divisions
+     */
     public function master_divisi()
     {
         $data['tittle']  = 'List Data Divisi | Inventori App';
@@ -2265,6 +2721,10 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * A function to add a new division to the system.
+     *
+     */
     public function tambah_divisi()
     {
         $data['tittle'] = 'List Data Divisi | Inventori App';
@@ -2274,6 +2734,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * A function to save a new division to the system.
+     *
+     * @param None
+     * @throws None
+     * @return None
+     */
     public function simpan_divisi()
     {
         $data = [
@@ -2286,6 +2753,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_divisi');
     }
 
+    /**
+     * Edit a division.
+     *
+     * @param int $id The ID of the division to be edited.
+     * @return void
+     */
     public function edit_divisi($id)
     {
         $data['tittle'] = 'Edit Divisi | Inventori App';
@@ -2296,6 +2769,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a division in the 'master_divisi' table in the database.
+     *
+     * @param int $id The ID of the division to be updated.
+     * @throws None
+     * @return void
+     */
     public function update_divisi($id)
     {
         $data = [
@@ -2308,6 +2788,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_divisi');
     }
 
+    /**
+     * Deletes a division from the 'master_divisi' table in the database.
+     *
+     * @param datatype $id description
+     * @throws Some_Exception_Class description of exception
+     * @return Some_Return_Value
+     */
     public function delete_divisi($id)
     {
         $this->db->delete('master_divisi', ['id' => $id]);
@@ -2315,6 +2802,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_divisi');
     }
 
+    /**
+     * Retrieves a list of employees from the 'master_karyawan' table in the database,
+     * along with their respective division names. The list is ordered by employee ID in descending order.
+     *
+     * @return void
+     */
     public function master_karyawan()
     {
         $data['tittle'] = 'List Data Karyawan | Inventori App';
@@ -2331,6 +2824,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * A function to add a new employee data to the database.
+     *
+     * @param None
+     * @throws None
+     * @return void
+     */
     public function tambah_karyawan()
     {
         $data['tittle'] = 'Tambah Data Karyawan | Inventori App';
@@ -2343,6 +2843,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves a new employee to the database.
+     *
+     * @return void
+     */
     public function simpan_karyawan()
     {
         $data = [
@@ -2354,6 +2859,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_karyawan');
     }
 
+    /**
+     * A description of the entire PHP function.
+     *
+     * @param datatype $id description
+     * @throws Some_Exception_Class description of exception
+     * @return Some_Return_Value
+     */
     public function edit_karyawan($id)
     {
         $data['tittle'] = 'Edit Karyawan | Inventori App';
@@ -2367,6 +2879,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * A description of the entire PHP function.
+     *
+     * @param datatype $id description
+     * @throws Some_Exception_Class description of exception
+     * @return Some_Return_Value
+     */
     public function update_karyawan($id)
     {
         $data = [
@@ -2379,6 +2898,12 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_karyawan');
     }
 
+    /**
+     * Deletes a karyawan from the 'master_karyawan' table in the database.
+     *
+     * @param int $id The ID of the karyawan to be deleted.
+     * @return void
+     */
     public function delete_karyawan($id)
     {
         $this->db->delete('master_karyawan', ['id' => $id]);
@@ -2386,6 +2911,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/master_karyawan');
     }
 
+    /**
+     * Retrieves the history of inventory assignments and returns for a specific kantor (office) and displays it in a report.
+     *
+     * @return void
+     */
     public function report_history_inventaris()
     {
         $data['tittle'] = 'Report History Inventaris | Inventori App';
@@ -2429,6 +2959,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Retrieves the list of inventory journals and displays them in the inventory journal list view.
+     *
+     * @return void
+     */
     public function jurnal_inventaris_barang()
     {
         $data['tittle'] = 'List Jurnal Inventaris | Inventori App';
@@ -2470,6 +3005,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * A function to add inventory items to the database.
+     *
+     * @param None
+     * @throws None
+     * @return None
+     */
     public function tambah_inventaris_barang()
     {
         $data['tittle'] = 'Tambah Jurnal Inventaris | Inventori App';
@@ -2498,6 +3040,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves inventory items to the database.
+     *
+     * @return void
+     */
     public function simpan_inventaris_barang()
     {
         $data = [
@@ -2525,6 +3072,13 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_inventaris_barang');
     }
 
+    /**
+     * Retrieves information for returning a journal of assets in the inventory system.
+     *
+     * @param datatype $id Description of the parameter $id
+     * @throws Some_Exception_Class Description of the exception
+     * @return Some_Return_Value Description of the return value
+     */
     public function return_jurnal_inventaris($id)
     {
         $data['tittle'] = 'Return Jurnal Inventaris | Inventori App';
@@ -2565,6 +3119,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates the return of inventaris in the system.
+     *
+     * @param datatype $id Description of the parameter $id
+     * @throws Some_Exception_Class Description of the exception
+     * @return Some_Return_Value
+     */
     public function update_return_inventaris($id)
     {
         $data = [
@@ -2587,6 +3148,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_inventaris_barang');
     }
 
+    /**
+     * Retrieves the mutasi inventaris barang.
+     *
+     * @return void
+     */
     public function mutasi_inventaris_barang()
     {
         $data['tittle'] = 'Mutasi Inventaris | Inventori App';
@@ -2617,6 +3183,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves the mutation of inventory items into the database.
+     *
+     * @return void
+     */
     public function simpan_mutasi_inventaris()
     {
         $id = $this->input->post('pengguna_lama');
@@ -2650,6 +3221,11 @@ class Dashboard extends CI_Controller
         redirect('dashboard/jurnal_inventaris_barang');
     }
 
+    /**
+     * Retrieves the report of assets inventory and displays it on the view.
+     *
+     * @return void
+     */
     public function report_assets_inventaris()
     {
         $data['tittle'] = 'Report Assets Inventaris | Inventori App';
