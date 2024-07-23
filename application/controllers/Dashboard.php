@@ -1393,17 +1393,28 @@ class Dashboard extends CI_Controller
      */
     public function simpan_admin()
     {
-        $data = [
-            'id_kantor'     => $this->input->post('id_kantor'),
-            'Nama'          => $this->input->post('nama_admin'),
-            'email'         => $this->input->post('email_admin'),
-            'password'      => md5($this->input->post('password_admin')),
-            'image'         => 'https://i.pravatar.cc/150?img=33'
-        ];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_kantor', 'Offcie Name', 'required');
+        $this->form_validation->set_rules('nama_admin', 'Admin Name', 'required');
+        $this->form_validation->set_rules('email_admin', 'Admin Email', 'required');
+        $this->form_validation->set_rules('password_admin', 'Admin Password', 'required');
 
-        $this->db->insert('user', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Admin Berhasil di tambahkan</div>');
-        redirect('dashboard/admin');
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/admin');
+        } else {
+            $data = [
+                'id_kantor'     => $this->input->post('id_kantor'),
+                'Nama'          => $this->input->post('nama_admin'),
+                'email'         => $this->input->post('email_admin'),
+                'password'      => md5($this->input->post('password_admin')),
+                'image'         => 'https://i.pravatar.cc/150?img=33'
+            ];
+
+            $this->db->insert('user', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Admin Berhasil di tambahkan</div>');
+            redirect('dashboard/admin');
+        }
     }
 
     /**
@@ -1439,24 +1450,35 @@ class Dashboard extends CI_Controller
      */
     public function update_admin($id)
     {
-        if ($this->input->post('password_admin') == null) {
-            $data = [
-                'id_kantor'     => $this->input->post('id_kantor'),
-                'Nama'          => $this->input->post('nama_admin'),
-                'email'         => $this->input->post('email_admin'),
-            ];
+
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_kantor', 'Offcie Name', 'required');
+        $this->form_validation->set_rules('nama_admin', 'Admin Name', 'required');
+        $this->form_validation->set_rules('email_admin', 'Admin Email', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/admin');
         } else {
-            $data = [
-                'id_kantor'     => $this->input->post('id_kantor'),
-                'Nama'          => $this->input->post('nama_admin'),
-                'email'         => $this->input->post('email_admin'),
-                'password'      => md5($this->input->post('password_admin')),
-            ];
+            if ($this->input->post('password_admin') == null) {
+                $data = [
+                    'id_kantor'     => $this->input->post('id_kantor'),
+                    'Nama'          => $this->input->post('nama_admin'),
+                    'email'         => $this->input->post('email_admin'),
+                ];
+            } else {
+                $data = [
+                    'id_kantor'     => $this->input->post('id_kantor'),
+                    'Nama'          => $this->input->post('nama_admin'),
+                    'email'         => $this->input->post('email_admin'),
+                    'password'      => md5($this->input->post('password_admin')),
+                ];
+            }
+            $this->db->where('id', $id);
+            $this->db->update('user', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Admin Berhasil di Update</div>');
+            redirect('dashboard/admin');
         }
-        $this->db->where('id', $id);
-        $this->db->update('user', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Admin Berhasil di Update</div>');
-        redirect('dashboard/admin');
     }
 
     /**
@@ -2923,14 +2945,23 @@ class Dashboard extends CI_Controller
      */
     public function simpan_divisi()
     {
-        $data = [
-            'id_kantor'     => $this->kantor,
-            'nama_divisi'   => $this->input->post('nama_divisi'),
-            'keterangan'    => $this->input->post('keterangan_divisi'),
-        ];
-        $this->db->insert('master_divisi', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Divisi Berhasil di tambahkan</div>');
-        redirect('dashboard/master_divisi');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_divisi', 'Divisi Name', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Divisi', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_divisi');
+        } else {
+            $data = [
+                'id_kantor'     => $this->kantor,
+                'nama_divisi'   => $this->input->post('nama_divisi'),
+                'keterangan'    => $this->input->post('keterangan_divisi'),
+            ];
+            $this->db->insert('master_divisi', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Divisi Berhasil di tambahkan</div>');
+            redirect('dashboard/master_divisi');
+        }
     }
 
     /**
@@ -2958,14 +2989,23 @@ class Dashboard extends CI_Controller
      */
     public function update_divisi($id)
     {
-        $data = [
-            'nama_divisi'   => $this->input->post('nama_divisi'),
-            'keterangan'    => $this->input->post('keterangan_divisi'),
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('master_divisi', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Divisi Berhasil di ubah</div>');
-        redirect('dashboard/master_divisi');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_divisi', 'Divisi Name', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Divisi', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_divisi');
+        } else {
+            $data = [
+                'nama_divisi'   => $this->input->post('nama_divisi'),
+                'keterangan'    => $this->input->post('keterangan_divisi'),
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('master_divisi', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Divisi Berhasil di ubah</div>');
+            redirect('dashboard/master_divisi');
+        }
     }
 
     /**
@@ -3030,13 +3070,22 @@ class Dashboard extends CI_Controller
      */
     public function simpan_karyawan()
     {
-        $data = [
-            'id_divisi'     => $this->input->post('nama_divisi'),
-            'nama_karyawan' => $this->input->post('nama_karyawan'),
-        ];
-        $this->db->insert('master_karyawan', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Karyawan Berhasil di tambahkan</div>');
-        redirect('dashboard/master_karyawan');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_divisi', 'Divisi Name', 'required');
+        $this->form_validation->set_rules('nama_karyawan', 'Karyawan Name', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_karyawan');
+        } else {
+            $data = [
+                'id_divisi'     => $this->input->post('nama_divisi'),
+                'nama_karyawan' => $this->input->post('nama_karyawan'),
+            ];
+            $this->db->insert('master_karyawan', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Karyawan Berhasil di tambahkan</div>');
+            redirect('dashboard/master_karyawan');
+        }
     }
 
     /**
@@ -3068,14 +3117,23 @@ class Dashboard extends CI_Controller
      */
     public function update_karyawan($id)
     {
-        $data = [
-            'id_divisi'     => $this->input->post('nama_divisi'),
-            'nama_karyawan' => $this->input->post('nama_karyawan'),
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('master_karyawan', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Karyawan Berhasil di ubah</div>');
-        redirect('dashboard/master_karyawan');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_divisi', 'Divisi Name', 'required');
+        $this->form_validation->set_rules('nama_karyawan', 'Karyawan Name', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/master_karyawan');
+        } else {
+            $data = [
+                'id_divisi'     => $this->input->post('nama_divisi'),
+                'nama_karyawan' => $this->input->post('nama_karyawan'),
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('master_karyawan', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Karyawan Berhasil di ubah</div>');
+            redirect('dashboard/master_karyawan');
+        }
     }
 
     /**

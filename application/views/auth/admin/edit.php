@@ -35,7 +35,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="id_kantor">
-                                                            <option selected>Pilih Nama Kantor...</option>
+                                                            <option value="" selected>Pilih Nama Kantor...</option>
                                                             <?php foreach ($kantor as $office) : ?>
                                                                 <option value="<?= $office['id'] ?>" <?= $office['id'] == $admin['id_kantor'] ? 'selected' : '' ?>>
                                                                     <?= $office['nama_kantor'] ?> - <?= $office['keterangan'] ?>

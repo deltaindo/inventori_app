@@ -27,7 +27,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="nama_divisi">
-                                                            <option selected>Pilih Nama Divisi...</option>
+                                                            <option value="" selected>Pilih Nama Divisi...</option>
                                                             <?php foreach ($divisis as $divisi) : ?>
                                                                 <option value="<?= $divisi['id'] ?>" <?= $divisi['id'] == $karyawan['id_divisi'] ? 'selected' : '' ?>>
                                                                     <?= $divisi['nama_divisi'] ?>
