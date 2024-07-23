@@ -59,7 +59,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="kondisi_asset">
-                                                            <option selected>Pilih Kondisi Asset...</option>
+                                                            <option value="" selected>Pilih Kondisi Asset...</option>
                                                             <option value="Aktif">Aktif</option>
                                                             <option value="Tidak Aktif">Tidak Aktif</option>
                                                         </select>

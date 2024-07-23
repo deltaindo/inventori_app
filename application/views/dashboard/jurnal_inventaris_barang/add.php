@@ -21,7 +21,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="nama_karyawan">
-                                                            <option selected>Pilih Karyawan...</option>
+                                                            <option value="" selected>Pilih Karyawan...</option>
                                                             <?php foreach ($employees as $employee) : ?>
                                                                 <option value="<?= $employee['id']; ?>"><?= $employee['nama_karyawan']; ?> - <?= $employee['nama_divisi']; ?></option>
                                                             <?php endforeach; ?>
@@ -33,7 +33,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="nama_inventaris">
-                                                            <option selected>Pilih Nama Inventaris...</option>
+                                                            <option value="" selected>Pilih Nama Inventaris...</option>
                                                             <?php foreach ($items as $item) : ?>
                                                                 <option value="<?= $item['id']; ?>">[<?= $item['kode_barang']; ?>] <?= $item['tanggal_masuk']; ?> - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['keterangan']; ?></option>
                                                             <?php endforeach; ?>
@@ -52,7 +52,7 @@
                                                     </label>
                                                     <div class="mb-3">
                                                         <select class="form-control" name="status_assets">
-                                                            <option selected>Pilih Status Asset...</option>
+                                                            <option value="" selected>Pilih Status Asset...</option>
                                                             <option value="Baru">Baru</option>
                                                             <option value="Bekas">Bekas</option>
                                                         </select>

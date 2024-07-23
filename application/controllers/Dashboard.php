@@ -3227,29 +3227,42 @@ class Dashboard extends CI_Controller
      */
     public function simpan_inventaris_barang()
     {
-        $data = [
-            'kode_inventaris'           => 'KJI-' . substr(uniqid(), -5),
-            'id_jurnal_barang_masuk'    => $this->input->post('nama_inventaris'),
-            'id_karyawan'               => $this->input->post('nama_karyawan'),
-            'tanggal_assign'            => $this->input->post('tanggal_assign'),
-            'status_assets'             => $this->input->post('status_assets'),
-            'jumlah_assets'             => $this->input->post('jumlah_assets'),
-            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-            'created_at'                => date('Y-m-d H:i:s')
-        ];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_jurnal_barang_masuk', 'Jurnal Barang Masuk', 'required');
+        $this->form_validation->set_rules('id_karyawan', 'Employee Name', 'required');
+        $this->form_validation->set_rules('tanggal_assign', 'Date of Assignment', 'required');
+        $this->form_validation->set_rules('status_assets', 'Status Assets', 'required');
+        $this->form_validation->set_rules('jumlah_assets', 'Quantity', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Assets', 'required');
 
-        $this->db->insert('jurnal_inventaris', $data);
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_inventaris_barang');
+        } else {
+            $data = [
+                'kode_inventaris'           => 'KJI-' . substr(uniqid(), -5),
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_inventaris'),
+                'id_karyawan'               => $this->input->post('nama_karyawan'),
+                'tanggal_assign'            => $this->input->post('tanggal_assign'),
+                'status_assets'             => $this->input->post('status_assets'),
+                'jumlah_assets'             => $this->input->post('jumlah_assets'),
+                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+                'created_at'                => date('Y-m-d H:i:s')
+            ];
 
-        $history = [
-            'id_jurnal_inventaris' => $this->db->insert_id(),
-            'kondisi_awal'         => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-            'created_at'           => date('Y-m-d H:i:s')
-        ];
+            $this->db->insert('jurnal_inventaris', $data);
 
-        $this->db->insert('history_assets', $history);
+            $history = [
+                'id_jurnal_inventaris' => $this->db->insert_id(),
+                'kondisi_awal'         => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+                'created_at'           => date('Y-m-d H:i:s')
+            ];
 
-        $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di simpan</div>');
-        redirect('dashboard/jurnal_inventaris_barang');
+            $this->db->insert('history_assets', $history);
+
+            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di simpan</div>');
+            redirect('dashboard/jurnal_inventaris_barang');
+        }
     }
 
     /**
@@ -3308,24 +3321,34 @@ class Dashboard extends CI_Controller
      */
     public function update_return_inventaris($id)
     {
-        $data = [
-            'tanggal_return'    => $this->input->post('tanggal_return'),
-            'kondisi_asset'     => $this->input->post('kondisi_asset'),
-            'updated_at'        => date('Y-m-d H:i:s')
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('jurnal_inventaris', $data);
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('tanggal_return', 'Date of Assignment', 'required');
+        $this->form_validation->set_rules('kondisi_asset', 'Condition Assets', 'required');
+        $this->form_validation->set_rules('kondisi_akhir', 'End Condition Assets', 'required');
 
-        $history = [
-            'kondisi_akhir' => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-            'updated_at'    => date('Y-m-d H:i:s')
-        ];
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_inventaris_barang');
+        } else {
+            $data = [
+                'tanggal_return'    => $this->input->post('tanggal_return'),
+                'kondisi_asset'     => $this->input->post('kondisi_asset'),
+                'updated_at'        => date('Y-m-d H:i:s')
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('jurnal_inventaris', $data);
 
-        $this->db->where('id_jurnal_inventaris', $id);
-        $this->db->update('history_assets', $history);
+            $history = [
+                'kondisi_akhir' => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+                'updated_at'    => date('Y-m-d H:i:s')
+            ];
 
-        $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di update</div>');
-        redirect('dashboard/jurnal_inventaris_barang');
+            $this->db->where('id_jurnal_inventaris', $id);
+            $this->db->update('history_assets', $history);
+
+            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di update</div>');
+            redirect('dashboard/jurnal_inventaris_barang');
+        }
     }
 
     /**
@@ -3370,35 +3393,48 @@ class Dashboard extends CI_Controller
      */
     public function simpan_mutasi_inventaris()
     {
-        $id = $this->input->post('pengguna_lama');
-        $update = [
-            'kondisi_asset' => 'Tercatat',
-            'updated_at'    => date('Y-m-d H:i:s')
-        ];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('id_jurnal_barang_masuk', 'Jurnal Barang Masuk', 'required');
+        $this->form_validation->set_rules('id_karyawan', 'Employee Name', 'required');
+        $this->form_validation->set_rules('tanggal_assign', 'Date of Assignment', 'required');
+        $this->form_validation->set_rules('status_assets', 'Status Assets', 'required');
+        $this->form_validation->set_rules('jumlah_assets', 'Quantity', 'required');
+        $this->form_validation->set_rules('keterangan', 'Description Assets', 'required');
 
-        $this->db->where('id', $id);
-        $this->db->update('jurnal_inventaris', $update);
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_inventaris_barang');
+        } else {
+            $id = $this->input->post('pengguna_lama');
+            $update = [
+                'kondisi_asset' => 'Tercatat',
+                'updated_at'    => date('Y-m-d H:i:s')
+            ];
 
-        $data = [
-            'kode_inventaris'           => 'KJI-' . substr(uniqid(), -5),
-            'id_jurnal_barang_masuk'    => $this->input->post('nama_inventaris'),
-            'id_karyawan'               => $this->input->post('nama_karyawan'),
-            'tanggal_assign'            => $this->input->post('tanggal_assign'),
-            'status_assets'             => $this->input->post('status_assets'),
-            'jumlah_assets'             => $this->input->post('jumlah_assets'),
-            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-        ];
-        $this->db->insert('jurnal_inventaris', $data);
+            $this->db->where('id', $id);
+            $this->db->update('jurnal_inventaris', $update);
 
-        $history = [
-            'id_jurnal_inventaris' => $this->db->insert_id(),
-            'kondisi_awal'         => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-            'created_at'           => date('Y-m-d H:i:s')
-        ];
-        $this->db->insert('history_assets', $history);
+            $data = [
+                'kode_inventaris'           => 'KJI-' . substr(uniqid(), -5),
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_inventaris'),
+                'id_karyawan'               => $this->input->post('nama_karyawan'),
+                'tanggal_assign'            => $this->input->post('tanggal_assign'),
+                'status_assets'             => $this->input->post('status_assets'),
+                'jumlah_assets'             => $this->input->post('jumlah_assets'),
+                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+            ];
+            $this->db->insert('jurnal_inventaris', $data);
 
-        $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Mutasi Assets Inventaris Berhasil di simpan</div>');
-        redirect('dashboard/jurnal_inventaris_barang');
+            $history = [
+                'id_jurnal_inventaris' => $this->db->insert_id(),
+                'kondisi_awal'         => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+                'created_at'           => date('Y-m-d H:i:s')
+            ];
+            $this->db->insert('history_assets', $history);
+
+            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Mutasi Assets Inventaris Berhasil di simpan</div>');
+            redirect('dashboard/jurnal_inventaris_barang');
+        }
     }
 
     /**
