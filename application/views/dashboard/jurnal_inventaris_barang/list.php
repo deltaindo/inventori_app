@@ -6,9 +6,9 @@
                     <div class="d-sm-flex align-items-right justify-content-between border-bottom">
                         <div>
                             <div class="btn-wrapper">
-                                <a href="" class="btn btn-primary text-white me-0">
+                                <a href="<?= base_url('report/report_inventaris_barang'); ?>" class="btn btn-success text-white me-0" type="button">
                                     <i class="ti-cloud-down"></i>
-                                    Download Excel
+                                    Export Excel
                                 </a>
                             </div>
                         </div>
@@ -26,7 +26,7 @@
                                     <a href="<?= base_url('dashboard/tambah_inventaris_barang'); ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
-                                    <a href="<?= base_url('dashboard/mutasi_inventaris_barang'); ?>" class="btn btn-success text-white">
+                                    <a href="<?= base_url('dashboard/mutasi_inventaris_barang'); ?>" class="btn btn-info text-black">
                                         Mutasi Inventaris
                                     </a>
                                     <div class="overflow-visible mt-3">
