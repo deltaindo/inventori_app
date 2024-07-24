@@ -1,14 +1,14 @@
 <div class="main-panel">
     <div class="content-wrapper">
         <div class="row">
-            <div class="col-sm-12 mt-2">
-                <div class="row tabel-produk mt-2">
+            <div class="col-sm-12">
+                <div class="row tabel-produk">
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="tab-content tab-content-basic">
                                 <?= $this->session->flashdata('message'); ?>
-                                <div class="row tabel-produk mt-2">
-                                    <div class="col-lg-8 grid-margin stretch-card">
+                                <div class="row tabel-produk">
+                                    <div class="col-lg-12 grid-margin stretch-card">
                                         <div class="card">
                                             <form method="post" action="<?= base_url('dashboard/simpan_jurnal_masuk_barang'); ?>">
                                                 <div class="card-body">
@@ -24,7 +24,7 @@
                                                             <option selected>Pilih Nama Barang...</option>
                                                             <?php foreach ($jurnal_barang as $item) : ?>
                                                                 <option value="<?= $item['id']; ?>">
-                                                                    <?= '[' . $item['kode_barang'] . '] ' . $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['nama_lokasi']; ?>
+                                                                    <?= '[' . $item['kode_barang'] . '] ' . $item['nama_barang'] . ' ' . $item['nama_merek']; ?> <?= $item['keterangan']; ?> - <?= $item['nama_lokasi']; ?>
                                                                 </option>
                                                             <?php endforeach; ?>
                                                         </select>

@@ -2384,7 +2384,7 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang | Inventori App';
 
-        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang, master_barang.nama_barang, master_lokasi.nama_lokasi, master_kantor.nama_kantor, master_merek.nama_merek, master_kategori.nama_kategori, master_satuan.nama_satuan');
+        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,jurnal_barang.keterangan, master_barang.nama_barang, master_lokasi.nama_lokasi, master_kantor.nama_kantor, master_merek.nama_merek, master_kategori.nama_kategori, master_satuan.nama_satuan');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
@@ -2635,7 +2635,7 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_merek.nama_merek,master_lokasi.nama_lokasi');
+        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,jurnal_barang.keterangan,master_barang.nama_barang,master_merek.nama_merek,master_lokasi.nama_lokasi');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
@@ -3286,40 +3286,78 @@ class Dashboard extends CI_Controller
     public function simpan_inventaris_barang()
     {
         $this->load->library('form_validation');
-        $this->form_validation->set_rules('id_jurnal_barang_masuk', 'Jurnal Barang Masuk', 'required');
-        $this->form_validation->set_rules('id_karyawan', 'Employee Name', 'required');
+        $this->form_validation->set_rules('nama_inventaris', 'Jurnal Barang Masuk', 'required');
+        $this->form_validation->set_rules('nama_karyawan', 'Employee Name', 'required');
         $this->form_validation->set_rules('tanggal_assign', 'Date of Assignment', 'required');
         $this->form_validation->set_rules('status_assets', 'Status Assets', 'required');
         $this->form_validation->set_rules('jumlah_assets', 'Quantity', 'required');
-        $this->form_validation->set_rules('keterangan', 'Description Assets', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Description Assets', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_inventaris_barang');
         } else {
-            $data = [
-                'kode_inventaris'           => 'KJI-' . substr(uniqid(), -5),
-                'id_jurnal_barang_masuk'    => $this->input->post('nama_inventaris'),
-                'id_karyawan'               => $this->input->post('nama_karyawan'),
-                'tanggal_assign'            => $this->input->post('tanggal_assign'),
-                'status_assets'             => $this->input->post('status_assets'),
-                'jumlah_assets'             => $this->input->post('jumlah_assets'),
-                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-                'created_at'                => date('Y-m-d H:i:s')
-            ];
+            $id_jurnal_barang_masuk = $this->input->post('nama_inventaris');
+            $this->db->select('id_jurnal_barang');
+            $this->db->from('jurnal_barang_masuk');
+            $this->db->where('id', $id_jurnal_barang_masuk);
+            $query = $this->db->get();
+            $jurnal_barang = $query->row();
 
-            $this->db->insert('jurnal_inventaris', $data);
+            if ($jurnal_barang) {
+                $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
 
-            $history = [
-                'id_jurnal_inventaris' => $this->db->insert_id(),
-                'kondisi_awal'         => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-                'created_at'           => date('Y-m-d H:i:s')
-            ];
+                $this->db->select('*');
+                $this->db->from('jurnal_stok_barang');
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $query_stok = $this->db->get();
+                $stok_barang = $query_stok->row();
 
-            $this->db->insert('history_assets', $history);
+                $jumlah_assets      = $this->input->post('jumlah_assets');
+                $jumlah_keluar_baru = $stok_barang->jumlah_keluar + $jumlah_assets;
+                $stok_akhir_baru    = $stok_barang->jumlah_masuk - $jumlah_keluar_baru;
 
-            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di simpan</div>');
-            redirect('dashboard/jurnal_inventaris_barang');
+                if ($stok_barang) {
+                    if ($jumlah_assets > $stok_barang->stok_akhir) {
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jumlah Stok Barang Tidak Cukup, Sisa Stok Item: ' . $stok_barang->stok_akhir . '</div>');
+                        redirect('dashboard/jurnal_inventaris_barang');
+                    } else {
+
+                        $data = [
+                            'kode_inventaris'           => 'KJI-' . substr(uniqid(), -5),
+                            'id_jurnal_barang_masuk'    => $this->input->post('nama_inventaris'),
+                            'id_karyawan'               => $this->input->post('nama_karyawan'),
+                            'tanggal_assign'            => $this->input->post('tanggal_assign'),
+                            'status_assets'             => $this->input->post('status_assets'),
+                            'jumlah_assets'             => $this->input->post('jumlah_assets'),
+                            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+                            'created_at'                => date('Y-m-d H:i:s')
+                        ];
+
+                        $this->db->insert('jurnal_inventaris', $data);
+
+                        $data_update = [
+                            'tanggal_update'  => date('Y-m-d H:i:s'),
+                            'jumlah_keluar'   => $jumlah_keluar_baru,
+                            'stok_akhir'      => $stok_akhir_baru
+                        ];
+
+                        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                        $this->db->update('jurnal_stok_barang', $data_update);
+
+                        $history = [
+                            'id_jurnal_inventaris' => $this->db->insert_id(),
+                            'kondisi_awal'         => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+                            'created_at'           => date('Y-m-d H:i:s')
+                        ];
+
+                        $this->db->insert('history_assets', $history);
+
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di simpan</div>');
+                        redirect('dashboard/jurnal_inventaris_barang');
+                    }
+                }
+            }
         }
     }
 

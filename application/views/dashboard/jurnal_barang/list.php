@@ -62,6 +62,9 @@
                                                         Kategori
                                                     </th>
                                                     <th>
+                                                        Spesifikasi
+                                                    </th>
+                                                    <th>
                                                         Action
                                                     </th>
                                                 </tr>
@@ -97,6 +100,9 @@
                                                         </td>
                                                         <td>
                                                             <?= $jurbar["nama_kategori"] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $jurbar["keterangan"] ?>
                                                         </td>
                                                         <td>
                                                             <a href="<?= base_url('dashboard/edit_jurnal_barang/' . $jurbar['id']); ?>" class="btn btn-lg btn-outline-primary">
