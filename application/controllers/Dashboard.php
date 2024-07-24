@@ -3335,25 +3335,22 @@ class Dashboard extends CI_Controller
                             'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
                             'created_at'                => date('Y-m-d H:i:s')
                         ];
-
                         $this->db->insert('jurnal_inventaris', $data);
-
-                        $data_update = [
-                            'tanggal_update'  => date('Y-m-d H:i:s'),
-                            'jumlah_keluar'   => $jumlah_keluar_baru,
-                            'stok_akhir'      => $stok_akhir_baru
-                        ];
-
-                        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
-                        $this->db->update('jurnal_stok_barang', $data_update);
 
                         $history = [
                             'id_jurnal_inventaris' => $this->db->insert_id(),
                             'kondisi_awal'         => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
                             'created_at'           => date('Y-m-d H:i:s')
                         ];
-
                         $this->db->insert('history_assets', $history);
+
+                        $data_update = [
+                            'tanggal_update'  => date('Y-m-d H:i:s'),
+                            'jumlah_keluar'   => $jumlah_keluar_baru,
+                            'stok_akhir'      => $stok_akhir_baru
+                        ];
+                        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                        $this->db->update('jurnal_stok_barang', $data_update);
 
                         $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di simpan</div>');
                         redirect('dashboard/jurnal_inventaris_barang');
