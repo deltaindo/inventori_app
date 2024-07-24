@@ -105,7 +105,7 @@
                                                             <?= $asset['kondisi_awal'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $asset['jumlah_assets'] ?>
+                                                            <?= $asset['jumlah_assets'] ?> <?= $asset['nama_satuan'] ?>
                                                         </td>
                                                         <td>
                                                             <?= $asset['status_assets'] ?>
