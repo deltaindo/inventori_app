@@ -3374,6 +3374,7 @@ class Dashboard extends CI_Controller
 
         $this->db->select('
             jurnal_inventaris.id,
+            jurnal_inventaris.id_jurnal_barang_masuk,
             jurnal_inventaris.kode_inventaris,
             jurnal_barang.kode_barang,
             master_barang.nama_barang,
@@ -3420,31 +3421,65 @@ class Dashboard extends CI_Controller
         $this->load->library('form_validation');
         $this->form_validation->set_rules('tanggal_return', 'Date of Assignment', 'required');
         $this->form_validation->set_rules('kondisi_asset', 'Condition Assets', 'required');
-        $this->form_validation->set_rules('kondisi_akhir', 'End Condition Assets', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'End Condition Assets', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_inventaris_barang');
         } else {
-            $data = [
-                'tanggal_return'    => $this->input->post('tanggal_return'),
-                'kondisi_asset'     => $this->input->post('kondisi_asset'),
-                'updated_at'        => date('Y-m-d H:i:s')
-            ];
-            $this->db->where('id', $id);
-            $this->db->update('jurnal_inventaris', $data);
+            $jumlah_assets = $this->input->post('jumlah_assets');
+            $id_jurnal_barang_masuk = $this->input->post('id_jurnal_barang_masuk');
 
-            $history = [
-                'kondisi_akhir' => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
-                'updated_at'    => date('Y-m-d H:i:s')
-            ];
+            $this->db->select('id_jurnal_barang');
+            $this->db->from('jurnal_barang_masuk');
+            $this->db->where('id', $id_jurnal_barang_masuk);
+            $query = $this->db->get();
+            $jurnal_barang = $query->row();
 
-            $this->db->where('id_jurnal_inventaris', $id);
-            $this->db->update('history_assets', $history);
+            if ($jurnal_barang) {
+                $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
 
-            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di update</div>');
-            redirect('dashboard/jurnal_inventaris_barang');
+                $this->db->select('*');
+                $this->db->from('jurnal_stok_barang');
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $query_stok = $this->db->get();
+                $stok_barang = $query_stok->row();
+
+                if ($stok_barang) {
+                    $jumlah_keluar_baru = $stok_barang->jumlah_keluar - $jumlah_assets;
+                    $stok_akhir_baru = $stok_barang->stok_akhir + $jumlah_assets;
+
+                    $data = [
+                        'tanggal_return'    => $this->input->post('tanggal_return'),
+                        'kondisi_asset'     => $this->input->post('kondisi_asset'),
+                        'updated_at'        => date('Y-m-d H:i:s')
+                    ];
+                    $this->db->where('id', $id);
+                    $this->db->update('jurnal_inventaris', $data);
+
+                    $history = [
+                        'kondisi_akhir' => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Asset dalam kondisi layak digunakan',
+                        'updated_at'    => date('Y-m-d H:i:s')
+                    ];
+                    $this->db->where('id_jurnal_inventaris', $id);
+                    $this->db->update('history_assets', $history);
+
+                    $data_update = [
+                        'tanggal_update'  => date('Y-m-d H:i:s'),
+                        'jumlah_keluar'   => $jumlah_keluar_baru,
+                        'stok_akhir'      => $stok_akhir_baru
+                    ];
+
+                    $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                    $this->db->update('jurnal_stok_barang', $data_update);
+
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Inventaris Berhasil di update</div>');
+                    redirect('dashboard/jurnal_inventaris_barang');
+                }
+            }
         }
+        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jurnal Inventaris Gagal di update</div>');
+        redirect('dashboard/jurnal_inventaris_barang');
     }
 
     /**

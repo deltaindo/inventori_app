@@ -37,7 +37,8 @@
                                                     </label>
 
                                                     <div class="mb-3">
-                                                        <textarea name="spesifikasi" cols="300" rows="10" class="form-control" style="height: 100px;" disabled>[<?= $items['kode_barang']; ?>] <?= $items['tanggal_masuk']; ?> - <?= $items['nama_barang'] . ' ' . $items['nama_merek']; ?> - <?= $items['spesifikasi']; ?></textarea>
+                                                        <textarea name="spesifikasi" class="form-control" style="height: 100px;" readonly>[<?= $items['kode_barang']; ?>] <?= $items['tanggal_masuk']; ?> - <?= $items['nama_barang'] . ' ' . $items['nama_merek']; ?> - <?= $items['spesifikasi']; ?></textarea>
+                                                        <input type="text" class="form-control" name="id_jurnal_barang_masuk" value="<?= $items['id_jurnal_barang_masuk']; ?>" hidden>
                                                     </div>
 
                                                     <label for="tanggal_assign" class="text-primary fs-6 mb-1">
@@ -98,7 +99,7 @@
                                                         Jumlah Assets
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="jumlah_assets" value="<?= $items['jumlah_assets']; ?>" disabled>
+                                                        <input type="text" class="form-control" name="jumlah_assets" value="<?= $items['jumlah_assets']; ?>" readonly>
                                                     </div>
                                                 </div>
                                             </form>
