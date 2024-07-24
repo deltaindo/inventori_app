@@ -6,9 +6,9 @@
                     <div class="d-sm-flex align-items-center justify-content-between border-bottom">
                         <div>
                             <div class="btn-wrapper">
-                                <a href="" class="btn btn-primary text-white me-0">
+                                <a href="<?= base_url('report/report_jurnal_masuk_barang'); ?>" class="btn btn-success text-white me-0" type="button">
                                     <i class="ti-cloud-down"></i>
-                                    Download Excel
+                                    Export Excel
                                 </a>
                             </div>
                         </div>
