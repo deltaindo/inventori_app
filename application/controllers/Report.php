@@ -896,4 +896,89 @@ class Report extends CI_Controller
         $writer->save('php://output');
         exit;
     }
+
+    public function report_jurnal_barang()
+    {
+        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,jurnal_barang.keterangan, master_barang.nama_barang, master_lokasi.nama_lokasi, master_kantor.nama_kantor, master_merek.nama_merek, master_kategori.nama_kategori, master_satuan.nama_satuan');
+        $this->db->from('jurnal_barang');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->where('master_kantor.id', $this->kantor);
+        $this->db->order_by('jurnal_barang.id', 'DESC');
+        $data['report_jurnal_barang'] = $this->db->get()->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report Jurnal Barang');
+
+        // Set title header
+        $sheet->mergeCells('A1:I1');
+        $sheet->setCellValue('A1', 'Report Jurnal Barang');
+        $sheet->getStyle('A1:I1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Kode Barang');
+        $sheet->setCellValue('C2', 'Nama Barang');
+        $sheet->setCellValue('D2', 'Merek');
+        $sheet->setCellValue('E2', 'Lokasi');
+        $sheet->setCellValue('F2', 'Kantor');
+        $sheet->setCellValue('G2', 'Satuan');
+        $sheet->setCellValue('H2', 'Kategori');
+        $sheet->setCellValue('I2', 'Spesifikasi');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:I2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:I2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:I2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['report_jurnal_barang'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['kode_barang']);
+            $sheet->setCellValue('C' . $baris, $item['nama_barang']);
+            $sheet->setCellValue('D' . $baris, $item['nama_merek']);
+            $sheet->setCellValue('E' . $baris, $item['nama_lokasi']);
+            $sheet->setCellValue('F' . $baris, $item['nama_kantor']);
+            $sheet->setCellValue('G' . $baris, $item['nama_satuan']);
+            $sheet->setCellValue('H' . $baris, $item['nama_kategori']);
+            $sheet->setCellValue('I' . $baris, $item['keterangan']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:I' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'I') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_Jurnal_Barang_' . $currentDateTime . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
 }
