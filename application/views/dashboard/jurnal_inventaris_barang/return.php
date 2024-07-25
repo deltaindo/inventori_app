@@ -37,7 +37,7 @@
                                                     </label>
 
                                                     <div class="mb-3">
-                                                        <textarea name="spesifikasi" class="form-control" style="height: 100px;" readonly>[<?= $items['kode_barang']; ?>] <?= $items['tanggal_masuk']; ?> - <?= $items['nama_barang'] . ' ' . $items['nama_merek']; ?> - <?= $items['spesifikasi']; ?></textarea>
+                                                        <textarea name="spesifikasi" class="form-control" style="height: 60px;" readonly>[<?= $items['kode_barang']; ?>] <?= $items['tanggal_masuk']; ?> - <?= $items['nama_barang'] . ' ' . $items['nama_merek']; ?> - <?= $items['spesifikasi']; ?></textarea>
                                                         <input type="text" class="form-control" name="id_jurnal_barang_masuk" value="<?= $items['id_jurnal_barang_masuk']; ?>" hidden>
                                                     </div>
 
@@ -80,7 +80,7 @@
                                                         Keterangan [Kondisi Akhir]
                                                     </label>
                                                     <div class="mb-3">
-                                                        <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Inventaris atau Kondisi Akhir"></textarea>
+                                                        <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 60px;" placeholder="Inputkan Keterangan Inventaris atau Kondisi Akhir"></textarea>
                                                         <span class="text-small">
                                                             <i>
                                                                 Contoh: Asset dalam kondisi layak digunakan.

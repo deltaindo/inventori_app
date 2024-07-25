@@ -30,7 +30,7 @@ class Report extends CI_Controller
 
     public function report_jurnal_masuk_barang()
     {
-        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total');
+        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
@@ -135,7 +135,7 @@ class Report extends CI_Controller
                             master_barang.nama_barang,
                             master_satuan.nama_satuan,
                             master_merek.nama_merek,
-                            jurnal_barang_masuk.keterangan as spesifikasi,
+                            jurnal_barang.keterangan as spesifikasi,
                             jurnal_barang_masuk.tanggal_masuk,
                             master_karyawan.nama_karyawan,
                             master_divisi.nama_divisi,
@@ -372,7 +372,7 @@ class Report extends CI_Controller
                             jurnal_inventaris.keterangan as keterangan_inventaris,
                             jurnal_barang_masuk.jenis_pakai,
                             jurnal_barang_masuk.kode_barang_masuk as kode_barang,
-                            jurnal_barang_masuk.keterangan as spesifikasi
+                            jurnal_barang.keterangan as spesifikasi
         ');
         $this->db->from('jurnal_inventaris');
         $this->db->join('history_assets', 'history_assets.id_jurnal_inventaris = jurnal_inventaris.id');
@@ -481,7 +481,7 @@ class Report extends CI_Controller
                             jurnal_barang.kode_barang,
                             master_barang.nama_barang,
                             master_merek.nama_merek,
-                            jurnal_barang_masuk.keterangan as spesifikasi,
+                            jurnal_barang.keterangan as spesifikasi,
                             jurnal_barang_masuk.tanggal_masuk,
                             jurnal_barang_masuk.jenis_pakai,
                             jurnal_barang_masuk.status_barang,

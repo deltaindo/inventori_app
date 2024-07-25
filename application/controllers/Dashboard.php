@@ -2603,7 +2603,24 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang_masuk.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total');
+        $this->db->select('
+                            jurnal_barang.id,
+                            jurnal_barang_masuk.id,
+                            jurnal_barang_masuk.kode_barang_masuk,
+                            master_barang.nama_barang,
+                            master_kategori.nama_kategori,
+                            master_lokasi.nama_lokasi,
+                            master_kantor.nama_kantor,
+                            master_merek.nama_merek,
+                            jurnal_barang_masuk.tanggal_masuk,
+                            jurnal_barang_masuk.jenis_pakai,
+                            jurnal_barang_masuk.status_barang,
+                            jurnal_barang_masuk.jumlah_masuk,
+                            master_satuan.nama_satuan,
+                            jurnal_barang.keterangan,
+                            jurnal_barang_masuk.harga_barang,
+                            jurnal_barang_masuk.total
+        ');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
@@ -2669,7 +2686,6 @@ class Dashboard extends CI_Controller
         $this->form_validation->set_rules('status_barang', 'Status Item', 'required');
         $this->form_validation->set_rules('jumlah_masuk', 'Quantity', 'required');
         $this->form_validation->set_rules('harga_barang', 'Unit Price', 'required');
-        $this->form_validation->set_rules('keterangan', 'Description Item', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
@@ -2683,8 +2699,7 @@ class Dashboard extends CI_Controller
                 'status_barang'     => $this->input->post('status_barang'),
                 'jumlah_masuk'      => $this->input->post('jumlah_masuk'),
                 'harga_barang'      => $this->input->post('harga_barang'),
-                'total'             => $this->input->post('jumlah_masuk') * $this->input->post('harga_barang'),
-                'keterangan'        => $this->input->post('keterangan'),
+                'total'             => $this->input->post('jumlah_masuk') * $this->input->post('harga_barang')
             ];
 
             $this->db->insert('jurnal_barang_masuk', $data);
@@ -2732,7 +2747,13 @@ class Dashboard extends CI_Controller
         $data['tittle'] = 'Edit Jurnal Barang Masuk | Inventori App';
         $data['jurnal_barang_masuk'] = $this->db->get_where('jurnal_barang_masuk', ['id' => $id])->row_array();
 
-        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,master_barang.nama_barang,master_merek.nama_merek,master_lokasi.nama_lokasi');
+        $this->db->select('
+                            jurnal_barang.id,
+                            jurnal_barang.kode_barang,
+                            master_barang.nama_barang,
+                            master_merek.nama_merek,
+                            master_lokasi.nama_lokasi
+        ');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
@@ -3174,7 +3195,7 @@ class Dashboard extends CI_Controller
             jurnal_inventaris.keterangan as keterangan_inventaris,
             jurnal_barang_masuk.jenis_pakai,
             jurnal_barang_masuk.kode_barang_masuk as kode_barang,
-            jurnal_barang_masuk.keterangan as spesifikasi
+            jurnal_barang.keterangan as spesifikasi
         ');
         $this->db->from('jurnal_inventaris');
         $this->db->join('history_assets', 'history_assets.id_jurnal_inventaris = jurnal_inventaris.id');
@@ -3215,7 +3236,7 @@ class Dashboard extends CI_Controller
             master_barang.nama_barang,
             master_satuan.nama_satuan,
             master_merek.nama_merek,
-            jurnal_barang_masuk.keterangan as spesifikasi,
+            jurnal_barang.keterangan as spesifikasi,
             jurnal_barang_masuk.tanggal_masuk,
             master_karyawan.nama_karyawan,
             master_divisi.nama_divisi,
@@ -3263,7 +3284,7 @@ class Dashboard extends CI_Controller
         $this->db->order_by('master_karyawan.id', 'DESC');
         $data['employees'] = $this->db->get()->result_array();
 
-        $this->db->select('jurnal_barang_masuk.id, jurnal_barang.kode_barang, master_barang.nama_barang, master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.keterangan');
+        $this->db->select('jurnal_barang_masuk.id, jurnal_barang.kode_barang, master_barang.nama_barang, master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang.keterangan');
         $this->db->from('jurnal_barang_masuk');
         $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
@@ -3379,7 +3400,7 @@ class Dashboard extends CI_Controller
             master_barang.nama_barang,
             master_satuan.nama_satuan,
             master_merek.nama_merek,
-            jurnal_barang_masuk.keterangan as spesifikasi,
+            jurnal_barang.keterangan as spesifikasi,
             jurnal_barang_masuk.tanggal_masuk,
             master_karyawan.nama_karyawan,
             master_divisi.nama_divisi,
@@ -3497,7 +3518,16 @@ class Dashboard extends CI_Controller
         $this->db->order_by('master_karyawan.id', 'DESC');
         $data['employees'] = $this->db->get()->result_array();
 
-        $this->db->select('jurnal_inventaris.id,jurnal_inventaris.id_jurnal_barang_masuk,master_karyawan.nama_karyawan,jurnal_inventaris.tanggal_return,master_barang.nama_barang,master_merek.nama_merek,jurnal_barang_masuk.keterangan as spesifikasi');
+        $this->db->select('
+                            jurnal_inventaris.id,
+                            jurnal_inventaris.id_jurnal_barang_masuk,
+                            master_karyawan.nama_karyawan,
+                            jurnal_inventaris.
+                            tanggal_return,
+                            master_barang.nama_barang,
+                            master_merek.nama_merek,
+                            jurnal_barang.keterangan as spesifikasi
+        ');
         $this->db->from('jurnal_inventaris');
         $this->db->join('jurnal_barang_masuk', 'jurnal_inventaris.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
         $this->db->join('master_karyawan', 'jurnal_inventaris.id_karyawan = master_karyawan.id');
@@ -3625,7 +3655,7 @@ class Dashboard extends CI_Controller
             jurnal_barang.kode_barang,
             master_barang.nama_barang,
             master_merek.nama_merek,
-            jurnal_barang_masuk.keterangan as spesifikasi,
+            jurnal_barang.keterangan as spesifikasi,
             jurnal_barang_masuk.tanggal_masuk,
             jurnal_barang_masuk.jenis_pakai,
             jurnal_barang_masuk.status_barang,

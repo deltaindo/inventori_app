@@ -81,23 +81,6 @@
                                                     <div class="mb-3">
                                                         <input type="number" class="form-control" name="harga_barang" placeholder="Inputkan Harga Asset Satuan" value="<?= $jurnal_barang_masuk['harga_barang']; ?>">
                                                     </div>
-
-                                                    <label for="keterangan" class="text-primary fs-6 mb-1">
-                                                        Keterangan
-                                                        [
-                                                        <b>
-                                                            Jangan Pakai Enter
-                                                        </b>
-                                                        ]
-                                                    </label>
-                                                    <div class="mb-3">
-                                                        <textarea id="keterangan_masuk_barang" name="keterangan" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Contoh: Ideapad Slim 3, Ryzen 5 6500U, Ram 8 GB, SSD 512 GB"><?= $jurnal_barang_masuk['keterangan']; ?></textarea>
-                                                        <span class="text-small">
-                                                            <i>
-                                                                Jangan Pakai Enter
-                                                            </i>
-                                                        </span>
-                                                    </div>
                                                 </div>
                                                 <div class="modal-footer">
                                                     <a href="<?= base_url('dashboard/jurnal_masuk_barang'); ?>" class="btn btn-outline-secondary text-black">
