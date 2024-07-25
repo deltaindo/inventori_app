@@ -38,6 +38,7 @@
                                                             <option selected>Pilih Jenis Pakai...</option>
                                                             <option value="Normal">Normal</option>
                                                             <option value="Inventaris">Inventaris</option>
+                                                            <option value="Alat Peraga">Alat Peraga</option>
                                                             <option value="Peminjaman">Peminjaman</option>
                                                         </select>
                                                     </div>

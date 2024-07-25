@@ -140,6 +140,11 @@
             Jurnal Inventaris Barang
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/jurnal_alat_peraga'); ?>">
+            Jurnal Alat Peraga
+          </a>
+        </li>
       </ul>
     </div>
   </li>
