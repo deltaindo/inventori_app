@@ -38,6 +38,7 @@
                                                             <option>Pilih Jenis Pakai...</option>
                                                             <option value="Normal" <?= $jurnal_barang_masuk['jenis_pakai'] == 'Normal' ? 'selected' : '' ?>>Normal</option>
                                                             <option value="Inventaris" <?= $jurnal_barang_masuk['jenis_pakai'] == 'Inventaris' ? 'selected' : '' ?>>Inventaris</option>
+                                                            <option value="Alat Peraga" <?= $jurnal_barang_masuk['jenis_pakai'] == 'Alat Peraga' ? 'selected' : '' ?>>Alat Peraga</option>
                                                             <option value="Peminjaman" <?= $jurnal_barang_masuk['jenis_pakai'] == 'Peminjaman' ? 'selected' : '' ?>>Peminjaman</option>
                                                         </select>
                                                     </div>

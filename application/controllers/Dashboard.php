@@ -2784,7 +2784,6 @@ class Dashboard extends CI_Controller
         $this->form_validation->set_rules('jenis_pakai', 'Type Use', 'required');
         $this->form_validation->set_rules('status_barang', 'Status Item', 'required');
         $this->form_validation->set_rules('harga_barang', 'Unit Price', 'required');
-        $this->form_validation->set_rules('keterangan', 'Description Item', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
@@ -2799,8 +2798,7 @@ class Dashboard extends CI_Controller
                     'status_barang'     => $this->input->post('status_barang'),
                     'jumlah_masuk'      => $this->input->post('jumlah_masuk_lama'),
                     'harga_barang'      => $this->input->post('harga_barang'),
-                    'total'             => $this->input->post('jumlah_masuk_lama') * $this->input->post('harga_barang'),
-                    'keterangan'        => $this->input->post('keterangan'),
+                    'total'             => $this->input->post('jumlah_masuk_lama') * $this->input->post('harga_barang')
                 ];
 
                 $this->db->where('id', $id);
@@ -3677,6 +3675,42 @@ class Dashboard extends CI_Controller
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_assets_inventaris/list');
+        $this->load->view('template/footer');
+    }
+
+    public function jurnal_alat_peraga()
+    {
+        $data['tittle'] = 'List Jurnal Alat Peraga | Inventori App';
+
+        $this->db->select('
+                            jurnal_alat_peraga.id,
+                            jurnal_alat_peraga.kode_alat_peraga,
+                            jurnal_barang.kode_barang,
+                            master_barang.nama_barang,
+                            master_merek.nama_merek,
+                            master_satuan.nama_satuan,
+                            jurnal_barang.keterangan as spesifikasi,
+                            jurnal_alat_peraga.alokasi_tujuan,
+                            jurnal_alat_peraga.tanggal_beli,
+                            jurnal_alat_peraga.tanggal_kalibrasi,
+                            jurnal_alat_peraga.masa_berlaku_kalibrasi,
+                            jurnal_alat_peraga.jumlah,
+                            jurnal_alat_peraga.keterangan
+        ');
+        $this->db->from('jurnal_alat_peraga');
+        $this->db->join('jurnal_barang_masuk', 'jurnal_alat_peraga.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_alat_peraga.id', 'DESC');
+        $data['alat_peraga'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_alat_peraga/list');
         $this->load->view('template/footer');
     }
 }
