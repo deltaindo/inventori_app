@@ -4,13 +4,11 @@
             <div class="col-sm-12 mt-2">
                 <div class="home-tab">
                     <div class="d-sm-flex align-items-center justify-content-between border-bottom">
-                        <div>
-                            <div class="btn-wrapper">
-                                <a href="<?= base_url('report/report_jurnal_masuk_barang'); ?>" class="btn btn-success text-white me-0" type="button">
-                                    <i class="ti-cloud-down"></i>
-                                    Export Excel
-                                </a>
-                            </div>
+                        <div class="btn-wrapper">
+                            <a href="<?= base_url('report/report_jurnal_masuk_barang'); ?>" class="btn btn-success text-white me-0" type="button">
+                                <i class="ti-cloud-down"></i>
+                                Export Excel
+                            </a>
                         </div>
                     </div>
                 </div>

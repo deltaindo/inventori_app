@@ -572,4 +572,328 @@ class Report extends CI_Controller
         $writer->save('php://output');
         exit;
     }
+
+    public function export_excel_lokasi()
+    {
+        $this->db->select('master_lokasi.id, master_kantor.nama_kantor, master_lokasi.nama_lokasi, master_lokasi.keterangan');
+        $this->db->from('master_lokasi');
+        $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('master_lokasi.id', 'DESC');
+        $data['lokasi_report'] = $this->db->get()->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report Data Lokasi');
+
+        // Set title header
+        $sheet->mergeCells('A1:D1');
+        $sheet->setCellValue('A1', 'Report Data Lokasi');
+        $sheet->getStyle('A1:D1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:D1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Nama Kantor');
+        $sheet->setCellValue('C2', 'Nama Lokasi');
+        $sheet->setCellValue('D2', 'Keterangan');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:D2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:D2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:D2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['lokasi_report'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['nama_kantor']);
+            $sheet->setCellValue('C' . $baris, $item['nama_lokasi']);
+            $sheet->setCellValue('D' . $baris, $item['keterangan']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:D' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'D') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_Data_Lokasi_' . $currentDateTime . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function report_excel_barang()
+    {
+        $this->db->order_by('id', 'DESC');
+        $data['report_barang'] = $this->db->get('master_barang')->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report Data Master Barang');
+
+        // Set title header
+        $sheet->mergeCells('A1:D1');
+        $sheet->setCellValue('A1', 'Report Data Master Barang');
+        $sheet->getStyle('A1:D1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:D1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Nama Barang');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:B2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:B2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:B2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['report_barang'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['nama_barang']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:B' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'B') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_Data_Barang_' . $currentDateTime . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function report_excel_satuan()
+    {
+        $this->db->order_by('id', 'DESC');
+        $data['report_satuan'] = $this->db->get('master_satuan')->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report Data Master Satuan');
+
+        // Set title header
+        $sheet->mergeCells('A1:C1');
+        $sheet->setCellValue('A1', 'Report Data Master Satuan');
+        $sheet->getStyle('A1:C1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:C1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Nama Satuan');
+        $sheet->setCellValue('C2', 'Keterangan');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:C2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:C2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:C2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['report_satuan'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['nama_satuan']);
+            $sheet->setCellValue('C' . $baris, $item['keterangan']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:C' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'C') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_Data_Master_Satuan_' . $currentDateTime . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function report_excel_merek()
+    {
+        $this->db->order_by('id', 'DESC');
+        $data['report_merek'] = $this->db->get('master_merek')->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report Data Master Merek');
+
+        // Set title header
+        $sheet->mergeCells('A1:C1');
+        $sheet->setCellValue('A1', 'Report Data Master Merek');
+        $sheet->getStyle('A1:C1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:C1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Nama Merek');
+        $sheet->setCellValue('C2', 'Keterangan');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:C2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:C2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:C2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['report_merek'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['nama_merek']);
+            $sheet->setCellValue('C' . $baris, $item['keterangan']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:C' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'C') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_Data_Master_Merek_' . $currentDateTime . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function report_excel_kategori()
+    {
+        $this->db->order_by('id', 'DESC');
+        $data['report_kategori'] = $this->db->get('master_kategori')->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report Data Master Kategori');
+
+        // Set title header
+        $sheet->mergeCells('A1:C1');
+        $sheet->setCellValue('A1', 'Report Data Master Kategori');
+        $sheet->getStyle('A1:C1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:C1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Nama Kategori');
+        $sheet->setCellValue('C2', 'Keterangan');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:C2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:C2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:C2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['report_kategori'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['nama_kategori']);
+            $sheet->setCellValue('C' . $baris, $item['keterangan']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:C' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'C') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_Data_Master_Kategori_' . $currentDateTime . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
 }
