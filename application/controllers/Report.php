@@ -128,7 +128,8 @@ class Report extends CI_Controller
 
     public function report_inventaris_barang()
     {
-        $this->db->select('jurnal_inventaris.id,
+        $this->db->select('
+                            jurnal_inventaris.id,
                             jurnal_inventaris.kode_inventaris,
                             jurnal_barang.kode_barang,
                             master_barang.nama_barang,
@@ -141,7 +142,8 @@ class Report extends CI_Controller
                             jurnal_inventaris.tanggal_assign,
                             jurnal_inventaris.jumlah_assets,
                             jurnal_inventaris.keterangan,
-                            jurnal_inventaris.tanggal_return');
+                            jurnal_inventaris.tanggal_return
+        ');
         $this->db->from('jurnal_inventaris');
         $this->db->join('master_karyawan', 'jurnal_inventaris.id_karyawan = master_karyawan.id', 'left');
         $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id', 'left');
@@ -222,6 +224,344 @@ class Report extends CI_Controller
         // Generate filename with current date and time
         $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
         $filename = "Report_Jurnal_Inventaris_Barang_{$currentDateTime}.xlsx";
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function report_jurnal_stok_barang()
+    {
+        $this->db->select('
+                            jurnal_stok_barang.id, 
+                            jurnal_barang.kode_barang, 
+                            master_barang.nama_barang, 
+                            master_merek.nama_merek, 
+                            master_lokasi.nama_lokasi, 
+                            master_satuan.nama_satuan, 
+                            master_kantor.nama_kantor, 
+                            jurnal_stok_barang.jumlah_masuk, 
+                            jurnal_stok_barang.jumlah_keluar, 
+                            jurnal_stok_barang.stok_akhir, 
+                            jurnal_stok_barang.tanggal_update,
+                            jurnal_barang.keterangan
+        ');
+
+        $this->db->from('jurnal_stok_barang');
+        $this->db->join('jurnal_barang', 'jurnal_stok_barang.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
+
+        $this->db->where('master_kantor.id', $this->kantor);
+
+        $this->db->group_by('
+            jurnal_stok_barang.id, 
+            jurnal_barang.kode_barang, 
+            master_barang.nama_barang, 
+            master_merek.nama_merek, 
+            master_lokasi.nama_lokasi, 
+            master_satuan.nama_satuan, 
+            master_kantor.nama_kantor, 
+            jurnal_stok_barang.jumlah_masuk, 
+            jurnal_stok_barang.jumlah_keluar, 
+            jurnal_stok_barang.stok_akhir, 
+            jurnal_stok_barang.tanggal_update
+        ');
+
+        $this->db->order_by('jurnal_stok_barang.id', 'DESC');
+        $data['jurnal_stok'] = $this->db->get()->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report Jurnal Stok Barang');
+
+        // Set title header
+        $sheet->mergeCells('A1:K1');
+        $sheet->setCellValue('A1', 'Report Jurnal Stok Barang');
+        $sheet->getStyle('A1:K1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Kode Barang');
+        $sheet->setCellValue('C2', 'Nama Barang');
+        $sheet->setCellValue('D2', 'Merek');
+        $sheet->setCellValue('E2', 'Lokasi');
+        $sheet->setCellValue('F2', 'Kantor');
+        $sheet->setCellValue('G2', 'Spesifikasi');
+        $sheet->setCellValue('H2', 'Jumlah Masuk');
+        $sheet->setCellValue('I2', 'Jumlah Keluar');
+        $sheet->setCellValue('J2', 'Stok Akhir');
+        $sheet->setCellValue('K2', 'Tanggal Update');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:K2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:K2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:K2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['jurnal_stok'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['kode_barang']);
+            $sheet->setCellValue('C' . $baris, $item['nama_barang']);
+            $sheet->setCellValue('D' . $baris, $item['nama_merek']);
+            $sheet->setCellValue('E' . $baris, $item['nama_lokasi']);
+            $sheet->setCellValue('F' . $baris, $item['nama_kantor']);
+            $sheet->setCellValue('G' . $baris, $item['keterangan']);
+            $sheet->setCellValue('H' . $baris, $item['jumlah_masuk'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('I' . $baris, $item['jumlah_keluar'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('J' . $baris, $item['stok_akhir'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('K' . $baris, $item['tanggal_update']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:K' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'K') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_Jurnal_Stok_Barang_' . $currentDateTime . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function report_history_inventaris()
+    {
+        $this->db->select('
+                            jurnal_inventaris.id,
+                            master_barang.nama_barang,
+                            master_karyawan.nama_karyawan,
+                            master_divisi.nama_divisi,
+                            master_merek.nama_merek,
+                            master_satuan.nama_satuan,
+                            jurnal_inventaris.tanggal_assign,
+                            jurnal_inventaris.tanggal_return,
+                            history_assets.kondisi_awal,
+                            history_assets.kondisi_akhir,
+                            jurnal_inventaris.jumlah_assets,
+                            jurnal_inventaris.status_assets,
+                            jurnal_inventaris.keterangan as keterangan_inventaris,
+                            jurnal_barang_masuk.jenis_pakai,
+                            jurnal_barang_masuk.kode_barang_masuk as kode_barang,
+                            jurnal_barang_masuk.keterangan as spesifikasi
+        ');
+        $this->db->from('jurnal_inventaris');
+        $this->db->join('history_assets', 'history_assets.id_jurnal_inventaris = jurnal_inventaris.id');
+        $this->db->join('master_karyawan', 'master_karyawan.id = jurnal_inventaris.id_karyawan');
+        $this->db->join('master_divisi', 'master_divisi.id = master_karyawan.id_divisi');
+        $this->db->join('jurnal_barang_masuk', 'jurnal_barang_masuk.id = jurnal_inventaris.id_jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang.id = jurnal_barang_masuk.id_jurnal_barang');
+        $this->db->join('master_barang', 'master_barang.id = jurnal_barang.id_barang');
+        $this->db->join('master_merek', 'master_merek.id = jurnal_barang.id_merek');
+        $this->db->join('master_satuan', 'master_satuan.id = jurnal_barang.id_satuan');
+        $this->db->join('master_lokasi', 'master_lokasi.id = jurnal_barang.id_lokasi');
+        $this->db->join('master_kantor', 'master_kantor.id = master_lokasi.id_kantor');
+
+        $this->db->where('master_kantor.id', $this->kantor);
+
+        $this->db->order_by('jurnal_inventaris.id', 'DESC');
+        $data['history_inventaris'] = $this->db->get()->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report History Inventaris');
+
+        // Set title header
+        $sheet->mergeCells('A1:O1');
+        $sheet->setCellValue('A1', 'Report History Inventaris');
+        $sheet->getStyle('A1:O1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:O1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Barang Masuk');
+        $sheet->setCellValue('C2', 'Nama Barang');
+        $sheet->setCellValue('D2', 'Nama Merek');
+        $sheet->setCellValue('E2', 'Spesifikasi');
+        $sheet->setCellValue('F2', 'Karyawan');
+        $sheet->setCellValue('G2', 'Divisi');
+        $sheet->setCellValue('H2', 'Tanggal Assign');
+        $sheet->setCellValue('I2', 'Kondisi Awal');
+        $sheet->setCellValue('J2', 'Jumlah Assets');
+        $sheet->setCellValue('K2', 'Status Assets');
+        $sheet->setCellValue('L2', 'Keterangan Inventaris');
+        $sheet->setCellValue('M2', 'Jenis Pakai');
+        $sheet->setCellValue('N2', 'Tanggal Return');
+        $sheet->setCellValue('O2', 'Kondisi Akhir');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:O2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:O2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:O2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['history_inventaris'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['kode_barang']);
+            $sheet->setCellValue('C' . $baris, $item['nama_barang']);
+            $sheet->setCellValue('D' . $baris, $item['nama_merek']);
+            $sheet->setCellValue('E' . $baris, $item['spesifikasi']);
+            $sheet->setCellValue('F' . $baris, $item['nama_karyawan']);
+            $sheet->setCellValue('G' . $baris, $item['nama_divisi']);
+            $sheet->setCellValue('H' . $baris, $item['tanggal_assign']);
+            $sheet->setCellValue('I' . $baris, $item['kondisi_awal']);
+            $sheet->setCellValue('J' . $baris, $item['jumlah_assets'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('K' . $baris, $item['status_assets']);
+            $sheet->setCellValue('L' . $baris, $item['keterangan_inventaris']);
+            $sheet->setCellValue('M' . $baris, $item['jenis_pakai']);
+            $sheet->setCellValue('N' . $baris, $item['tanggal_return'] == Null ? '-' : $item['tanggal_return']);
+            $sheet->setCellValue('O' . $baris, $item['kondisi_akhir'] == Null ? '-' : $item['kondisi_akhir']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:O' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'O') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_History_Inventaris_' . $currentDateTime . '.xlsx';
+
+        // Set headers for download
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="' . $filename . '"');
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function report_assets_inventaris()
+    {
+        $this->db->select('
+                            jurnal_barang_masuk.kode_barang_masuk,
+                            jurnal_barang.kode_barang,
+                            master_barang.nama_barang,
+                            master_merek.nama_merek,
+                            jurnal_barang_masuk.keterangan as spesifikasi,
+                            jurnal_barang_masuk.tanggal_masuk,
+                            jurnal_barang_masuk.jenis_pakai,
+                            jurnal_barang_masuk.status_barang,
+                            jurnal_barang_masuk.jumlah_masuk,
+                            master_satuan.nama_satuan
+        ');
+
+        $this->db->from('jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Inventaris');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
+        $data['assets_report'] = $this->db->get()->result_array();
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setTitle('Report Assets Inventaris');
+
+        // Set title header
+        $sheet->mergeCells('A1:J1');
+        $sheet->setCellValue('A1', 'Report Assets Inventaris');
+        $sheet->getStyle('A1:J1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:J1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        // Set header
+        $sheet->setCellValue('A2', 'No');
+        $sheet->setCellValue('B2', 'Barang Masuk');
+        $sheet->setCellValue('C2', 'Kode Barang');
+        $sheet->setCellValue('D2', 'Barang');
+        $sheet->setCellValue('E2', 'Merek');
+        $sheet->setCellValue('F2', 'Spesifikasi');
+        $sheet->setCellValue('G2', 'Tanggal Masuk');
+        $sheet->setCellValue('H2', 'Jenis Pakai');
+        $sheet->setCellValue('I2', 'Status Barang');
+        $sheet->setCellValue('J2', 'Jumlah Masuk');
+
+        // Apply bold style and background color to header
+        $sheet->getStyle('A2:J2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:J2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:J2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+        // Populate data
+        $baris = 3;
+        $no = 1;
+        foreach ($data['assets_report'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['kode_barang_masuk']);
+            $sheet->setCellValue('C' . $baris, $item['kode_barang']);
+            $sheet->setCellValue('D' . $baris, $item['nama_barang']);
+            $sheet->setCellValue('E' . $baris, $item['nama_merek']);
+            $sheet->setCellValue('F' . $baris, $item['spesifikasi']);
+            $sheet->setCellValue('G' . $baris, $item['tanggal_masuk']);
+            $sheet->setCellValue('H' . $baris, $item['jenis_pakai']);
+            $sheet->setCellValue('I' . $baris, $item['status_barang']);
+            $sheet->setCellValue('J' . $baris, $item['jumlah_masuk'] . ' ' . $item['nama_satuan']);
+            $baris++;
+        }
+
+        // Apply border style to all cells
+        $styleArray = [
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+        ];
+        $sheet->getStyle('A2:J' . ($baris - 1))->applyFromArray($styleArray);
+
+        // Set auto size for all columns
+        foreach (range('A', 'J') as $columnID) {
+            $sheet->getColumnDimension($columnID)->setAutoSize(true);
+        }
+
+        // Generate filename with current date and time
+        $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+        $filename = 'Report_Assets_' . $currentDateTime . '.xlsx';
 
         // Set headers for download
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
