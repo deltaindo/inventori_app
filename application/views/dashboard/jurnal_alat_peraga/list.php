@@ -5,7 +5,7 @@
                 <div class="home-tab">
                     <div class="d-sm-flex align-items-right justify-content-between border-bottom">
                         <div class="btn-wrapper">
-                            <a href="#" class="btn btn-success text-white me-0" type="button">
+                            <a href="<?= base_url('report/report_jurnal_alat_peraga'); ?>" class="btn btn-success text-white me-0" type="button">
                                 <i class="ti-cloud-down"></i>
                                 Export Excel
                             </a>
