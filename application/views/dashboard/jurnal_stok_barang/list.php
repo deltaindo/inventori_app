@@ -82,7 +82,7 @@
                                                             <?= $stok['nama_kantor'] ?>
                                                         </td>
                                                         <td>
-                                                            <?= $stok['tanggal_update'] ?>
+                                                            <?= $stok['tanggal_update'] == null ? '-' : $stok['tanggal_update'] ?>
                                                         </td>
                                                         <td>
                                                             <?= $stok['jumlah_masuk'] ?> <?= $stok['nama_satuan'] ?>
