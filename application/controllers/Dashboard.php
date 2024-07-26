@@ -3752,19 +3752,56 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_alat_peraga');
         } else {
-            $data = [
-                'kode_alat_peraga'          => 'JAP-' . substr(uniqid(), -5),
-                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-                'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
-                'tanggal_beli'              => $this->input->post('tanggal_beli'),
-                'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
-                'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
-                'jumlah'                    => $this->input->post('jumlah_alat'),
-                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
-            ];
-            $this->db->insert('jurnal_alat_peraga', $data);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Alat Peraga Berhasil di simpan</div>');
-            redirect('dashboard/jurnal_alat_peraga');
+            $id_jurnal_barang_masuk = $this->input->post('nama_alat');
+            $this->db->select('id_jurnal_barang');
+            $this->db->from('jurnal_barang_masuk');
+            $this->db->where('id', $id_jurnal_barang_masuk);
+            $query = $this->db->get();
+            $jurnal_barang = $query->row();
+
+            if ($jurnal_barang) {
+                $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
+
+                $this->db->select('*');
+                $this->db->from('jurnal_stok_barang');
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $query_stok = $this->db->get();
+                $stok_barang = $query_stok->row();
+
+                $jumlah_alat      = $this->input->post('jumlah_alat');
+                $jumlah_keluar_baru = $stok_barang->jumlah_keluar + $jumlah_alat;
+                $stok_akhir_baru    = $stok_barang->jumlah_masuk - $jumlah_keluar_baru;
+
+                if ($stok_barang) {
+                    if ($jumlah_alat > $stok_barang->stok_akhir) {
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jumlah Stok Barang Tidak Cukup, Sisa Stok Item: ' . $stok_barang->stok_akhir . '</div>');
+                        redirect('dashboard/jurnal_alat_peraga');
+                    } else {
+                        $data = [
+                            'kode_alat_peraga'          => 'JAP-' . substr(uniqid(), -5),
+                            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                            'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
+                            'tanggal_beli'              => $this->input->post('tanggal_beli'),
+                            'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
+                            'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
+                            'jumlah'                    => $this->input->post('jumlah_alat'),
+                            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
+                        ];
+                        $this->db->insert('jurnal_alat_peraga', $data);
+
+                        $data_update = [
+                            'tanggal_update'  => date('Y-m-d H:i:s'),
+                            'jumlah_keluar'   => $jumlah_keluar_baru,
+                            'stok_akhir'      => $stok_akhir_baru
+                        ];
+                        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                        $this->db->update('jurnal_stok_barang', $data_update);
+
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Alat Peraga Berhasil di simpan</div>');
+                        redirect('dashboard/jurnal_alat_peraga');
+                    }
+                }
+            }
         }
     }
 
