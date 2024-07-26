@@ -21,7 +21,7 @@
                                         Jurnal Alat Peraga
                                     </h4>
                                     <?= $this->session->userdata('pesan');  ?>
-                                    <a href="#" class="btn btn-primary text-white">
+                                    <a href="<?= base_url('dashboard/tambah_jurnal_alat_peraga'); ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
                                     <div class="overflow-visible mt-3">
@@ -110,7 +110,7 @@
                                                             <?= $jurnal_alat_peraga['keterangan'] ?>
                                                         </td>
                                                         <td>
-                                                            <a href="#" class="btn btn-outline-secondary text-black">
+                                                            <a href="<?= base_url('dashboard/edit_jurnal_alat_peraga/' . $jurnal_alat_peraga['id']); ?>" class="btn btn-outline-secondary text-black">
                                                                 Edit
                                                             </a>
                                                         </td>
