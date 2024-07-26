@@ -244,7 +244,8 @@ class Report extends CI_Controller
                             master_merek.nama_merek, 
                             master_lokasi.nama_lokasi, 
                             master_satuan.nama_satuan, 
-                            master_kantor.nama_kantor, 
+                            master_kantor.nama_kantor,
+                            master_kategori.nama_kategori,  
                             jurnal_stok_barang.jumlah_masuk, 
                             jurnal_stok_barang.jumlah_keluar, 
                             jurnal_stok_barang.stok_akhir, 
@@ -256,6 +257,7 @@ class Report extends CI_Controller
         $this->db->join('jurnal_barang', 'jurnal_stok_barang.id_jurnal_barang = jurnal_barang.id');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
@@ -269,7 +271,8 @@ class Report extends CI_Controller
             master_merek.nama_merek, 
             master_lokasi.nama_lokasi, 
             master_satuan.nama_satuan, 
-            master_kantor.nama_kantor, 
+            master_kantor.nama_kantor,
+            master_kategori.nama_kategori,  
             jurnal_stok_barang.jumlah_masuk, 
             jurnal_stok_barang.jumlah_keluar, 
             jurnal_stok_barang.stok_akhir, 
@@ -284,28 +287,29 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Jurnal Stok Barang');
 
         // Set title header
-        $sheet->mergeCells('A1:K1');
+        $sheet->mergeCells('A1:L1');
         $sheet->setCellValue('A1', 'Report Jurnal Stok Barang');
-        $sheet->getStyle('A1:K1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:L1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
         $sheet->setCellValue('B2', 'Kode Barang');
         $sheet->setCellValue('C2', 'Nama Barang');
         $sheet->setCellValue('D2', 'Merek');
-        $sheet->setCellValue('E2', 'Lokasi');
-        $sheet->setCellValue('F2', 'Kantor');
-        $sheet->setCellValue('G2', 'Spesifikasi');
-        $sheet->setCellValue('H2', 'Jumlah Masuk');
-        $sheet->setCellValue('I2', 'Jumlah Keluar');
-        $sheet->setCellValue('J2', 'Stok Akhir');
-        $sheet->setCellValue('K2', 'Tanggal Update');
+        $sheet->setCellValue('E2', 'Jenis Assets');
+        $sheet->setCellValue('F2', 'Lokasi');
+        $sheet->setCellValue('G2', 'Kantor');
+        $sheet->setCellValue('H2', 'Spesifikasi');
+        $sheet->setCellValue('I2', 'Jumlah Masuk');
+        $sheet->setCellValue('J2', 'Jumlah Keluar');
+        $sheet->setCellValue('K2', 'Stok Akhir');
+        $sheet->setCellValue('L2', 'Tanggal Update');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:K2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:K2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:K2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:L2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:L2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:L2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -315,13 +319,14 @@ class Report extends CI_Controller
             $sheet->setCellValue('B' . $baris, $item['kode_barang']);
             $sheet->setCellValue('C' . $baris, $item['nama_barang']);
             $sheet->setCellValue('D' . $baris, $item['nama_merek']);
-            $sheet->setCellValue('E' . $baris, $item['nama_lokasi']);
-            $sheet->setCellValue('F' . $baris, $item['nama_kantor']);
-            $sheet->setCellValue('G' . $baris, $item['keterangan']);
-            $sheet->setCellValue('H' . $baris, $item['jumlah_masuk'] . ' ' . $item['nama_satuan']);
-            $sheet->setCellValue('I' . $baris, $item['jumlah_keluar'] . ' ' . $item['nama_satuan']);
-            $sheet->setCellValue('J' . $baris, $item['stok_akhir'] . ' ' . $item['nama_satuan']);
-            $sheet->setCellValue('K' . $baris, $item['tanggal_update']);
+            $sheet->setCellValue('E' . $baris, $item['nama_kategori']);
+            $sheet->setCellValue('F' . $baris, $item['nama_lokasi']);
+            $sheet->setCellValue('G' . $baris, $item['nama_kantor']);
+            $sheet->setCellValue('H' . $baris, $item['keterangan']);
+            $sheet->setCellValue('I' . $baris, $item['jumlah_masuk'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('J' . $baris, $item['jumlah_keluar'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('K' . $baris, $item['stok_akhir'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('L' . $baris, $item['tanggal_update'] == null ? '-' : $item['tanggal_update']);
             $baris++;
         }
 
@@ -333,10 +338,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:K' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:L' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'K') as $columnID) {
+        foreach (range('A', 'L') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 

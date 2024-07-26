@@ -37,6 +37,9 @@
                                                         Merek
                                                     </th>
                                                     <th>
+                                                        Jenis Assets
+                                                    </th>
+                                                    <th>
                                                         Lokasi
                                                     </th>
                                                     <th>
@@ -74,6 +77,9 @@
                                                         </td>
                                                         <td>
                                                             <?= $stok['nama_merek'] ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $stok['nama_kategori'] ?>
                                                         </td>
                                                         <td>
                                                             <?= $stok['nama_lokasi'] ?>

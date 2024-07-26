@@ -2882,6 +2882,7 @@ class Dashboard extends CI_Controller
             master_lokasi.nama_lokasi, 
             master_satuan.nama_satuan, 
             master_kantor.nama_kantor, 
+            master_kategori.nama_kategori, 
             jurnal_stok_barang.jumlah_masuk, 
             jurnal_stok_barang.jumlah_keluar, 
             jurnal_stok_barang.stok_akhir, 
@@ -2893,6 +2894,7 @@ class Dashboard extends CI_Controller
         $this->db->join('jurnal_barang', 'jurnal_stok_barang.id_jurnal_barang = jurnal_barang.id');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
@@ -2906,7 +2908,8 @@ class Dashboard extends CI_Controller
             master_merek.nama_merek, 
             master_lokasi.nama_lokasi, 
             master_satuan.nama_satuan, 
-            master_kantor.nama_kantor, 
+            master_kantor.nama_kantor,
+            master_kategori.nama_kategori, 
             jurnal_stok_barang.jumlah_masuk, 
             jurnal_stok_barang.jumlah_keluar, 
             jurnal_stok_barang.stok_akhir, 
@@ -3737,19 +3740,32 @@ class Dashboard extends CI_Controller
 
     public function simpan_jurnal_alat_peraga()
     {
-        $data = [
-            'kode_alat_peraga'          => 'JAP-' . substr(uniqid(), -5),
-            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-            'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
-            'tanggal_beli'              => $this->input->post('tanggal_beli'),
-            'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
-            'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
-            'jumlah'                    => $this->input->post('jumlah_alat'),
-            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
-        ];
-        $this->db->insert('jurnal_alat_peraga', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Alat Peraga Berhasil di simpan</div>');
-        redirect('dashboard/jurnal_alat_peraga');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_alat', 'Nama Alat', 'required');
+        $this->form_validation->set_rules('alokasi_tujuan', 'Alokasi Tujuan', 'required');
+        $this->form_validation->set_rules('tanggal_beli', 'Tanggal Beli', 'required');
+        $this->form_validation->set_rules('tanggal_kalibrasi', 'Tanggal Kalibrasi', 'required');
+        $this->form_validation->set_rules('jumlah_alat', 'Jumlah Alat', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Keterangan Alat', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_alat_peraga');
+        } else {
+            $data = [
+                'kode_alat_peraga'          => 'JAP-' . substr(uniqid(), -5),
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
+                'tanggal_beli'              => $this->input->post('tanggal_beli'),
+                'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
+                'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
+                'jumlah'                    => $this->input->post('jumlah_alat'),
+                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
+            ];
+            $this->db->insert('jurnal_alat_peraga', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Alat Peraga Berhasil di simpan</div>');
+            redirect('dashboard/jurnal_alat_peraga');
+        }
     }
 
     public function edit_jurnal_alat_peraga($id)
@@ -3777,18 +3793,31 @@ class Dashboard extends CI_Controller
 
     public function update_jurnal_alat_peraga($id)
     {
-        $data = [
-            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-            'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
-            'tanggal_beli'              => $this->input->post('tanggal_beli'),
-            'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
-            'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
-            'jumlah'                    => $this->input->post('jumlah_alat'),
-            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
-        ];
-        $this->db->where('id', $id);
-        $this->db->update('jurnal_alat_peraga', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Alat Peraga Berhasil di update</div>');
-        redirect('dashboard/jurnal_alat_peraga');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_alat', 'Nama Alat', 'required');
+        $this->form_validation->set_rules('alokasi_tujuan', 'Alokasi Tujuan', 'required');
+        $this->form_validation->set_rules('tanggal_beli', 'Tanggal Beli', 'required');
+        $this->form_validation->set_rules('tanggal_kalibrasi', 'Tanggal Kalibrasi', 'required');
+        $this->form_validation->set_rules('jumlah_alat', 'Jumlah Alat', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Keterangan Alat', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_alat_peraga');
+        } else {
+            $data = [
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
+                'tanggal_beli'              => $this->input->post('tanggal_beli'),
+                'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
+                'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
+                'jumlah'                    => $this->input->post('jumlah_alat'),
+                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('jurnal_alat_peraga', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Alat Peraga Berhasil di update</div>');
+            redirect('dashboard/jurnal_alat_peraga');
+        }
     }
 }
