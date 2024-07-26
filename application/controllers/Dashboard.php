@@ -3768,7 +3768,7 @@ class Dashboard extends CI_Controller
                 $query_stok = $this->db->get();
                 $stok_barang = $query_stok->row();
 
-                $jumlah_alat      = $this->input->post('jumlah_alat');
+                $jumlah_alat        = $this->input->post('jumlah_alat');
                 $jumlah_keluar_baru = $stok_barang->jumlah_keluar + $jumlah_alat;
                 $stok_akhir_baru    = $stok_barang->jumlah_masuk - $jumlah_keluar_baru;
 
@@ -3835,26 +3835,71 @@ class Dashboard extends CI_Controller
         $this->form_validation->set_rules('alokasi_tujuan', 'Alokasi Tujuan', 'required');
         $this->form_validation->set_rules('tanggal_beli', 'Tanggal Beli', 'required');
         $this->form_validation->set_rules('tanggal_kalibrasi', 'Tanggal Kalibrasi', 'required');
-        $this->form_validation->set_rules('jumlah_alat', 'Jumlah Alat', 'required');
         $this->form_validation->set_rules('keterangan_barang', 'Keterangan Alat', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_alat_peraga');
         } else {
-            $data = [
-                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-                'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
-                'tanggal_beli'              => $this->input->post('tanggal_beli'),
-                'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
-                'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
-                'jumlah'                    => $this->input->post('jumlah_alat'),
-                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
-            ];
-            $this->db->where('id', $id);
-            $this->db->update('jurnal_alat_peraga', $data);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Alat Peraga Berhasil di update</div>');
-            redirect('dashboard/jurnal_alat_peraga');
+            if (!$this->input->post('jumlah_alat_baru')) {
+                $data = [
+                    'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                    'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
+                    'tanggal_beli'              => $this->input->post('tanggal_beli'),
+                    'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
+                    'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
+                    'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
+                ];
+                $this->db->where('id', $id);
+                $this->db->update('jurnal_alat_peraga', $data);
+                $this->session->set_flashdata('pesan', '<div class="alert alert-primary" role="alert">Jurnal Alat Peraga Berhasil di update</div>');
+                redirect('dashboard/jurnal_alat_peraga');
+            }
+
+            $id_jurnal_barang_masuk = $this->input->post('nama_alat');
+            $this->db->select('id_jurnal_barang');
+            $this->db->from('jurnal_barang_masuk');
+            $this->db->where('id', $id_jurnal_barang_masuk);
+            $query = $this->db->get();
+            $jurnal_barang = $query->row();
+
+            if ($jurnal_barang) {
+                $data = [
+                    'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                    'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
+                    'tanggal_beli'              => $this->input->post('tanggal_beli'),
+                    'tanggal_kalibrasi'         => $this->input->post('tanggal_kalibrasi'),
+                    'masa_berlaku_kalibrasi'    => $this->input->post('masa_berlaku_kalibrasi'),
+                    'jumlah'                    => $this->input->post('jumlah_alat_baru'),
+                    'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Alat Peraga atau Praktik dalam kondisi layak digunakan',
+                ];
+                $this->db->where('id', $id);
+                $this->db->update('jurnal_alat_peraga', $data);
+
+                $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
+
+                $this->db->select('*');
+                $this->db->from('jurnal_stok_barang');
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $query_stok = $this->db->get();
+                $stok_barang = $query_stok->row();
+
+                $jumlah_alat_lama   = $this->input->post('jumlah_alat_lama');
+                $jumlah_alat_baru   = $this->input->post('jumlah_alat_baru');
+                $jumlah_keluar_baru = $stok_barang->jumlah_keluar - $jumlah_alat_lama + $jumlah_alat_baru;
+                $stok_akhir_baru    = $stok_barang->jumlah_masuk - $jumlah_keluar_baru;
+
+                $data_update = [
+                    'tanggal_update'  => date('Y-m-d H:i:s'),
+                    'jumlah_keluar'   => $jumlah_keluar_baru,
+                    'stok_akhir'      => $stok_akhir_baru
+                ];
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $this->db->update('jurnal_stok_barang', $data_update);
+
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peraga Berhasil di update</div>');
+                redirect('dashboard/jurnal_alat_peraga');
+            }
         }
     }
 }

@@ -79,7 +79,7 @@
                                                         <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Alat Peraga"></textarea>
                                                         <span class="text-small">
                                                             <i>
-                                                                Contoh: Alat Peraga / Praktik dalam kondisi layak digunakan.
+                                                                Contoh: Alat Peraga atau Praktik dalam kondisi layak digunakan.
                                                             </i>
                                                         </span>
                                                     </div>

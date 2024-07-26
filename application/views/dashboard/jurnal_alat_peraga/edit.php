@@ -67,11 +67,23 @@
                                                         <input type="date" class="form-control" name="masa_berlaku_kalibrasi" value="<?= $alat_peraga['masa_berlaku_kalibrasi']; ?>">
                                                     </div>
 
-                                                    <label for="jumlah_alat" class="text-primary fs-6 mb-1">
-                                                        Jumlah
+                                                    <label for="jumlah_alat_lama" class="text-primary fs-6 mb-1">
+                                                        Jumlah Alat (Data Lama)
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="number" class="form-control" name="jumlah_alat" placeholder="Inputkan Jumlah Alat Peraga atau Praktik" value="<?= $alat_peraga['jumlah']; ?>">
+                                                        <input type="number" class="form-control" name="jumlah_alat_lama" value="<?= $alat_peraga['jumlah']; ?>" readonly>
+                                                    </div>
+
+                                                    <label for="jumlah_alat_baru" class="text-primary fs-6 mb-1">
+                                                        Jumlah Alat (Data Baru)
+                                                    </label>
+                                                    <div class="mb-3">
+                                                        <input type="number" class="form-control" name="jumlah_alat_baru" placeholder="Inputkan Jumlah Alat Peraga atau Praktik (Data Baru)">
+                                                        <span class="text-small">
+                                                            <i>
+                                                                * Tidak Wajib diisi. Jika akan mengubah Jumlah Alat, silahkan inputkan data baru.
+                                                            </i>
+                                                        </span>
                                                     </div>
 
                                                     <label for="keterangan_barang" class="text-primary fs-6 mb-1">
@@ -81,7 +93,7 @@
                                                         <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Alat Peraga"><?= $alat_peraga['keterangan']; ?></textarea>
                                                         <span class="text-small">
                                                             <i>
-                                                                Contoh: Alat Peraga / Praktik dalam kondisi layak digunakan.
+                                                                Contoh: Alat Peraga atau Praktik dalam kondisi layak digunakan.
                                                             </i>
                                                         </span>
                                                     </div>
