@@ -76,13 +76,16 @@
                                                         <input type="number" class="form-control" name="harga_barang" placeholder="Inputkan Harga Asset Satuan" autofocus>
                                                     </div>
                                                 </div>
-                                                <div class="modal-footer">
-                                                    <a href="<?= base_url('dashboard/jurnal_masuk_barang'); ?>" class="btn btn-outline-secondary text-black">
-                                                        Kembali
-                                                    </a>
-                                                    <button type="submit" class="btn btn-primary text-white">
-                                                        Simpan
-                                                    </button>
+
+                                                <div class="card-footer d-flex justify-content-end">
+                                                    <div class="d-flex">
+                                                        <a href="<?= base_url('dashboard/jurnal_masuk_barang'); ?>" class="btn btn-outline-secondary text-black">
+                                                            Kembali
+                                                        </a>
+                                                        <button type="submit" class="btn btn-primary text-white mx-1">
+                                                            Simpan
+                                                        </button>
+                                                    </div>
                                                 </div>
                                             </form>
                                         </div>

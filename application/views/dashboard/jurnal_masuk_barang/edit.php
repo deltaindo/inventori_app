@@ -1,20 +1,32 @@
 <div class="main-panel">
     <div class="content-wrapper">
         <div class="row">
-            <div class="col-sm-12 mt-2">
-                <div class="row tabel-produk mt-2">
+            <div class="col-sm-12">
+                <div class="row tabel-produk">
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="tab-content tab-content-basic">
                                 <?= $this->session->flashdata('message'); ?>
-                                <div class="row tabel-produk mt-2">
+                                <div class="row tabel-produk">
                                     <div class="col-lg-8 grid-margin stretch-card">
                                         <div class="card">
                                             <form method="post" action="<?= base_url('dashboard/update_jurnal_masuk_barang/' . $jurnal_barang_masuk['id']); ?>">
                                                 <div class="card-body">
-                                                    <h4 class="card-title">
-                                                        Edit Jurnal Barang Masuk
-                                                    </h4>
+                                                    <div class="card-footer d-flex justify-content-between">
+                                                        <div class="d-flex">
+                                                            <h4 class="card-title">
+                                                                Edit Jurnal Barang Masuk
+                                                            </h4>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <a href="<?= base_url('dashboard/jurnal_masuk_barang'); ?>" class="btn btn-outline-secondary text-black">
+                                                                Kembali
+                                                            </a>
+                                                            <button type="submit" class="btn btn-primary text-white mx-1">
+                                                                Edit
+                                                            </button>
+                                                        </div>
+                                                    </div>
 
                                                     <label for="id_jurnal_barang" class="text-primary fs-6 mb-1">
                                                         Nama Barang
@@ -82,14 +94,6 @@
                                                     <div class="mb-3">
                                                         <input type="number" class="form-control" name="harga_barang" placeholder="Inputkan Harga Asset Satuan" value="<?= $jurnal_barang_masuk['harga_barang']; ?>">
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a href="<?= base_url('dashboard/jurnal_masuk_barang'); ?>" class="btn btn-outline-secondary text-black">
-                                                        Kembali
-                                                    </a>
-                                                    <button type="submit" class="btn btn-primary text-white">
-                                                        Edit
-                                                    </button>
                                                 </div>
                                             </form>
                                         </div>

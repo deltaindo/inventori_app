@@ -57,9 +57,6 @@
           <h1 class="welcome-text">
             <span class="text-black fw-bold"><?= $this->nama_kantor == null ? 'Selamat Pagi' : $this->nama_kantor; ?></span>
           </h1>
-          <h3 class="welcome-sub-text">
-            Total Seluruh Aset : <span class="text-danger">Rp. 0</span>
-          </h3>
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">

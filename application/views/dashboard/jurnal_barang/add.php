@@ -12,9 +12,22 @@
                                         <div class="card">
                                             <form method="post" action="<?= base_url('dashboard/simpan_jurnal_barang'); ?>" enctype="multipart/form-data">
                                                 <div class="card-body">
-                                                    <h4 class="card-title">
-                                                        Tambah Jurnal Barang
-                                                    </h4>
+
+                                                    <div class="card-footer d-flex justify-content-between">
+                                                        <div class="d-flex">
+                                                            <h4 class="card-title">
+                                                                Tambah Jurnal Barang
+                                                            </h4>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <a href="<?= base_url('dashboard/jurnal_barang'); ?>" class="btn btn-outline-secondary text-black">
+                                                                Kembali
+                                                            </a>
+                                                            <button type="submit" class="btn btn-primary text-white mx-1">
+                                                                Simpan
+                                                            </button>
+                                                        </div>
+                                                    </div>
 
                                                     <label for="id_barang" class="text-primary fs-6 mb-1">
                                                         Nama Barang
@@ -110,14 +123,6 @@
                                                             </i>
                                                         </span>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a href="<?= base_url('dashboard/jurnal_barang'); ?>" class="btn btn-outline-secondary text-black">
-                                                        Kembali
-                                                    </a>
-                                                    <button type="submit" class="btn btn-primary text-white">
-                                                        Simpan
-                                                    </button>
                                                 </div>
                                             </form>
                                         </div>

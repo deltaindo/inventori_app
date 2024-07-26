@@ -1,20 +1,32 @@
 <div class="main-panel">
     <div class="content-wrapper">
         <div class="row">
-            <div class="col-sm-12 mt-2">
-                <div class="row tabel-produk mt-2">
+            <div class="col-sm-12">
+                <div class="row tabel-produk">
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
                             <div class="tab-content tab-content-basic">
                                 <?= $this->session->flashdata('message'); ?>
-                                <div class="row tabel-produk mt-2">
+                                <div class="row tabel-produk">
                                     <div class="col-lg-12 grid-margin stretch-card">
                                         <div class="card">
                                             <form method="post" action="<?= base_url('dashboard/simpan_inventaris_barang'); ?>">
                                                 <div class="card-body">
-                                                    <h4 class="card-title">
-                                                        Tambah Jurnal Inventaris
-                                                    </h4>
+                                                    <div class="card-footer d-flex justify-content-between">
+                                                        <div class="d-flex">
+                                                            <h4 class="card-title">
+                                                                Tambah Jurnal Inventaris
+                                                            </h4>
+                                                        </div>
+                                                        <div class="d-flex">
+                                                            <a href="<?= base_url('dashboard/jurnal_inventaris_barang'); ?>" class="btn btn-outline-secondary text-black">
+                                                                Kembali
+                                                            </a>
+                                                            <button type="submit" class="btn btn-primary text-white mx-1">
+                                                                Simpan
+                                                            </button>
+                                                        </div>
+                                                    </div>
 
                                                     <label for="nama_karyawan" class="text-primary fs-6 mb-1">
                                                         Nama Karyawan
@@ -76,14 +88,6 @@
                                                             </i>
                                                         </span>
                                                     </div>
-                                                </div>
-                                                <div class="modal-footer">
-                                                    <a href="<?= base_url('dashboard/jurnal_inventaris_barang'); ?>" class="btn btn-outline-secondary text-black">
-                                                        Kembali
-                                                    </a>
-                                                    <button type="submit" class="btn btn-primary text-white">
-                                                        Simpan
-                                                    </button>
                                                 </div>
                                             </form>
                                         </div>

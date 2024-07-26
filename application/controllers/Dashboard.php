@@ -2531,7 +2531,7 @@ class Dashboard extends CI_Controller
         $this->form_validation->set_rules('id_satuan', 'Unit Name', 'required');
         $this->form_validation->set_rules('id_kategori', 'Category Name', 'required');
         $this->form_validation->set_rules('id_merek', 'Brand Name', 'required');
-        $this->form_validation->set_rules('keterangan', 'Description Item', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Description Item', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
@@ -2815,8 +2815,7 @@ class Dashboard extends CI_Controller
                 'status_barang'     => $this->input->post('status_barang'),
                 'jumlah_masuk'      => $this->input->post('jumlah_masuk_baru'),
                 'harga_barang'      => $this->input->post('harga_barang'),
-                'total'             => $this->input->post('jumlah_masuk_baru') * $this->input->post('harga_barang'),
-                'keterangan'        => $this->input->post('keterangan'),
+                'total'             => $this->input->post('jumlah_masuk_baru') * $this->input->post('harga_barang')
             ];
 
             $this->db->where('id', $id);
