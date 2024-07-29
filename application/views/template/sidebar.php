@@ -145,6 +145,11 @@
             Jurnal Alat Peraga
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/jurnal_alat_peserta'); ?>">
+            Jurnal Alat Peserta
+          </a>
+        </li>
       </ul>
     </div>
   </li>

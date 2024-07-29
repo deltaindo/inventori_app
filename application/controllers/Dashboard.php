@@ -3901,4 +3901,113 @@ class Dashboard extends CI_Controller
             }
         }
     }
+
+    public function jurnal_alat_peserta()
+    {
+        $data['tittle'] = 'List Jurnal Alat Peserta | Inventori App';
+
+        $this->db->select('
+                            jurnal_alat_peserta.id,
+                            jurnal_alat_peserta.kode_alat_peserta,
+                            jurnal_barang.kode_barang,
+                            master_barang.nama_barang,
+                            master_merek.nama_merek,
+                            master_satuan.nama_satuan,
+                            jurnal_barang.keterangan as spesifikasi,
+                            jurnal_alat_peserta.tujuan_barang_keluar,
+                            jurnal_alat_peserta.tanggal_keluar,
+                            jurnal_alat_peserta.jumlah,
+                            jurnal_alat_peserta.keterangan
+        ');
+        $this->db->from('jurnal_alat_peserta');
+        $this->db->join('jurnal_barang_masuk', 'jurnal_alat_peserta.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_alat_peserta.id', 'DESC');
+        $data['alat_peserta'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_alat_peserta/list');
+        $this->load->view('template/footer');
+    }
+
+    public function tambah_jurnal_alat_peserta()
+    {
+        $data['tittle'] = 'Tambah Jurnal Alat Peserta | Inventori App';
+
+        $this->db->select('jurnal_barang_masuk.id, jurnal_barang.kode_barang, master_barang.nama_barang, master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang.keterangan');
+        $this->db->from('jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Peserta');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
+        $data['items'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_alat_peserta/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_jurnal_alat_peserta()
+    {
+        $data = [
+            'kode_alat_peserta'         => 'JPP-' . substr(uniqid(), -5),
+            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+            'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
+            'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
+            'jumlah'                    => $this->input->post('jumlah'),
+            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
+        ];
+        $this->db->insert('jurnal_alat_peserta', $data);
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Simpan</div>');
+        redirect('dashboard/jurnal_alat_peserta');
+    }
+
+    public function edit_jurnal_alat_peserta($id)
+    {
+        $data['tittle'] = 'Edit Jurnal Alat Peserta | Inventori App';
+
+        $data['alat_peserta'] = $this->db->get_where('jurnal_alat_peserta', ['id' => $id])->row_array();
+
+        $this->db->select('jurnal_barang_masuk.id, jurnal_barang.kode_barang, master_barang.nama_barang, master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang.keterangan');
+        $this->db->from('jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Peserta');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
+        $data['items'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_alat_peserta/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_jurnal_alat_peserta($id)
+    {
+        $data = [
+            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+            'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
+            'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
+            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
+        ];
+
+        $this->db->where('id', $id);
+        $this->db->update('jurnal_alat_peserta', $data);
+
+        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Update</div>');
+        redirect('dashboard/jurnal_alat_peserta');
+    }
 }

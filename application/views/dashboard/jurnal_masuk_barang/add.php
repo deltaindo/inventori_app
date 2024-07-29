@@ -39,7 +39,8 @@
                                                             <option value="Normal">Normal</option>
                                                             <option value="Inventaris">Inventaris</option>
                                                             <option value="Alat Peraga">Alat Peraga</option>
-                                                            <option value="Peminjaman">Peminjaman</option>
+                                                            <option value="Peserta">Perlengkapan Peserta</option>
+                                                            <option value="Peminjaman">Barang Peminjaman</option>
                                                         </select>
                                                     </div>
 
