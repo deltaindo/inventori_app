@@ -104,7 +104,7 @@
                                                             <?= $alat_tulis['keterangan']; ?>
                                                         </td>
                                                         <td>
-                                                            <a href="#" class="btn btn-outline-secondary text-black">
+                                                            <a href="<?= base_url('dashboard/edit_alat_tulis_kantor/'.$alat_tulis['id']); ?>" class="btn btn-outline-secondary text-black">
                                                                 Edit
                                                             </a>
                                                         </td>

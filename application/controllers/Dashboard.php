@@ -4182,16 +4182,83 @@ class Dashboard extends CI_Controller
 
     public function simpan_jurnal_alat_tulis_kantor()
     {
-        $data = [
-            'kode_alat_tulis_kantor'    => 'ATK-' . substr(uniqid(), -5),
-            'id_karyawan'               => $this->input->post('nama_karyawan'),
-            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-            'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
-            'jumlah_pengambilan'        => $this->input->post('jumlah_pengambilan'),
-            'keterangan'                => $this->input->post('keterangan_barang'),
-        ];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_karyawan', 'Nama Karyawan', 'required');
+        $this->form_validation->set_rules('nama_alat', 'Nama Alat Tulis Kantor', 'required');
+        $this->form_validation->set_rules('tanggal_pengambilan', 'Tanggal Pengambilan', 'required');
+        $this->form_validation->set_rules('jumlah_pengambilan', 'Jumlah Pengambilan', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Keterangan Barang', 'required');
 
-        $this->db->insert('jurnal_alat_tulis_kantor', $data);
-        redirect('dashboard/jurnal_alat_tulis_kantor');
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_alat_tulis_kantor');
+        } else {
+            $data = [
+                'kode_alat_tulis_kantor'    => 'ATK-' . substr(uniqid(), -5),
+                'id_karyawan'               => $this->input->post('nama_karyawan'),
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
+                'jumlah_pengambilan'        => $this->input->post('jumlah_pengambilan'),
+                'keterangan'                => $this->input->post('keterangan_barang'),
+            ];
+    
+            $this->db->insert('jurnal_alat_tulis_kantor', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Simpan</div>');
+            redirect('dashboard/jurnal_alat_tulis_kantor');
+        }
+    }
+
+    public function edit_alat_tulis_kantor($id)
+    {
+        $data['tittle'] = 'Edit Jurnal Alat Tulis Kantor';
+        $data['alat_tulis_kantor'] = $this->db->get_where('jurnal_alat_tulis_kantor', ['id' => $id])->row_array();
+
+        $this->db->select('master_karyawan.id, master_karyawan.nama_karyawan, master_divisi.nama_divisi');
+        $this->db->from('master_karyawan');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->where('master_divisi.id_kantor', $this->kantor);
+        $this->db->order_by('master_karyawan.id', 'DESC');
+        $data['employees'] = $this->db->get()->result_array();
+
+        $this->db->select('jurnal_barang_masuk.id, jurnal_barang.kode_barang, master_barang.nama_barang, master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang.keterangan');
+        $this->db->from('jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Normal');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
+        $data['items'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_alat_tulis_kantor/edit', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function update_jurnal_alat_tulis_kantor($id)
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_karyawan', 'Nama Karyawan', 'required');
+        $this->form_validation->set_rules('nama_alat', 'Nama Alat Tulis Kantor', 'required');
+        $this->form_validation->set_rules('tanggal_pengambilan', 'Tanggal Pengambilan', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Keterangan Barang', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_alat_tulis_kantor');
+        } else {
+            $data = [
+                'id_karyawan'               => $this->input->post('nama_karyawan'),
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
+                'keterangan'                => $this->input->post('keterangan_barang'),
+            ];
+            $this->db->where('id', $id);
+            $this->db->update('jurnal_alat_tulis_kantor', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Update</div>');
+            redirect('dashboard/jurnal_alat_tulis_kantor');
+        }
     }
 }
