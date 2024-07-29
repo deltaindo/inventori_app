@@ -4119,9 +4119,79 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'List Jurnal Alat Tulis Kantor';
 
+        $this->db->select('
+                            jurnal_alat_tulis_kantor.id,
+                            jurnal_alat_tulis_kantor.kode_alat_tulis_kantor,
+                            jurnal_barang.kode_barang,
+                            master_barang.nama_barang,
+                            master_merek.nama_merek,
+                            master_satuan.nama_satuan,
+                            master_karyawan.nama_karyawan,
+                            master_divisi.nama_divisi,
+                            jurnal_barang.keterangan as spesifikasi,
+                            jurnal_alat_tulis_kantor.tanggal_pengambilan,
+                            jurnal_alat_tulis_kantor.jumlah_pengambilan,
+                            jurnal_alat_tulis_kantor.keterangan
+        ');
+        $this->db->from('jurnal_alat_tulis_kantor');
+        $this->db->join('jurnal_barang_masuk', 'jurnal_alat_tulis_kantor.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
+        $this->db->join('master_karyawan', 'jurnal_alat_tulis_kantor.id_karyawan = master_karyawan.id');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_alat_tulis_kantor.id', 'DESC');
+        $data['alat_tulis_kantor'] = $this->db->get()->result_array();
+
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_alat_tulis_kantor/list', $data);
         $this->load->view('template/footer');
+    }
+
+    public function tambah_alat_tulis_kantor()
+    {
+        $data['tittle'] = 'Tambah Jurnal Alat Tulis Kantor';
+
+        $this->db->select('master_karyawan.id, master_karyawan.nama_karyawan, master_divisi.nama_divisi');
+        $this->db->from('master_karyawan');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->where('master_divisi.id_kantor', $this->kantor);
+        $this->db->order_by('master_karyawan.id', 'DESC');
+        $data['employees'] = $this->db->get()->result_array();
+
+        $this->db->select('jurnal_barang_masuk.id, jurnal_barang.kode_barang, master_barang.nama_barang, master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang.keterangan');
+        $this->db->from('jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Normal');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
+        $data['items'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_alat_tulis_kantor/add', $data);
+        $this->load->view('template/footer');
+    }
+
+    public function simpan_jurnal_alat_tulis_kantor()
+    {
+        $data = [
+            'kode_alat_tulis_kantor'    => 'ATK-' . substr(uniqid(), -5),
+            'id_karyawan'               => $this->input->post('nama_karyawan'),
+            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+            'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
+            'jumlah_pengambilan'        => $this->input->post('jumlah_pengambilan'),
+            'keterangan'                => $this->input->post('keterangan_barang'),
+        ];
+
+        $this->db->insert('jurnal_alat_tulis_kantor', $data);
+        redirect('dashboard/jurnal_alat_tulis_kantor');
     }
 }

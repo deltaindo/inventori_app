@@ -5,7 +5,7 @@
                 <div class="home-tab">
                     <div class="d-sm-flex align-items-right justify-content-between border-bottom">
                         <div class="btn-wrapper">
-                            <a href="#" class="btn btn-success text-white me-0" type="button">
+                            <a href="<?= base_url('report/report_jurnal_alat_tulis_kantor'); ?>" class="btn btn-success text-white me-0" type="button">
                                 <i class="ti-cloud-down"></i>
                                 Export Excel
                             </a>
@@ -21,7 +21,7 @@
                                         Jurnal Alat Tulis Kantor
                                     </h4>
                                     <?= $this->session->userdata('pesan');  ?>
-                                    <a href="#" class="btn btn-primary text-white">
+                                    <a href="<?= base_url('dashboard/tambah_alat_tulis_kantor'); ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
                                     <div class="overflow-visible mt-3">
@@ -68,39 +68,40 @@
                                             </thead>
                                             <tbody>
                                                 <?php $i = 1; ?>
+                                                <?php foreach($alat_tulis_kantor as $alat_tulis) : ?>
                                                     <tr>
                                                         <td>
                                                             <?= $i++ ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['kode_alat_tulis_kantor']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['kode_barang']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['nama_barang']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['nama_merek']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['spesifikasi']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['nama_karyawan']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['nama_divisi']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['tanggal_pengambilan']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['jumlah_pengambilan']; ?> <?= $alat_tulis['nama_satuan']; ?>
                                                         </td>
                                                         <td>
-                                                            
+                                                            <?= $alat_tulis['keterangan']; ?>
                                                         </td>
                                                         <td>
                                                             <a href="#" class="btn btn-outline-secondary text-black">
@@ -108,6 +109,7 @@
                                                             </a>
                                                         </td>
                                                     </tr>
+                                                <?php endforeach; ?>
                                             </tbody>
                                         </table>
                                     </div>

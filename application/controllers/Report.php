@@ -1190,4 +1190,108 @@ class Report extends CI_Controller
         $writer->save('php://output');
         exit;
     }
+
+    public function report_jurnal_alat_tulis_kantor()
+    {
+            $this->db->select('
+                            jurnal_alat_tulis_kantor.id,
+                            jurnal_alat_tulis_kantor.kode_alat_tulis_kantor,
+                            jurnal_barang.kode_barang,
+                            master_barang.nama_barang,
+                            master_merek.nama_merek,
+                            master_satuan.nama_satuan,
+                            master_karyawan.nama_karyawan,
+                            master_divisi.nama_divisi,
+                            jurnal_barang.keterangan as spesifikasi,
+                            jurnal_alat_tulis_kantor.tanggal_pengambilan,
+                            jurnal_alat_tulis_kantor.jumlah_pengambilan,
+                            jurnal_alat_tulis_kantor.keterangan
+            ');
+            $this->db->from('jurnal_alat_tulis_kantor');
+            $this->db->join('jurnal_barang_masuk', 'jurnal_alat_tulis_kantor.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
+            $this->db->join('master_karyawan', 'jurnal_alat_tulis_kantor.id_karyawan = master_karyawan.id');
+            $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+            $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+            $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+            $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+            $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+            $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+            $this->db->where('master_lokasi.id_kantor', $this->kantor);
+            $this->db->order_by('jurnal_alat_tulis_kantor.id', 'DESC');
+            $data['alat_tulis_kantor'] = $this->db->get()->result_array();
+
+            $spreadsheet = new Spreadsheet();
+            $sheet = $spreadsheet->getActiveSheet();
+            $sheet->setTitle('Report Jurnal Alat Tulis Kantor');
+
+            // Set title header
+            $sheet->mergeCells('A1:K1');
+            $sheet->setCellValue('A1', 'Report Jurnal Alat Tulis Kantor');
+            $sheet->getStyle('A1:K1')->getFont()->setBold(true)->setSize(15);
+            $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+            // Set header
+            $sheet->setCellValue('A2', 'No');
+            $sheet->setCellValue('B2', 'Kode ATK');
+            $sheet->setCellValue('C2', 'Kode Barang');
+            $sheet->setCellValue('D2', 'Nama Barang');
+            $sheet->setCellValue('E2', 'Merek');
+            $sheet->setCellValue('F2', 'Spesifikasi');
+            $sheet->setCellValue('G2', 'Nama Karyawan');
+            $sheet->setCellValue('H2', 'Divisi');
+            $sheet->setCellValue('I2', 'Tanggal Pengambilan');
+            $sheet->setCellValue('J2', 'Jumlah Pengambilan');
+            $sheet->setCellValue('K2', 'Keterangan');
+
+            // Apply bold style and background color to header
+            $sheet->getStyle('A2:K2')->getFont()->setBold(true)->setSize(12);;
+            $sheet->getStyle('A2:K2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+            $sheet->getStyle('A2:K2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+
+            // Populate data
+            $baris = 3;
+            $no = 1;
+            foreach ($data['alat_tulis_kantor'] as $item) {
+            $sheet->setCellValue('A' . $baris, $no++);
+            $sheet->setCellValue('B' . $baris, $item['kode_alat_tulis_kantor']);
+            $sheet->setCellValue('C' . $baris, $item['kode_barang']);
+            $sheet->setCellValue('D' . $baris, $item['nama_barang']);
+            $sheet->setCellValue('E' . $baris, $item['nama_merek']);
+            $sheet->setCellValue('F' . $baris, $item['spesifikasi']);
+            $sheet->setCellValue('G' . $baris, $item['nama_karyawan']);
+            $sheet->setCellValue('H' . $baris, $item['nama_divisi']);
+            $sheet->setCellValue('I' . $baris, $item['tanggal_pengambilan']);
+            $sheet->setCellValue('J' . $baris, $item['jumlah_pengambilan'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('K' . $baris, $item['keterangan']);
+            $baris++;
+            }
+
+            // Apply border style to all cells
+            $styleArray = [
+            'borders' => [
+            'allBorders' => [
+            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    ],
+                ],
+            ];
+            $sheet->getStyle('A2:K' . ($baris - 1))->applyFromArray($styleArray);
+
+            // Set auto size for all columns
+            foreach (range('A', 'K') as $columnID) {
+                $sheet->getColumnDimension($columnID)->setAutoSize(true);
+            }
+
+            // Generate filename with current date and time
+            $currentDateTime = date('Ymd_His'); // Format: YYYYMMDD_HHMMSS
+            $filename = 'Report_Jurnal_Alat_Tulis_' . $currentDateTime . '.xlsx';
+
+            // Set headers for download
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+            header('Content-Disposition: attachment;filename="' . $filename . '"');
+            header('Cache-Control: max-age=0');
+
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('php://output');
+            exit;   
+    }
 }
