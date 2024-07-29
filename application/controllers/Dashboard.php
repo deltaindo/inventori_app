@@ -4114,4 +4114,14 @@ class Dashboard extends CI_Controller
             }
         }
     }
+
+    public function jurnal_alat_tulis_kantor()
+    {
+        $data['tittle'] = 'List Jurnal Alat Tulis Kantor';
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_alat_tulis_kantor/list', $data);
+        $this->load->view('template/footer');
+    }
 }

@@ -137,17 +137,22 @@
       <ul class="nav flex-column sub-menu">
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('dashboard/jurnal_inventaris_barang'); ?>">
-            Jurnal Inventaris Barang
+            Inventaris Barang
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('dashboard/jurnal_alat_peraga'); ?>">
-            Jurnal Alat Peraga
+            Alat Peraga Praktik
           </a>
         </li>
         <li class="nav-item">
           <a class="nav-link" href="<?= base_url('dashboard/jurnal_alat_peserta'); ?>">
-            Jurnal Alat Peserta
+            Alat Perlengkapan Peserta
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/jurnal_alat_tulis_kantor'); ?>">
+            Alat Tulis Kantor
           </a>
         </li>
       </ul>
