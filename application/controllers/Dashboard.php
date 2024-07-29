@@ -4056,18 +4056,62 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_alat_peserta');
         } else {
-            $data = [
-                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-                'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
-                'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
-                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
-            ];
-    
-            $this->db->where('id', $id);
-            $this->db->update('jurnal_alat_peserta', $data);
-    
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Update</div>');
-            redirect('dashboard/jurnal_alat_peserta');
+            if (!$this->input->post('jumlah_baru')) {
+                $data = [
+                    'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                    'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
+                    'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
+                    'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
+                ];
+                $this->db->where('id', $id);
+                $this->db->update('jurnal_alat_peserta', $data);
+        
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Update</div>');
+                redirect('dashboard/jurnal_alat_peserta');
+            }
+
+            $id_jurnal_barang_masuk = $this->input->post('nama_alat');
+            $this->db->select('id_jurnal_barang');
+            $this->db->from('jurnal_barang_masuk');
+            $this->db->where('id', $id_jurnal_barang_masuk);
+            $query = $this->db->get();
+            $jurnal_barang = $query->row();
+
+            if ($jurnal_barang) {
+                $data = [
+                    'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                    'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
+                    'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
+                    'jumlah'                    => $this->input->post('jumlah_baru'),
+                    'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
+                ];
+                $this->db->where('id', $id);
+                $this->db->update('jurnal_alat_peserta', $data);
+
+                $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
+
+                $this->db->select('*');
+                $this->db->from('jurnal_stok_barang');
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $query_stok = $this->db->get();
+                $stok_barang = $query_stok->row();
+
+                $jumlah_alat_lama   = $this->input->post('jumlah_lama');
+                $jumlah_alat_baru   = $this->input->post('jumlah_baru');
+                $jumlah_keluar_baru = $stok_barang->jumlah_keluar - $jumlah_alat_lama + $jumlah_alat_baru;
+                $stok_akhir_baru    = $stok_barang->jumlah_masuk - $jumlah_keluar_baru;
+
+                $data_update = [
+                    'tanggal_update'  => date('Y-m-d H:i:s'),
+                    'jumlah_keluar'   => $jumlah_keluar_baru,
+                    'stok_akhir'      => $stok_akhir_baru
+                ];
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $this->db->update('jurnal_stok_barang', $data_update);
+
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Update</div>');
+                redirect('dashboard/jurnal_alat_peserta');
+            }
         }
     }
 }
