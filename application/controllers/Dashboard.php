@@ -3959,17 +3959,29 @@ class Dashboard extends CI_Controller
 
     public function simpan_jurnal_alat_peserta()
     {
-        $data = [
-            'kode_alat_peserta'         => 'JPP-' . substr(uniqid(), -5),
-            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-            'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
-            'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
-            'jumlah'                    => $this->input->post('jumlah'),
-            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
-        ];
-        $this->db->insert('jurnal_alat_peserta', $data);
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Simpan</div>');
-        redirect('dashboard/jurnal_alat_peserta');
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_alat', 'Nama Perlengkapan Peserta', 'required');
+        $this->form_validation->set_rules('tujuan_barang_keluar', 'Tujuan Barang Keluar', 'required');
+        $this->form_validation->set_rules('tanggal_keluar', 'Tanggal Keluar', 'required');
+        $this->form_validation->set_rules('jumlah', 'Jumlah Perlengkapan Peserta', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Keterangan Perlengkapan Peserta', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_alat_peserta');
+        } else {
+            $data = [
+                'kode_alat_peserta'         => 'JPP-' . substr(uniqid(), -5),
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
+                'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
+                'jumlah'                    => $this->input->post('jumlah'),
+                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
+            ];
+            $this->db->insert('jurnal_alat_peserta', $data);
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Simpan</div>');
+            redirect('dashboard/jurnal_alat_peserta');
+        }
     }
 
     public function edit_jurnal_alat_peserta($id)
@@ -3997,17 +4009,28 @@ class Dashboard extends CI_Controller
 
     public function update_jurnal_alat_peserta($id)
     {
-        $data = [
-            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-            'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
-            'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
-            'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
-        ];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_alat', 'Nama Perlengkapan Peserta', 'required');
+        $this->form_validation->set_rules('tujuan_barang_keluar', 'Tujuan Barang Keluar', 'required');
+        $this->form_validation->set_rules('tanggal_keluar', 'Tanggal Keluar', 'required');
+        $this->form_validation->set_rules('keterangan_barang', 'Keterangan Perlengkapan Peserta', 'required');
 
-        $this->db->where('id', $id);
-        $this->db->update('jurnal_alat_peserta', $data);
-
-        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Update</div>');
-        redirect('dashboard/jurnal_alat_peserta');
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_alat_peserta');
+        } else {
+            $data = [
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
+                'tanggal_keluar'            => $this->input->post('tanggal_keluar'),
+                'keterangan'                => $this->input->post('keterangan_barang') ? $this->input->post('keterangan_barang') : 'Digunakan untuk perlengkapan peserta.',
+            ];
+    
+            $this->db->where('id', $id);
+            $this->db->update('jurnal_alat_peserta', $data);
+    
+            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Peserta Berhasil di Update</div>');
+            redirect('dashboard/jurnal_alat_peserta');
+        }
     }
 }
