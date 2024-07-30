@@ -4343,8 +4343,45 @@ class Dashboard extends CI_Controller
         }
     }
 
-    public function jurnal_peminjaman_inventaris($id)
+    public function jurnal_peminjaman_inventaris()
     {
+        $data['tittle'] = 'Jurnal Peminjaman Inventaris';
 
+        $this->db->select('
+                jurnal_pinjam_inventaris.id,
+                jurnal_pinjam_inventaris.kode_pinjam_inventaris,
+                jurnal_barang.kode_barang,
+                master_barang.nama_barang,
+                master_merek.nama_merek,
+                master_satuan.nama_satuan,
+                master_karyawan.nama_karyawan,
+                master_divisi.nama_divisi,
+                jurnal_barang.keterangan as spesifikasi,
+                jurnal_pinjam_inventaris.tujuan_pinjam,
+                jurnal_pinjam_inventaris.tanggal_pinjam,
+                jurnal_pinjam_inventaris.jumlah_pinjam,
+                jurnal_pinjam_inventaris.kondisi_pinjam,
+                jurnal_pinjam_inventaris.tanggal_kembali,
+                jurnal_pinjam_inventaris.kondisi_kembali,
+                jurnal_pinjam_inventaris.status,
+                jurnal_pinjam_inventaris.keterangan,
+        ');
+        $this->db->from('jurnal_pinjam_inventaris');
+        $this->db->join('jurnal_barang_masuk', 'jurnal_pinjam_inventaris.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
+        $this->db->join('master_karyawan', 'jurnal_pinjam_inventaris.id_karyawan = master_karyawan.id');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_pinjam_inventaris.id', 'DESC');
+        $data['pinjam_inventaris'] = $this->db->get()->result_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_peminjaman_inventaris/list', $data);
+        $this->load->view('template/footer');
     }
 }
