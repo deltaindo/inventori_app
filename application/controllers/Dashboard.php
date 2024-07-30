@@ -4412,4 +4412,35 @@ class Dashboard extends CI_Controller
         $this->load->view('dashboard/jurnal_peminjaman_inventaris/add', $data);
         $this->load->view('template/footer');
     }
+
+    public function simpan_jurnal_peminjaman_inventaris()
+    {
+        $data = [
+            'kode_pinjam_inventaris'    => 'JPI-' . substr(uniqid(), -5),
+            'id_karyawan'               => $this->input->post('nama_karyawan'),
+            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+            'tujuan_pinjam'             => $this->input->post('tujuan_pinjam'),
+            'tanggal_pinjam'            => $this->input->post('tanggal_pinjam'),
+            'jumlah_pinjam'             => $this->input->post('jumlah_pinjam'),
+            'kondisi_pinjam'            => $this->input->post('kondisi_pinjam'),
+            'status'                    => 'Dipinjam',
+            'keterangan'                => $this->input->post('keterangan') == '' ? '-' : $this->input->post('keterangan'),
+        ];
+
+        $this->db->insert('jurnal_pinjam_inventaris', $data);
+        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Jurnal Peminjaman Inventaris berhasil disimpan</div>');
+        redirect('dashboard/jurnal_peminjaman_inventaris');
+    }
+
+    public function pengembalian_peminjaman_inventaris($id)
+    {
+        $data['tittle'] = 'Pengembalian Peminjaman Inventaris | Inventori App';
+
+        $data['pinjam_inventaris'] = $this->db->get_where('jurnal_pinjam_inventaris', ['id' => $id])->row_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_peminjaman_inventaris/edit', $data);
+        $this->load->view('template/footer');
+    }
 }

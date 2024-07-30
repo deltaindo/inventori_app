@@ -4,7 +4,7 @@
             <div class="row tabel-produk">
                 <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
-                        <form method="post" action="#">
+                        <form method="post" action="<?= base_url('dashboard/simpan_jurnal_peminjaman_inventaris'); ?>">
                             <div class="card-body">
                                 <div class="card-footer d-flex justify-content-between">
                                     <div class="d-flex">
@@ -68,7 +68,7 @@
                                 </div>
 
                                 <label for="kondisi_pinjam" class="text-primary fs-6 mb-1">
-                                    Keterangan
+                                    Kondisi Pinjam
                                 </label>
                                 <div class="mb-1">
                                     <textarea id="keterangan_masuk_barang" name="kondisi_pinjam" cols="300" rows="10" class="form-control" style="height: 60px;" placeholder="Kondisi Inventaris saat dipinjam..."></textarea>
@@ -79,14 +79,14 @@
                                     </span>
                                 </div>
 
-                                <label for="keterangan_barang" class="text-primary fs-6 mb-1">
-                                    Keterangan
+                                <label for="keterangan" class="text-primary fs-6 mb-1">
+                                    Keterangan Tambahan
                                 </label>
                                 <div class="mb-1">
-                                    <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Keterangan Alat Perlengkapan Peserta"></textarea>
+                                    <textarea id="keterangan_masuk_barang" name="keterangan" cols="300" rows="10" class="form-control" style="height: 70px;" placeholder="Keterangan Tambahan..."></textarea>
                                     <span class="text-small">
                                         <i>
-                                            Contoh: Buku Tulis digunakan untuk keperluan kerja.
+                                            * Jika ada keterangan tambahan, silahkan inputkan.
                                         </i>
                                     </span>
                                 </div>

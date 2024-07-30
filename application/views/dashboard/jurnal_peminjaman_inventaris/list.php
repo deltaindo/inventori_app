@@ -134,7 +134,7 @@
                                                             <?= $pinjam['keterangan'] ?>
                                                         </td>
                                                         <td>
-                                                            <a href="#" class="btn btn-primary text-white">
+                                                            <a href="<?= base_url('dashboard/pengembalian_peminjaman_inventaris/' . $pinjam['id']); ?>" class="btn btn-primary text-white">
                                                                 Dikembalikan
                                                             </a>
                                                         </td>
