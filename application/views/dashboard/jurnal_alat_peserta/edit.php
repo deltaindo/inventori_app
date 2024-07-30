@@ -26,7 +26,7 @@
                                     Nama Perlengkapan / Alat Peserta [Tanggal Masuk Barang]
                                 </label>
                                 <div class="mb-1">
-                                    <select class="form-control" name="nama_alat">
+                                    <select class="form-control text-black" name="nama_alat">
                                         <option value="" selected>Pilih Alat Peserta...</option>
                                         <?php foreach ($items as $item) : ?>
                                             <option value="<?= $item['id']; ?>" <?= $item['id'] == $alat_peserta['id_jurnal_barang_masuk'] ? 'selected' : '' ?>>

@@ -31,7 +31,7 @@
                                                     Pengguna Baru
                                                 </label>
                                                 <div class="mb-3">
-                                                    <select class="form-control" name="nama_karyawan">
+                                                    <select class="form-control text-black" name="nama_karyawan">
                                                         <option value="" selected>Pilih Karyawan...</option>
                                                         <?php foreach ($employees as $employee) : ?>
                                                             <option value="<?= $employee['id']; ?>"><?= $employee['nama_karyawan']; ?> - <?= $employee['nama_divisi']; ?></option>
@@ -43,7 +43,7 @@
                                                     [Tanggal Return Asset] Pengguna Lama
                                                 </label>
                                                 <div class="mb-3">
-                                                    <select class="form-control" name="pengguna_lama">
+                                                    <select class="form-control text-black" name="pengguna_lama">
                                                         <option value="" selected>Pilih Pengguna Lama...</option>
                                                         <?php foreach ($items as $item) : ?>
                                                             <option value="<?= $item['id']; ?>">[<?= $item['tanggal_return']; ?>] <?= $item['nama_karyawan']; ?> - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['spesifikasi']; ?></option>

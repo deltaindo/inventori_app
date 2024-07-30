@@ -27,7 +27,7 @@
                                         Nama Alat Peraga / Praktik [Tanggal Masuk Barang]
                                     </label>
                                     <div class="mb-1">
-                                        <select class="form-control" name="nama_alat">
+                                        <select class="form-control text-black" name="nama_alat">
                                             <option value="" selected>Pilih Alat Peraga...</option>
                                             <?php foreach ($items as $item) : ?>
                                                 <option value="<?= $item['id']; ?>">[<?= $item['kode_barang']; ?>] <?= $item['tanggal_masuk']; ?> - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['keterangan']; ?></option>

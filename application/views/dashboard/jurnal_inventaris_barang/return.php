@@ -56,7 +56,7 @@
                                     Kondisi Asset
                                 </label>
                                 <div class="mb-1">
-                                    <select class="form-control" name="kondisi_asset">
+                                    <select class="form-control text-black" name="kondisi_asset">
                                         <option value="" selected>Pilih Kondisi Asset...</option>
                                         <option value="Aktif">Aktif</option>
                                         <option value="Tidak Aktif">Tidak Aktif</option>
