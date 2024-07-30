@@ -26,7 +26,7 @@
                                     Nama Karyawan
                                 </label>
                                 <div class="mb-1">
-                                    <select class="form-control" name="nama_karyawan">
+                                    <select class="form-control text-black" name="nama_karyawan">
                                         <option value="" selected>Pilih Karyawan...</option>
                                             <?php foreach ($employees as $employee) : ?>
                                                 <option value="<?= $employee['id']; ?>"><?= $employee['nama_karyawan']; ?> - <?= $employee['nama_divisi']; ?></option>
@@ -38,7 +38,7 @@
                                     Nama Alat Tulis Kantor [Tanggal Masuk Barang]
                                 </label>
                                 <div class="mb-1">
-                                    <select class="form-control" name="nama_alat">
+                                    <select class="form-control text-black" name="nama_alat">
                                         <option value="" selected>Pilih Alat Peserta...</option>
                                         <?php foreach ($items as $item) : ?>
                                             <option value="<?= $item['id']; ?>">[<?= $item['kode_barang']; ?>] <?= $item['tanggal_masuk']; ?> - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['keterangan']; ?></option>

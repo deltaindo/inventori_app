@@ -4193,18 +4193,54 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_alat_tulis_kantor');
         } else {
-            $data = [
-                'kode_alat_tulis_kantor'    => 'ATK-' . substr(uniqid(), -5),
-                'id_karyawan'               => $this->input->post('nama_karyawan'),
-                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-                'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
-                'jumlah_pengambilan'        => $this->input->post('jumlah_pengambilan'),
-                'keterangan'                => $this->input->post('keterangan_barang'),
-            ];
-    
-            $this->db->insert('jurnal_alat_tulis_kantor', $data);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Simpan</div>');
-            redirect('dashboard/jurnal_alat_tulis_kantor');
+            $id_jurnal_barang_masuk = $this->input->post('nama_alat');
+            $this->db->select('id_jurnal_barang');
+            $this->db->from('jurnal_barang_masuk');
+            $this->db->where('id', $id_jurnal_barang_masuk);
+            $query = $this->db->get();
+            $jurnal_barang = $query->row();
+
+            if ($jurnal_barang) {
+                $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
+
+                $this->db->select('*');
+                $this->db->from('jurnal_stok_barang');
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $query_stok     = $this->db->get();
+                $stok_barang    = $query_stok->row();
+
+                $jumlah_alat        = $this->input->post('jumlah_pengambilan');
+                $jumlah_keluar_baru = $stok_barang->jumlah_keluar + $jumlah_alat;
+                $stok_akhir_baru    = $stok_barang->jumlah_masuk - $jumlah_keluar_baru;
+
+                if ($stok_barang) {
+                    if ($jumlah_alat > $stok_barang->stok_akhir) {
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jumlah Stok Barang Tidak Cukup, Sisa Stok Item: ' . $stok_barang->stok_akhir . '</div>');
+                        redirect('dashboard/jurnal_alat_tulis_kantor');
+                    } else {
+                        $data = [
+                            'kode_alat_tulis_kantor'    => 'ATK-' . substr(uniqid(), -5),
+                            'id_karyawan'               => $this->input->post('nama_karyawan'),
+                            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                            'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
+                            'jumlah_pengambilan'        => $this->input->post('jumlah_pengambilan'),
+                            'keterangan'                => $this->input->post('keterangan_barang'),
+                        ];
+                        $this->db->insert('jurnal_alat_tulis_kantor', $data);
+
+                        $data_update = [
+                            'tanggal_update'  => date('Y-m-d H:i:s'),
+                            'jumlah_keluar'   => $jumlah_keluar_baru,
+                            'stok_akhir'      => $stok_akhir_baru
+                        ];
+                        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                        $this->db->update('jurnal_stok_barang', $data_update);
+
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Simpan</div>');
+                        redirect('dashboard/jurnal_alat_tulis_kantor');
+                    }
+                }
+            }
         }
     }
 
@@ -4249,16 +4285,61 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_alat_tulis_kantor');
         } else {
-            $data = [
-                'id_karyawan'               => $this->input->post('nama_karyawan'),
-                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-                'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
-                'keterangan'                => $this->input->post('keterangan_barang'),
-            ];
-            $this->db->where('id', $id);
-            $this->db->update('jurnal_alat_tulis_kantor', $data);
-            $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Update</div>');
-            redirect('dashboard/jurnal_alat_tulis_kantor');
+            if (!$this->input->post('jumlah_pengambilan_baru')) {
+                $data = [
+                    'id_karyawan'               => $this->input->post('nama_karyawan'),
+                    'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                    'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
+                    'keterangan'                => $this->input->post('keterangan_barang'),
+                ];
+                $this->db->where('id', $id);
+                $this->db->update('jurnal_alat_tulis_kantor', $data);
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Update</div>');
+                redirect('dashboard/jurnal_alat_tulis_kantor');
+            } else {
+                $id_jurnal_barang_masuk = $this->input->post('nama_alat');
+                $this->db->select('id_jurnal_barang');
+                $this->db->from('jurnal_barang_masuk');
+                $this->db->where('id', $id_jurnal_barang_masuk);
+                $query = $this->db->get();
+                $jurnal_barang = $query->row();
+
+                if ($jurnal_barang) {
+
+                    $data = [
+                        'id_karyawan'               => $this->input->post('nama_karyawan'),
+                        'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                        'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
+                        'jumlah_pengambilan'        => $this->input->post('jumlah_pengambilan_baru'),
+                        'keterangan'                => $this->input->post('keterangan_barang'),
+                    ];
+                    $this->db->where('id', $id);
+                    $this->db->update('jurnal_alat_tulis_kantor', $data);
+
+                    $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
+                    $this->db->select('*');
+                    $this->db->from('jurnal_stok_barang');
+                    $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                    $query_stok = $this->db->get();
+                    $stok_barang = $query_stok->row();
+
+                    $jumlah_alat_lama   = $this->input->post('jumlah_pengambilan_lama');
+                    $jumlah_alat_baru   = $this->input->post('jumlah_pengambilan_baru');
+                    $jumlah_keluar_baru = $stok_barang->jumlah_keluar - $jumlah_alat_lama + $jumlah_alat_baru;
+                    $stok_akhir_baru    = $stok_barang->jumlah_masuk - $jumlah_keluar_baru;
+
+                    $data_update = [
+                        'tanggal_update'  => date('Y-m-d H:i:s'),
+                        'jumlah_keluar'   => $jumlah_keluar_baru,
+                        'stok_akhir'      => $stok_akhir_baru
+                    ];
+                    $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                    $this->db->update('jurnal_stok_barang', $data_update);
+
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Update</div>');
+                    redirect('dashboard/jurnal_alat_tulis_kantor');
+                }                
+            }
         }
     }
 }
