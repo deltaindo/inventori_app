@@ -21,7 +21,7 @@
                                         Jurnal Peminjaman Inventaris
                                     </h4>
                                     <?= $this->session->userdata('pesan');  ?>
-                                    <a href="#" class="btn btn-primary text-white">
+                                    <a href="<?= base_url('dashboard/tambah_peminjaman_inventaris'); ?>" class="btn btn-primary text-white">
                                         Tambah Data
                                     </a>
                                     <div class="overflow-visible mt-3">

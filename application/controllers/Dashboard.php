@@ -4384,4 +4384,13 @@ class Dashboard extends CI_Controller
         $this->load->view('dashboard/jurnal_peminjaman_inventaris/list', $data);
         $this->load->view('template/footer');
     }
+
+    public function tambah_peminjaman_inventaris()
+    {
+        $data['tittle'] = 'Tambah | Inventori App';
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('dashboard/jurnal_peminjaman_inventaris/add', $data);
+        $this->load->view('template/footer');
+    }
 }
