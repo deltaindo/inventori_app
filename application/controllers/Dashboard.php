@@ -3840,7 +3840,7 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_alat_peraga');
         } else {
-            if (!$this->input->post('jumlah_alat_baru')) {
+            if (!$this->input->post('jumlah_alat_baru') && $this->input->post('jumlah_alat_baru') != 0) {
                 $data = [
                     'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
                     'alokasi_tujuan'            => $this->input->post('alokasi_tujuan'),
@@ -4056,7 +4056,7 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_alat_peserta');
         } else {
-            if (!$this->input->post('jumlah_baru')) {
+            if (!$this->input->post('jumlah_baru') && $this->input->post('jumlah_baru') != 0) {
                 $data = [
                     'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
                     'tujuan_barang_keluar'      => $this->input->post('tujuan_barang_keluar'),
@@ -4285,7 +4285,7 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_alat_tulis_kantor');
         } else {
-            if (!$this->input->post('jumlah_pengambilan_baru')) {
+            if (!$this->input->post('jumlah_pengambilan_baru') && $this->input->post('jumlah_pengambilan_baru') != 0) {
                 $data = [
                     'id_karyawan'               => $this->input->post('nama_karyawan'),
                     'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
@@ -4341,5 +4341,10 @@ class Dashboard extends CI_Controller
                 }                
             }
         }
+    }
+
+    public function jurnal_peminjaman_inventaris($id)
+    {
+
     }
 }

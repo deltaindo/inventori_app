@@ -155,6 +155,11 @@
             Alat Tulis Kantor
           </a>
         </li>
+        <li class="nav-item">
+          <a class="nav-link" href="<?= base_url('dashboard/jurnal_peminjaman_inventaris'); ?>">
+            Peminjaman Barang
+          </a>
+        </li>
       </ul>
     </div>
   </li>
