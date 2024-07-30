@@ -134,9 +134,13 @@
                                                             <?= $pinjam['keterangan'] ?>
                                                         </td>
                                                         <td>
-                                                            <a href="<?= base_url('dashboard/pengembalian_peminjaman_inventaris/' . $pinjam['id']); ?>" class="btn btn-primary text-white">
-                                                                Dikembalikan
-                                                            </a>
+                                                            <?php if ($pinjam['status'] == "Dipinjam") : ?>
+                                                                <a href="<?= base_url('dashboard/pengembalian_peminjaman_inventaris/' . $pinjam['id']); ?>" class="btn btn-primary text-white">
+                                                                    Dikembalikan
+                                                                </a>
+                                                            <?php elseif ($pinjam['status'] == "Dikembalikan") : ?>
+                                                                -
+                                                            <?php endif; ?>
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>

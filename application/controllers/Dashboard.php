@@ -4305,17 +4305,6 @@ class Dashboard extends CI_Controller
                 $jurnal_barang = $query->row();
 
                 if ($jurnal_barang) {
-
-                    $data = [
-                        'id_karyawan'               => $this->input->post('nama_karyawan'),
-                        'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-                        'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
-                        'jumlah_pengambilan'        => $this->input->post('jumlah_pengambilan_baru'),
-                        'keterangan'                => $this->input->post('keterangan_barang'),
-                    ];
-                    $this->db->where('id', $id);
-                    $this->db->update('jurnal_alat_tulis_kantor', $data);
-
                     $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
                     $this->db->select('*');
                     $this->db->from('jurnal_stok_barang');
@@ -4328,16 +4317,31 @@ class Dashboard extends CI_Controller
                     $jumlah_keluar_baru = $stok_barang->jumlah_keluar - $jumlah_alat_lama + $jumlah_alat_baru;
                     $stok_akhir_baru    = $stok_barang->jumlah_masuk - $jumlah_keluar_baru;
 
-                    $data_update = [
-                        'tanggal_update'  => date('Y-m-d H:i:s'),
-                        'jumlah_keluar'   => $jumlah_keluar_baru,
-                        'stok_akhir'      => $stok_akhir_baru
-                    ];
-                    $this->db->where('id_jurnal_barang', $id_jurnal_barang);
-                    $this->db->update('jurnal_stok_barang', $data_update);
+                    if ($jumlah_alat_baru > $stok_barang->jumlah_masuk) {
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">Jumlah Update Data melebihi Jumlah Masuk</div>');
+                        redirect('dashboard/jurnal_alat_tulis_kantor');
+                    } else if ($jumlah_alat_baru <= $stok_barang->jumlah_masuk) {
+                        $data = [
+                            'id_karyawan'               => $this->input->post('nama_karyawan'),
+                            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                            'tanggal_pengambilan'       => $this->input->post('tanggal_pengambilan'),
+                            'jumlah_pengambilan'        => $this->input->post('jumlah_pengambilan_baru'),
+                            'keterangan'                => $this->input->post('keterangan_barang'),
+                        ];
+                        $this->db->where('id', $id);
+                        $this->db->update('jurnal_alat_tulis_kantor', $data);
 
-                    $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Update</div>');
-                    redirect('dashboard/jurnal_alat_tulis_kantor');
+                        $data_update = [
+                            'tanggal_update'  => date('Y-m-d H:i:s'),
+                            'jumlah_keluar'   => $jumlah_keluar_baru,
+                            'stok_akhir'      => $stok_akhir_baru
+                        ];
+                        $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                        $this->db->update('jurnal_stok_barang', $data_update);
+    
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Alat Tulis Kantor Berhasil di Update</div>');
+                        redirect('dashboard/jurnal_alat_tulis_kantor');
+                    }
                 }                
             }
         }
@@ -4415,21 +4419,34 @@ class Dashboard extends CI_Controller
 
     public function simpan_jurnal_peminjaman_inventaris()
     {
-        $data = [
-            'kode_pinjam_inventaris'    => 'JPI-' . substr(uniqid(), -5),
-            'id_karyawan'               => $this->input->post('nama_karyawan'),
-            'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
-            'tujuan_pinjam'             => $this->input->post('tujuan_pinjam'),
-            'tanggal_pinjam'            => $this->input->post('tanggal_pinjam'),
-            'jumlah_pinjam'             => $this->input->post('jumlah_pinjam'),
-            'kondisi_pinjam'            => $this->input->post('kondisi_pinjam'),
-            'status'                    => 'Dipinjam',
-            'keterangan'                => $this->input->post('keterangan') == '' ? '-' : $this->input->post('keterangan'),
-        ];
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_karyawan', 'Nama Karyawan', 'required');
+        $this->form_validation->set_rules('nama_alat', 'Nama Alat Tulis Kantor', 'required');
+        $this->form_validation->set_rules('tujuan_pinjam', 'Tujuan Pinjam', 'required');
+        $this->form_validation->set_rules('Tanggal Pinjam', 'Tanggal Pinjam', 'required');
+        $this->form_validation->set_rules('jumlah_pinjam', 'Jumlah Pinjam', 'required');
+        $this->form_validation->set_rules('kondisi_pinjam', 'Kondisi Pinjam', 'required');
 
-        $this->db->insert('jurnal_pinjam_inventaris', $data);
-        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Jurnal Peminjaman Inventaris berhasil disimpan</div>');
-        redirect('dashboard/jurnal_peminjaman_inventaris');
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_peminjaman_inventaris');
+        } else {
+            $data = [
+                'kode_pinjam_inventaris'    => 'JPI-' . substr(uniqid(), -5),
+                'id_karyawan'               => $this->input->post('nama_karyawan'),
+                'id_jurnal_barang_masuk'    => $this->input->post('nama_alat'),
+                'tujuan_pinjam'             => $this->input->post('tujuan_pinjam'),
+                'tanggal_pinjam'            => $this->input->post('tanggal_pinjam'),
+                'jumlah_pinjam'             => $this->input->post('jumlah_pinjam'),
+                'kondisi_pinjam'            => $this->input->post('kondisi_pinjam'),
+                'status'                    => 'Dipinjam',
+                'keterangan'                => $this->input->post('keterangan') == '' ? '-' : $this->input->post('keterangan'),
+            ];
+    
+            $this->db->insert('jurnal_pinjam_inventaris', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Jurnal Peminjaman Inventaris berhasil disimpan</div>');
+            redirect('dashboard/jurnal_peminjaman_inventaris');
+        }
     }
 
     public function pengembalian_peminjaman_inventaris($id)
@@ -4437,10 +4454,51 @@ class Dashboard extends CI_Controller
         $data['tittle'] = 'Pengembalian Peminjaman Inventaris | Inventori App';
 
         $data['pinjam_inventaris'] = $this->db->get_where('jurnal_pinjam_inventaris', ['id' => $id])->row_array();
+        
+        $this->db->select('master_karyawan.id, master_karyawan.nama_karyawan, master_divisi.nama_divisi');
+        $this->db->from('master_karyawan');
+        $this->db->join('master_divisi', 'master_karyawan.id_divisi = master_divisi.id');
+        $this->db->where('master_divisi.id_kantor', $this->kantor);
+        $this->db->order_by('master_karyawan.id', 'DESC');
+        $data['employees'] = $this->db->get()->result_array();
+
+        $this->db->select('jurnal_barang_masuk.id, jurnal_barang.kode_barang, master_barang.nama_barang, master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang.keterangan');
+        $this->db->from('jurnal_barang_masuk');
+        $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id');
+        $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
+        $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Peminjaman');
+        $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
+        $data['items'] = $this->db->get()->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('dashboard/jurnal_peminjaman_inventaris/edit', $data);
         $this->load->view('template/footer');
+    }
+
+    public function update_jurnal_peminjaman_inventaris($id)
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('tanggal_kembali', 'Tanggal Kembali', 'required');
+        $this->form_validation->set_rules('kondisi_kembali', 'Kondisi Kembali', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('dashboard/jurnal_peminjaman_inventaris');
+        } else {
+            $data = [
+                'tanggal_kembali'   => $this->input->post('tanggal_kembali'),
+                'kondisi_kembali'   => $this->input->post('kondisi_kembali'),
+                'status'            => 'Dikembalikan',
+            ];
+    
+            $this->db->where('id', $id);
+            $this->db->update('jurnal_pinjam_inventaris', $data);
+            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Jurnal Peminjaman Inventaris berhasil disimpan</div>');
+            redirect('dashboard/jurnal_peminjaman_inventaris');
+        }
     }
 }

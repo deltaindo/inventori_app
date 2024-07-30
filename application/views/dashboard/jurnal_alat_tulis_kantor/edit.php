@@ -29,10 +29,10 @@
                                     <select class="form-control text-black" name="nama_karyawan">
                                         <option value="" selected>Pilih Karyawan...</option>
                                             <?php foreach ($employees as $employee) : ?>
-                                            <option value="<?= $employee['id']; ?>" <?= $employee['id'] == $alat_tulis_kantor['id_karyawan'] ? 'selected' : '' ?>>
-                                                <?= $employee['nama_karyawan']; ?> - <?= $employee['nama_divisi']; ?>
-                                            </option>
-                                        <?php endforeach; ?>
+                                                <option value="<?= $employee['id']; ?>" <?= $employee['id'] == $alat_tulis_kantor['id_karyawan'] ? 'selected' : '' ?>>
+                                                    <?= $employee['nama_karyawan']; ?> - <?= $employee['nama_divisi']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
                                     </select>
                                 </div>
 
@@ -40,7 +40,7 @@
                                     Nama Alat Tulis Kantor [Tanggal Masuk Barang]
                                 </label>
                                 <div class="mb-1">
-                                    <select class="form-control text-black" name="nama_alat">
+                                    <select class="form-control text-black" disabled>
                                         <option value="" selected>Pilih Alat Peserta...</option>
                                         <?php foreach ($items as $item) : ?>
                                             <option value="<?= $item['id']; ?>" <?= $item['id'] == $alat_tulis_kantor['id_jurnal_barang_masuk'] ? 'selected' : '' ?>>
@@ -48,6 +48,7 @@
                                             </option>
                                         <?php endforeach; ?>
                                     </select>
+                                    <input type="text" class="form-control" name="nama_alat" value="<?= $alat_tulis_kantor['id_jurnal_barang_masuk']; ?>" hidden>
                                 </div>
 
                                 <label for="tanggal_pengambilan" class="text-primary fs-6 mb-1">

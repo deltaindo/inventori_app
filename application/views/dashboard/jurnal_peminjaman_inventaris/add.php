@@ -39,7 +39,7 @@
                                 </label>
                                 <div class="mb-1">
                                     <select class="form-control text-black" name="nama_alat">
-                                        <option value="" selected>Pilih Alat Peserta...</option>
+                                        <option value="" selected>Pilih Barang Inventaris Pinjam...</option>
                                         <?php foreach ($items as $item) : ?>
                                             <option value="<?= $item['id']; ?>">[<?= $item['kode_barang']; ?>] <?= $item['tanggal_masuk']; ?> - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['keterangan']; ?></option>
                                         <?php endforeach; ?>

@@ -4,7 +4,7 @@
             <div class="row tabel-produk">
                 <div class="col-lg-12 grid-margin stretch-card">
                     <div class="card">
-                        <form method="post" action="<?= base_url('dashboard/simpan_jurnal_peminjaman_inventaris'); ?>">
+                        <form method="post" action="<?= base_url('dashboard/update_jurnal_peminjaman_inventaris/' . $pinjam_inventaris['id']); ?>">
                             <div class="card-body">
                                 <div class="card-footer d-flex justify-content-between">
                                     <div class="d-flex">
@@ -26,14 +26,30 @@
                                     Nama Karyawan
                                 </label>
                                 <div class="mb-1">
-                                    <input type="text" class="form-control" name="nama_karyawan" disabled>
+                                    <select class="form-control text-black" disabled>
+                                        <option value="" selected>Pilih Karyawan...</option>
+                                            <?php foreach ($employees as $employee) : ?>
+                                                <option value="<?= $employee['id']; ?>" <?= $employee['id'] == $pinjam_inventaris['id_karyawan'] ? 'selected' : '' ?>>
+                                                    <?= $employee['nama_karyawan']; ?> - <?= $employee['nama_divisi']; ?>
+                                                </option>
+                                            <?php endforeach; ?>
+                                    </select>
+                                    <input type="text" class="form-control" name="nama_karyawan" value="<?= $pinjam_inventaris['id_karyawan']; ?>" hidden>
                                 </div>
 
                                 <label for="nama_alat" class="text-primary fs-6 mb-1">
                                     Nama Inventaris [Tanggal Masuk Barang]
                                 </label>
                                 <div class="mb-1">
-                                    <input type="text" class="form-control" name="nama_alat" disabled>
+                                    <select class="form-control text-black" disabled>
+                                        <option value="" selected>Pilih Barang Inventaris Pinjam...</option>
+                                        <?php foreach ($items as $item) : ?>
+                                            <option value="<?= $item['id']; ?>" <?= $item['id'] == $pinjam_inventaris['id_jurnal_barang_masuk'] ? 'selected' : '' ?>>
+                                                [<?= $item['kode_barang']; ?>] <?= $item['tanggal_masuk']; ?> - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['keterangan']; ?>
+                                            </option>
+                                        <?php endforeach; ?>
+                                    </select>
+                                    <input type="text" class="form-control" name="nama_alat" value="<?= $pinjam_inventaris['id_jurnal_barang_masuk']; ?>" hidden>
                                 </div>
 
                                 <label for="tujuan_pinjam" class="text-primary fs-6 mb-1">
@@ -81,10 +97,10 @@
                                     <div class="d-flex mx-1">
                                         <div class="mb-1">
                                             <label for="kondisi_kembali" class="text-primary fs-6 mb-1">
-                                                Keterangan Tambahan
+                                                Kondisi Kembali
                                             </label>
                                             <div class="mb-1">
-                                                <textarea id="keterangan_masuk_barang" name="kondisi_kembali" cols="300" rows="10" class="form-control" style="height: 60px;" placeholder="Kondisi Kembali..."></textarea>
+                                                <textarea id="keterangan_masuk_barang" name="kondisi_kembali" cols="300" rows="10" class="form-control" style="height: 60px;" placeholder="Kondisi Kembali..." autofocus></textarea>
                                             </div>
                                         </div>
                                     </div>
