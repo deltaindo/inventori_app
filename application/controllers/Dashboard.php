@@ -2652,9 +2652,10 @@ class Dashboard extends CI_Controller
     {
         $data['tittle'] = 'Jurnal Barang Masuk | Inventori App';
 
-        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,jurnal_barang.keterangan,master_barang.nama_barang,master_merek.nama_merek,master_lokasi.nama_lokasi');
+        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,jurnal_barang.keterangan,master_barang.nama_barang,master_kategori.nama_kategori,master_merek.nama_merek,master_lokasi.nama_lokasi');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
+        $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->join('master_kantor', 'master_lokasi.id_kantor = master_kantor.id');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');

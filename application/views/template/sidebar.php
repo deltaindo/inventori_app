@@ -106,11 +106,6 @@
             Jurnal Barang Masuk
           </a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="<?= base_url('dashboard/peminjaman'); ?>">
-            Peminjaman
-          </a>
-        </li>
       </ul>
     </div>
   </li>
@@ -197,8 +192,8 @@
     <div class="collapse" id="user">
       <ul class="nav flex-column sub-menu">
         <li class="nav-item">
-          <a class="nav-link" href="#">
-            Profil Saya
+          <a class="nav-link" href="<?= base_url('auth/akun_saya'); ?>">
+            Akun Saya
           </a>
         </li>
         <li class="nav-item">

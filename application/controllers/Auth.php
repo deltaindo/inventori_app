@@ -1,8 +1,19 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require 'vendor/autoload.php';
+
 class Auth extends CI_Controller
 {
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // variabel global
+        $this->kantor           = $this->session->userdata('id_kantor');
+        $this->nama_kantor      = $this->db->get_where('master_kantor', ['id' => $this->kantor])->row()->nama_kantor;
+    }
 
     /**
      * Index function that loads the form validation library,
@@ -76,5 +87,16 @@ class Auth extends CI_Controller
         $this->session->unset_userdata('role_id');
         $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">You have been logged out!</div>');
         redirect('auth');
+    }
+
+    public function akun_saya()
+    {
+        $data['tittle'] = 'Akun Saya | Inventori App';
+        $data['profil'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $this->load->view('template/header', $data);
+        $this->load->view('template/sidebar');
+        $this->load->view('auth/akun/setting', $data);
+        $this->load->view('template/footer');
     }
 }
