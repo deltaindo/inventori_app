@@ -3670,8 +3670,11 @@ class Dashboard extends CI_Controller
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
-        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Inventaris');
         $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->group_start();
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Inventaris');
+        $this->db->or_where('jurnal_barang_masuk.jenis_pakai', 'Peminjaman');
+        $this->db->group_end();
         $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
         $data['assets'] = $this->db->get()->result_array();
 

@@ -482,16 +482,16 @@ class Report extends CI_Controller
     public function report_assets_inventaris()
     {
         $this->db->select('
-                            jurnal_barang_masuk.kode_barang_masuk,
-                            jurnal_barang.kode_barang,
-                            master_barang.nama_barang,
-                            master_merek.nama_merek,
-                            jurnal_barang.keterangan as spesifikasi,
-                            jurnal_barang_masuk.tanggal_masuk,
-                            jurnal_barang_masuk.jenis_pakai,
-                            jurnal_barang_masuk.status_barang,
-                            jurnal_barang_masuk.jumlah_masuk,
-                            master_satuan.nama_satuan
+            jurnal_barang_masuk.kode_barang_masuk,
+            jurnal_barang.kode_barang,
+            master_barang.nama_barang,
+            master_merek.nama_merek,
+            jurnal_barang.keterangan as spesifikasi,
+            jurnal_barang_masuk.tanggal_masuk,
+            jurnal_barang_masuk.jenis_pakai,
+            jurnal_barang_masuk.status_barang,
+            jurnal_barang_masuk.jumlah_masuk,
+            master_satuan.nama_satuan
         ');
 
         $this->db->from('jurnal_barang_masuk');
@@ -500,8 +500,11 @@ class Report extends CI_Controller
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
-        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Inventaris');
         $this->db->where('master_lokasi.id_kantor', $this->kantor);
+        $this->db->group_start();
+        $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Inventaris');
+        $this->db->or_where('jurnal_barang_masuk.jenis_pakai', 'Peminjaman');
+        $this->db->group_end();
         $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
         $data['assets_report'] = $this->db->get()->result_array();
 
