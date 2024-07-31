@@ -4438,7 +4438,7 @@ class Dashboard extends CI_Controller
         $this->form_validation->set_rules('nama_karyawan', 'Nama Karyawan', 'required');
         $this->form_validation->set_rules('nama_alat', 'Nama Alat Tulis Kantor', 'required');
         $this->form_validation->set_rules('tujuan_pinjam', 'Tujuan Pinjam', 'required');
-        $this->form_validation->set_rules('Tanggal Pinjam', 'Tanggal Pinjam', 'required');
+        $this->form_validation->set_rules('tanggal_pinjam', 'Tanggal Pinjam', 'required');
         $this->form_validation->set_rules('jumlah_pinjam', 'Jumlah Pinjam', 'required');
         $this->form_validation->set_rules('kondisi_pinjam', 'Kondisi Pinjam', 'required');
 
