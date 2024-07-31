@@ -26,7 +26,7 @@
                                                         Nama Divisi
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="nama_divisi">
+                                                        <select class="form-control text-black" name="nama_divisi">
                                                             <option value="" selected>Pilih Nama Divisi...</option>
                                                             <?php foreach ($divisis as $divisi) : ?>
                                                                 <option value="<?= $divisi['id']; ?>"><?= $divisi['nama_divisi']; ?></option>

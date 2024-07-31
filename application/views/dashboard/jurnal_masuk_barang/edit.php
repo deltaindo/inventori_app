@@ -32,7 +32,7 @@
                                                         Nama Barang
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="id_jurnal_barang">
+                                                        <select class="form-control text-black" name="id_jurnal_barang">
                                                             <option selected>Pilih Nama Barang...</option>
                                                             <?php foreach ($jurnal_barang as $jurnal_item) : ?>
                                                                 <option value="<?= $jurnal_item['id'] ?>" <?= $jurnal_item['id'] == $jurnal_barang_masuk['id_jurnal_barang'] ? 'selected' : '' ?>>
@@ -46,7 +46,7 @@
                                                         Jenis Pakai
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="jenis_pakai">
+                                                        <select class="form-control text-black" name="jenis_pakai">
                                                             <option>Pilih Jenis Pakai...</option>
                                                             <option value="Normal" <?= $jurnal_barang_masuk['jenis_pakai'] == 'Normal' ? 'selected' : '' ?>>Normal</option>
                                                             <option value="Inventaris" <?= $jurnal_barang_masuk['jenis_pakai'] == 'Inventaris' ? 'selected' : '' ?>>Inventaris</option>
@@ -60,7 +60,7 @@
                                                         Status Barang
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="status_barang">
+                                                        <select class="form-control text-black" name="status_barang">
                                                             <option selected>Pilih Jenis Pakai...</option>
                                                             <option value="Baik" <?= $jurnal_barang_masuk['status_barang'] == 'Baik' ? 'selected' : '' ?>>Baik</option>
                                                             <option value="Layak Pakai" <?= $jurnal_barang_masuk['status_barang'] == 'Layak Pakai' ? 'selected' : '' ?>>Layak Pakai</option>

@@ -26,7 +26,7 @@
                                                         Nama Kantor
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="id_kantor">
+                                                        <select class="form-control text-black" name="id_kantor">
                                                             <option selected>Pilih Nama Kantor...</option>
                                                             <?php foreach ($kantor as $office) : ?>
                                                                 <option value="<?= $office['id']; ?>"><?= $office['nama_kantor']; ?> - <?= $office['keterangan']; ?></option>

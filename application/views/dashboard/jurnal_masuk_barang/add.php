@@ -14,7 +14,7 @@
                                     Nama Barang [Merek]
                                 </label>
                                 <div class="mb-3">
-                                    <select class="form-control" name="id_jurnal_barang">
+                                    <select class="form-control text-black" name="id_jurnal_barang">
                                         <option selected>Pilih Nama Barang...</option>
                                         <?php foreach ($jurnal_barang as $item) : ?>
                                             <option value="<?= $item['id']; ?>">
@@ -28,7 +28,7 @@
                                     Jenis Pakai
                                 </label>
                                 <div class="mb-3">
-                                    <select class="form-control" name="jenis_pakai">
+                                    <select class="form-control text-black" name="jenis_pakai">
                                         <option selected>Pilih Jenis Pakai...</option>
                                         <option value="Normal">Normal</option>
                                         <option value="Inventaris">Inventaris</option>
@@ -42,7 +42,7 @@
                                     Status Barang
                                 </label>
                                 <div class="mb-3">
-                                    <select class="form-control" name="status_barang">
+                                    <select class="form-control text-black" name="status_barang">
                                         <option selected>Pilih Jenis Pakai...</option>
                                         <option value="Baik">Baik</option>
                                         <option value="Layak Pakai">Layak Pakai</option>

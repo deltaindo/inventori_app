@@ -55,7 +55,7 @@
                                                     [Tanggal Return Asset] Nama Inventaris
                                                 </label>
                                                 <div class="mb-3">
-                                                    <select class="form-control" name="nama_inventaris">
+                                                    <select class="form-control text-black" name="nama_inventaris">
                                                         <option value="" selected>Pilih Nama Inventaris...</option>
                                                         <?php foreach ($items as $item) : ?>
                                                             <option value="<?= $item['id_jurnal_barang_masuk']; ?>">[<?= $item['tanggal_return']; ?>] - <?= $item['nama_barang'] . ' ' . $item['nama_merek']; ?> - <?= $item['spesifikasi']; ?></option>
@@ -74,7 +74,7 @@
                                                     Status Asset
                                                 </label>
                                                 <div class="mb-3">
-                                                    <select class="form-control" name="status_assets">
+                                                    <select class="form-control text-black" name="status_assets">
                                                         <option value="" selected>Pilih Status Asset...</option>
                                                         <option value="Baru">Baru</option>
                                                         <option value="Bekas">Bekas</option>

@@ -31,7 +31,7 @@
                                         Nama Barang
                                     </label>
                                     <div class="mb-3">
-                                        <select class="form-control" name="id_barang">
+                                        <select class="form-control text-black" name="id_barang">
                                             <option value="" selected>Pilih Nama Barang...</option>
                                             <?php foreach ($barang as $items) : ?>
                                                 <option value="<?= $items['id'] ?>" <?= $items['id'] == $jurnal_barang['id_barang'] ? 'selected' : '' ?>>
@@ -45,7 +45,7 @@
                                         Merek Barang
                                     </label>
                                     <div class="mb-3">
-                                        <select class="form-control" name="id_merek">
+                                        <select class="form-control text-black" name="id_merek">
                                             <option value="" selected>Pilih Merek Barang...</option>
                                             <?php foreach ($merek as $brand) : ?>
                                                 <option value="<?= $brand['id'] ?>" <?= $brand['id'] == $jurnal_barang['id_merek'] ? 'selected' : '' ?>>
@@ -59,7 +59,7 @@
                                         Satuan Barang
                                     </label>
                                     <div class="mb-3">
-                                        <select class="form-control" name="id_satuan">
+                                        <select class="form-control text-black" name="id_satuan">
                                             <option value="" selected>Pilih Satuan Barang...</option>
                                             <?php foreach ($satuan as $unit) : ?>
                                                 <option value="<?= $unit['id'] ?>" <?= $unit['id'] == $jurnal_barang['id_satuan'] ? 'selected' : '' ?>>
@@ -73,7 +73,7 @@
                                         Lokasi Barang
                                     </label>
                                     <div class="mb-3">
-                                        <select class="form-control" name="id_lokasi">
+                                        <select class="form-control text-black" name="id_lokasi">
                                             <option value="" selected>Pilih Lokasi Barang...</option>
                                             <?php foreach ($lokasi as $location) : ?>
                                                 <option value="<?= $location['id'] ?>" <?= $location['id'] == $jurnal_barang['id_lokasi'] ? 'selected' : '' ?>>
@@ -88,7 +88,7 @@
                                         Kategori
                                     </label>
                                     <div class="mb-3">
-                                        <select class="form-control" name="id_kategori">
+                                        <select class="form-control text-black" name="id_kategori">
                                             <option value="" selected>Pilih Kategori...</option>
                                             <?php foreach ($kategori as $category) : ?>
                                                 <option value="<?= $category['id'] ?>" <?= $category['id'] == $jurnal_barang['id_kategori'] ? 'selected' : '' ?>>

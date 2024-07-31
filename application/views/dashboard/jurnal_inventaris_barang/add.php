@@ -59,7 +59,7 @@
                                             Status Asset
                                         </label>
                                         <div class="mb-3">
-                                            <select class="form-control" name="status_assets">
+                                            <select class="form-control text-black" name="status_assets">
                                                 <option value="" selected>Pilih Status Asset...</option>
                                                 <option value="Baru">Baru</option>
                                                 <option value="Bekas">Bekas</option>
