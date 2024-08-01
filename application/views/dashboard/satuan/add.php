@@ -19,13 +19,13 @@
                                                         Nama Satuan
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="nama_satuan" placeholder="Inputkan Nama Satuan" autofocus>
+                                                        <input type="text" class="form-control" name="nama_satuan" placeholder="Nama Satuan..." autofocus>
                                                     </div>
                                                     <label for="keterangan_satuan" class="text-primary fs-6 mb-1">
                                                         Keterangan Satuan (Contoh:)
                                                     </label>
                                                     <div class="mb-3">
-                                                        <textarea name="keterangan_satuan" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Satuan"></textarea>
+                                                        <textarea name="keterangan_satuan" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Keterangan Satuan..."></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

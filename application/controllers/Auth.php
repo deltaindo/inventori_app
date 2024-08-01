@@ -85,7 +85,7 @@ class Auth extends CI_Controller
 
         $this->kantor           = $this->session->userdata('id_kantor');
         $this->nama_kantor      = $this->db->get_where('master_kantor', ['id' => $this->kantor])->row()->nama_kantor;
-
+        $this->nama_pengguna    = $this->db->get_where('user', ['id' => $this->session->userdata('id')])->row()->nama_lengkap;
         $data['profil']         = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->load->view('template/header', $data);

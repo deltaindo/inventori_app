@@ -19,7 +19,7 @@
                                                         Nama Barang
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="nama_barang" placeholder="Inputkan Nama Barang" autofocus>
+                                                        <input type="text" class="form-control" name="nama_barang" placeholder="Nama Barang..." autofocus>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

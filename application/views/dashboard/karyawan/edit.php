@@ -19,14 +19,14 @@
                                                         Nama Karyawan
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="nama_karyawan" value="<?= $karyawan['nama_karyawan']; ?>" placeholder="Inputkan Nama Karyawan" autofocus>
+                                                        <input type="text" class="form-control" name="nama_karyawan" value="<?= $karyawan['nama_karyawan']; ?>" placeholder="Nama Karyawan" autofocus>
                                                     </div>
 
                                                     <label for="nama_divisi" class="text-primary fs-6 mb-1">
                                                         Nama Divisi
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="nama_divisi">
+                                                        <select class="form-control text-black" name="nama_divisi">
                                                             <option value="" selected>Pilih Nama Divisi...</option>
                                                             <?php foreach ($divisis as $divisi) : ?>
                                                                 <option value="<?= $divisi['id'] ?>" <?= $divisi['id'] == $karyawan['id_divisi'] ? 'selected' : '' ?>>

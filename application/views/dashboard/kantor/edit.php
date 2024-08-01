@@ -19,13 +19,13 @@
                                                         Nama Kantor
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="nama_kantor" value="<?= $kantor['nama_kantor']; ?>" placeholder="Inputkan Nama Kantor" autofocus>
+                                                        <input type="text" class="form-control" name="nama_kantor" value="<?= $kantor['nama_kantor']; ?>" placeholder="Nama Kantor" autofocus>
                                                     </div>
                                                     <label for="keterangan_kantor" class="text-primary fs-6 mb-1">
                                                         Keterangan
                                                     </label>
                                                     <div class="mb-3">
-                                                        <textarea name="keterangan_kantor" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Kantor"><?= $kantor['keterangan']; ?></textarea>
+                                                        <textarea name="keterangan_kantor" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Keterangan Kantor"><?= $kantor['keterangan']; ?></textarea>
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer">

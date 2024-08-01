@@ -23,6 +23,13 @@
                                                         <input type="text" class="form-control" name="nama_admin" value="<?= $admin['Nama']; ?>" placeholder="Inputkan Nama Admin" autofocus>
                                                     </div>
 
+                                                    <label for="nama_lengkap" class="text-primary fs-6 mb-1">
+                                                        Nama Lengkap
+                                                    </label>
+                                                    <div class="mb-3">
+                                                        <input type="text" class="form-control" name="nama_lengkap" value="<?= $admin['nama_lengkap']; ?>" placeholder="Inputkan Nama Admin" autofocus>
+                                                    </div>
+
                                                     <label for="email_admin" class="text-primary fs-6 mb-1">
                                                         Email Admin
                                                     </label>
@@ -34,7 +41,7 @@
                                                         Nama Kantor
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="id_kantor">
+                                                        <select class="form-control text-black" name="id_kantor">
                                                             <option value="" selected>Pilih Nama Kantor...</option>
                                                             <?php foreach ($kantor as $office) : ?>
                                                                 <option value="<?= $office['id'] ?>" <?= $office['id'] == $admin['id_kantor'] ? 'selected' : '' ?>>

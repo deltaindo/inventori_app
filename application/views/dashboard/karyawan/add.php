@@ -19,7 +19,7 @@
                                                         Nama Karyawan
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="nama_karyawan" placeholder="Inputkan Nama Karyawan" autofocus>
+                                                        <input type="text" class="form-control" name="nama_karyawan" placeholder="Nama Karyawan" autofocus>
                                                     </div>
 
                                                     <label for="nama_divisi" class="text-primary fs-6 mb-1">

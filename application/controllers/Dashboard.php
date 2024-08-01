@@ -36,6 +36,7 @@ class Dashboard extends CI_Controller
         // variabel global
         $this->kantor           = $this->session->userdata('id_kantor');
         $this->nama_kantor      = $this->db->get_where('master_kantor', ['id' => $this->kantor])->row()->nama_kantor;
+        $this->nama_pengguna    = $this->db->get_where('user', ['id' => $this->session->userdata('id')])->row()->nama_lengkap;
     }
     public function index()
     {
@@ -1354,7 +1355,6 @@ class Dashboard extends CI_Controller
         $this->db->select('user.id, user.Nama, user.email, master_kantor.nama_kantor');
         $this->db->from('user');
         $this->db->join('master_kantor', 'user.id_kantor = master_kantor.id');
-        $this->db->where('user.id_kantor', $this->kantor);
         $this->db->order_by('user.id', 'DESC');
         $data['admins'] = $this->db->get()->result_array();
 
@@ -1374,9 +1374,7 @@ class Dashboard extends CI_Controller
     public function tambah_admin()
     {
         $data['tittle'] = 'Tambah Data Admin | Inventori App';
-        $data["kantor"] = $this->db->where('id', $this->kantor)
-            ->get('master_kantor')
-            ->result_array();
+        $data["kantor"] = $this->db->get('master_kantor')->result_array();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
         $this->load->view('auth/admin/add', $data);
@@ -1395,7 +1393,8 @@ class Dashboard extends CI_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_kantor', 'Offcie Name', 'required');
-        $this->form_validation->set_rules('nama_admin', 'Admin Name', 'required');
+        $this->form_validation->set_rules('nama_admin', 'Username Admin', 'required');
+        $this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required');
         $this->form_validation->set_rules('email_admin', 'Admin Email', 'required');
         $this->form_validation->set_rules('password_admin', 'Admin Password', 'required');
 
@@ -1406,6 +1405,7 @@ class Dashboard extends CI_Controller
             $data = [
                 'id_kantor'     => $this->input->post('id_kantor'),
                 'Nama'          => $this->input->post('nama_admin'),
+                'nama_lengkap'  => $this->input->post('nama_lengkap'),
                 'email'         => $this->input->post('email_admin'),
                 'password'      => md5($this->input->post('password_admin')),
                 'image'         => 'https://i.pravatar.cc/150?img=33'
@@ -1454,6 +1454,7 @@ class Dashboard extends CI_Controller
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_kantor', 'Offcie Name', 'required');
         $this->form_validation->set_rules('nama_admin', 'Admin Name', 'required');
+        $this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required');
         $this->form_validation->set_rules('email_admin', 'Admin Email', 'required');
 
         if ($this->form_validation->run() == FALSE) {
@@ -1464,12 +1465,14 @@ class Dashboard extends CI_Controller
                 $data = [
                     'id_kantor'     => $this->input->post('id_kantor'),
                     'Nama'          => $this->input->post('nama_admin'),
+                    'nama_lengkap'  => $this->input->post('nama_lengkap'),
                     'email'         => $this->input->post('email_admin'),
                 ];
             } else {
                 $data = [
                     'id_kantor'     => $this->input->post('id_kantor'),
                     'Nama'          => $this->input->post('nama_admin'),
+                    'nama_lengkap'  => $this->input->post('nama_lengkap'),
                     'email'         => $this->input->post('email_admin'),
                     'password'      => md5($this->input->post('password_admin')),
                 ];
@@ -1526,9 +1529,7 @@ class Dashboard extends CI_Controller
         $data['tittle'] = 'List Data Kantor | Inventori App';
 
         $this->db->order_by('id', 'DESC');
-        $data['kantor'] = $this->db->where('id', $this->kantor)
-            ->get('master_kantor')
-            ->result_array();
+        $data['kantor'] = $this->db->get('master_kantor')->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -1696,7 +1697,7 @@ class Dashboard extends CI_Controller
     public function tambah_lokasi()
     {
         $data['tittle'] = 'List Data Lokasi | Inventori App';
-        $data['kantor'] = $this->db->get('master_kantor')->result_array();
+        $data['kantor'] = $this->db->where('id', $this->kantor)->get('master_kantor')->result_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -1740,7 +1741,7 @@ class Dashboard extends CI_Controller
     public function edit_lokasi($id)
     {
         $data['tittle'] = 'Edit Data Lokasi | Inventori App';
-        $data['kantor'] = $this->db->get('master_kantor')->result_array();
+        $data['kantor'] = $this->db->where('id', $this->kantor)->get('master_kantor')->result_array();
         $data['lokasi'] = $this->db->get_where('master_lokasi', ['id' => $id])->row_array();
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
@@ -1759,7 +1760,7 @@ class Dashboard extends CI_Controller
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_kantor', 'Offcie Name', 'required');
         $this->form_validation->set_rules('nama_lokasi', 'Location Name', 'required');
-        $this->form_validation->set_rules('keterangan', 'Description Location', 'required');
+        $this->form_validation->set_rules('keterangan_lokasi', 'Description Location', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
@@ -2969,7 +2970,7 @@ class Dashboard extends CI_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('nama_divisi', 'Divisi Name', 'required');
-        $this->form_validation->set_rules('keterangan', 'Description Divisi', 'required');
+        $this->form_validation->set_rules('keterangan_divisi', 'Description Divisi', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
@@ -3013,7 +3014,7 @@ class Dashboard extends CI_Controller
     {
         $this->load->library('form_validation');
         $this->form_validation->set_rules('nama_divisi', 'Divisi Name', 'required');
-        $this->form_validation->set_rules('keterangan', 'Description Divisi', 'required');
+        $this->form_validation->set_rules('keterangan_divisi', 'Description Divisi', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');

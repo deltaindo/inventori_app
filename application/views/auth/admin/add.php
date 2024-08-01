@@ -17,31 +17,38 @@
                                                     </h4>
 
                                                     <label for="nama_admin" class="text-primary fs-6 mb-1">
-                                                        Nama Admin
+                                                        Username Admin
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="nama_admin" placeholder="Inputkan Nama Admin" autofocus>
+                                                        <input type="text" class="form-control" name="nama_admin" placeholder="Username Admin..." autofocus>
+                                                    </div>
+
+                                                    <label for="nama_lengkap" class="text-primary fs-6 mb-1">
+                                                        Nama Lengkap Admin
+                                                    </label>
+                                                    <div class="mb-3">
+                                                        <input type="text" class="form-control" name="nama_lengkap" placeholder="Nama Lengkap Admin..." autofocus>
                                                     </div>
 
                                                     <label for="email_admin" class="text-primary fs-6 mb-1">
                                                         Email Admin
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="email_admin" placeholder="Inputkan Email Admin" autofocus>
+                                                        <input type="text" class="form-control" name="email_admin" placeholder="Email Admin..." autofocus>
                                                     </div>
 
                                                     <label for="password_admin" class="text-primary fs-6 mb-1">
                                                         Password Admin
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="password" class="form-control" name="password_admin" placeholder="Inputkan Password Admin" autofocus>
+                                                        <input type="password" class="form-control" name="password_admin" placeholder="Password Admin..." autofocus>
                                                     </div>
 
                                                     <label for="id_kantor" class="text-primary fs-6 mb-1">
                                                         Nama Kantor
                                                     </label>
                                                     <div class="mb-3">
-                                                        <select class="form-control" name="id_kantor">
+                                                        <select class="form-control text-black" name="id_kantor">
                                                             <option value="" selected>Pilih Nama Kantor...</option>
                                                             <?php foreach ($kantor as $office) : ?>
                                                                 <option value="<?= $office['id']; ?>"><?= $office['nama_kantor']; ?> - <?= $office['keterangan']; ?></option>

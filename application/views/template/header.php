@@ -43,11 +43,11 @@
         </button>
       </div>
       <div>
-        <a class="navbar-brand brand-logo" href="<?= base_url('dashboard/perlengkapan_kantor'); ?>">
+        <a class="navbar-brand brand-logo" href="<?= base_url('dashboard/report_stok_barang'); ?>">
           <img src="<?= base_url('assets/images/logo-delta.png'); ?>" alt="logo" style="height: 75px" />
         </a>
-        <a class="navbar-brand brand-logo-mini" href="<?= base_url('dashboard/perlengkapan_kantor'); ?>">
-          <img src="images/logo-mini.svg" alt="logo" />
+        <a class="navbar-brand brand-logo-mini" href="<?= base_url('dashboard/report_stok_barang'); ?>">
+          <img src="<?= base_url('assets/images/logo-delta.png'); ?>" alt="logo" />
         </a>
       </div>
     </div>
@@ -57,6 +57,9 @@
           <h1 class="welcome-text">
             <span class="text-black fw-bold"><?= $this->nama_kantor == null ? 'Selamat Pagi' : $this->nama_kantor; ?></span>
           </h1>
+          <h3 class="text-black welcome-sub-text">
+            <span class="text-black fw-bold"><?= $this->nama_pengguna == null ? 'Pengguna' : "Pengguna aktif ". $this->nama_pengguna; ?></span>
+          </h3>
         </li>
       </ul>
       <ul class="navbar-nav ms-auto">
