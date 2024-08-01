@@ -30,7 +30,7 @@ class Report extends CI_Controller
 
     public function report_jurnal_masuk_barang()
     {
-        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total');
+        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total, jurnal_barang_masuk.keterangan as deskripsi');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
@@ -48,10 +48,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Jurnal Barang Masuk');
 
         // Set title header
-        $sheet->mergeCells('A1:N1');
+        $sheet->mergeCells('A1:O1');
         $sheet->setCellValue('A1', 'Report Jurnal Barang Masuk');
-        $sheet->getStyle('A1:N1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:N1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:O1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:O1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -68,11 +68,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('L2', 'Jumlah Masuk');
         $sheet->setCellValue('M2', 'Harga Asset');
         $sheet->setCellValue('N2', 'Total Harga Asset');
+        $sheet->setCellValue('O2', 'Keterangan');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:N2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:N2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:N2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:O2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:O2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:O2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -91,9 +92,10 @@ class Report extends CI_Controller
             $sheet->setCellValue('K' . $baris, $item['status_barang']);
             $sheet->setCellValue('L' . $baris, $item['jumlah_masuk'] . ' ' . $item['nama_satuan']);
             $sheet->setCellValue('M' . $baris, $item['harga_barang']);
-            $sheet->getStyle('M' . $baris)->getNumberFormat()->setFormatCode('Rp #,##0.00');
+            $sheet->setCellValue('O' . $baris, $item['deskripsi']);
+            $sheet->getStyle('M' . $baris)->getNumberFormat()->setFormatCode('Rp #,##');
             $sheet->setCellValue('N' . $baris, $item['total']);
-            $sheet->getStyle('N' . $baris)->getNumberFormat()->setFormatCode('Rp #,##0.00');
+            $sheet->getStyle('N' . $baris)->getNumberFormat()->setFormatCode('Rp #,##');
             $baris++;
         }
 
@@ -105,10 +107,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:N' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:O' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'N') as $columnID) {
+        foreach (range('A', 'O') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 

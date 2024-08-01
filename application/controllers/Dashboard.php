@@ -2620,7 +2620,8 @@ class Dashboard extends CI_Controller
                             master_satuan.nama_satuan,
                             jurnal_barang.keterangan,
                             jurnal_barang_masuk.harga_barang,
-                            jurnal_barang_masuk.total
+                            jurnal_barang_masuk.total,
+                            jurnal_barang_masuk.keterangan as deskripsi,
         ');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
@@ -2800,7 +2801,8 @@ class Dashboard extends CI_Controller
                     'status_barang'     => $this->input->post('status_barang'),
                     'jumlah_masuk'      => $this->input->post('jumlah_masuk_lama'),
                     'harga_barang'      => $this->input->post('harga_barang'),
-                    'total'             => $this->input->post('jumlah_masuk_lama') * $this->input->post('harga_barang')
+                    'total'             => $this->input->post('jumlah_masuk_lama') * $this->input->post('harga_barang'),
+                    'keterangan'        => $this->input->post('keterangan') == '' ? '-' : $this->input->post('keterangan')
                 ];
 
                 $this->db->where('id', $id);
@@ -2817,7 +2819,8 @@ class Dashboard extends CI_Controller
                 'status_barang'     => $this->input->post('status_barang'),
                 'jumlah_masuk'      => $this->input->post('jumlah_masuk_baru'),
                 'harga_barang'      => $this->input->post('harga_barang'),
-                'total'             => $this->input->post('jumlah_masuk_baru') * $this->input->post('harga_barang')
+                'total'             => $this->input->post('jumlah_masuk_baru') * $this->input->post('harga_barang'),
+                'keterangan'        => $this->input->post('keterangan')
             ];
 
             $this->db->where('id', $id);

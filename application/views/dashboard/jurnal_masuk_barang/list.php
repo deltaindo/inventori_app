@@ -71,6 +71,9 @@
                                                         Total Harga Asset
                                                     </th>
                                                     <th>
+                                                        Keterangan
+                                                    </th>
+                                                    <th>
                                                         Action
                                                     </th>
                                                 </tr>
@@ -120,6 +123,9 @@
                                                         </td>
                                                         <td>
                                                             <?= 'Rp ' . number_format($barang_masuk['total'], 0, ',', '.'); ?>
+                                                        </td>
+                                                        <td>
+                                                            <?= $barang_masuk['deskripsi']; ?>
                                                         </td>
                                                         <td>
                                                             <a href="<?= base_url('dashboard/edit_jurnal_barang_masuk/' . $barang_masuk['id']); ?>" class="btn btn-lg btn-outline-primary">
