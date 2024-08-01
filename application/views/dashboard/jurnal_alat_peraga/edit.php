@@ -41,7 +41,7 @@
                                     Alokasi Tujuan
                                 </label>
                                 <div class="mb-1">
-                                    <input type="text" class="form-control" name="alokasi_tujuan" value="<?= $alat_peraga['alokasi_tujuan']; ?>" placeholder="Inputkan Alokasi Tujuan. Misal : Nama Ruangan atau Nama Penanggung Jawab" autofocus>
+                                    <input type="text" class="form-control" name="alokasi_tujuan" value="<?= $alat_peraga['alokasi_tujuan']; ?>" placeholder="Alokasi Tujuan. Misal : Nama Ruangan atau Nama Penanggung Jawab..." autofocus>
                                 </div>
 
                                 <label for="tanggal_beli" class="text-primary fs-6 mb-1">
@@ -76,7 +76,7 @@
                                     Jumlah Alat (Data Baru)
                                 </label>
                                 <div class="mb-1">
-                                    <input type="number" class="form-control" name="jumlah_alat_baru" placeholder="Inputkan Jumlah Alat Peraga atau Praktik (Data Baru)">
+                                    <input type="number" class="form-control" name="jumlah_alat_baru" placeholder="Jumlah Alat Peraga atau Praktik (Data Baru)...">
                                     <span class="text-small">
                                         <i>
                                             * Tidak Wajib diisi. Jika akan mengubah Jumlah Alat, silahkan inputkan data baru.
@@ -88,7 +88,7 @@
                                     Keterangan
                                 </label>
                                 <div class="mb-1">
-                                    <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 55px;" placeholder="Inputkan Keterangan Alat Peraga"><?= $alat_peraga['keterangan']; ?></textarea>
+                                    <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 55px;" placeholder="Keterangan Alat Peraga..."><?= $alat_peraga['keterangan']; ?></textarea>
                                     <span class="text-small">
                                         <i>
                                             Contoh: Alat Peraga atau Praktik dalam kondisi layak digunakan.

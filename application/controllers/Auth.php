@@ -93,4 +93,40 @@ class Auth extends CI_Controller
         $this->load->view('auth/akun/setting', $data);
         $this->load->view('template/footer');
     }
+
+    public function update_akun()
+    {
+        $this->load->library('form_validation');
+        $this->form_validation->set_rules('nama_akun', 'Nama Akun', 'required');
+        $this->form_validation->set_rules('nama_lengkap', 'Nama Lengkap', 'required');
+        $this->form_validation->set_rules('email_akun', 'Email Akun', 'required');
+
+        if ($this->form_validation->run() == FALSE) {
+            $this->session->set_flashdata('message', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
+            redirect('auth/akun_saya');
+        } else {
+            if(!$this->input->post('password_akun')){
+                $data = [
+                    'Nama'          => $this->input->post('nama_akun'),
+                    'nama_lengkap'  => $this->input->post('nama_lengkap'),
+                    'email'         => $this->input->post('email_akun'),
+                ];
+                $this->db->where('id', $this->session->userdata('id'));
+                $this->db->update('user', $data);
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Akun Berhasil di Update</div>');
+                redirect('auth/logout');
+            } elseif ($this->input->post('password_akun')) {
+                $data = [
+                    'Nama'          => $this->input->post('nama_akun'),
+                    'nama_lengkap'  => $this->input->post('nama_lengkap'),
+                    'email'         => $this->input->post('email_akun'),
+                    'password'      => md5($this->input->post('password_akun')),
+                ];
+                $this->db->where('id', $this->session->userdata('id'));
+                $this->db->update('user', $data);
+                $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Akun Berhasil di Update</div>');
+                redirect('auth/logout');
+            }   
+        }
+    }
 }

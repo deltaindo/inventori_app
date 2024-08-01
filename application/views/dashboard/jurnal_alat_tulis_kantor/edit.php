@@ -69,14 +69,14 @@
                                     Jumlah Pengambilan (Data Baru)
                                 </label>
                                 <div class="mb-1">
-                                    <input type="number" class="form-control" name="jumlah_pengambilan_baru" placeholder="Jumlah Pengambilan (Data Baru)" autofocus>
+                                    <input type="number" class="form-control" name="jumlah_pengambilan_baru" placeholder="Jumlah Pengambilan (Data Baru)..." autofocus>
                                 </div>
 
                                 <label for="keterangan_barang" class="text-primary fs-6 mb-1">
                                     Keterangan
                                 </label>
                                 <div class="mb-1">
-                                    <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Keterangan Alat Tulis Kantor"><?= $alat_tulis_kantor['keterangan']; ?></textarea>
+                                    <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Keterangan Alat Tulis Kantor..."><?= $alat_tulis_kantor['keterangan']; ?></textarea>
                                     <span class="text-small">
                                         <i>
                                             Contoh: Buku Tulis digunakan untuk keperluan kerja.

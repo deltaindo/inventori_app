@@ -39,7 +39,7 @@
                                         Alokasi Tujuan
                                     </label>
                                     <div class="mb-1">
-                                        <input type="text" class="form-control" name="alokasi_tujuan" placeholder="Inputkan Alokasi Tujuan. Misal : Nama Ruangan atau Nama Penanggung Jawab" autofocus>
+                                        <input type="text" class="form-control" name="alokasi_tujuan" placeholder="Alokasi Tujuan. Misal : Nama Ruangan atau Nama Penanggung Jawab..." autofocus>
                                     </div>
 
                                     <label for="tanggal_beli" class="text-primary fs-6 mb-1">
@@ -67,14 +67,14 @@
                                         Jumlah
                                     </label>
                                     <div class="mb-1">
-                                        <input type="number" class="form-control" name="jumlah_alat" placeholder="Inputkan Jumlah Alat Peraga atau Praktik">
+                                        <input type="number" class="form-control" name="jumlah_alat" placeholder="Jumlah Alat Peraga atau Praktik...">
                                     </div>
 
                                     <label for="keterangan_barang" class="text-primary fs-6 mb-1">
                                         Keterangan
                                     </label>
                                     <div class="mb-1">
-                                        <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Inputkan Keterangan Alat Peraga"></textarea>
+                                        <textarea id="keterangan_masuk_barang" name="keterangan_barang" cols="300" rows="10" class="form-control" style="height: 100px;" placeholder="Keterangan Alat Peraga..."></textarea>
                                         <span class="text-small">
                                             <i>
                                                 Contoh: Alat Peraga atau Praktik dalam kondisi layak digunakan.

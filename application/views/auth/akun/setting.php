@@ -10,7 +10,7 @@
                                 <div class="row tabel-produk">
                                     <div class="col-lg-12 grid-margin stretch-card">
                                         <div class="card">
-                                            <form method="post" action="<?= base_url('dashboard/simpan_jurnal_masuk_barang'); ?>">
+                                            <form method="post" action="<?= base_url('auth/update_akun'); ?>">
                                                 <div class="card-body">
                                                     <h4 class="card-title">
                                                         Update Akun Saya
@@ -20,14 +20,21 @@
                                                         Nama Akun
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="text" class="form-control" name="nama_akun" placeholder="Nama Akun..." autocomplete="off" autofocus>
+                                                        <input type="text" class="form-control" name="nama_akun" placeholder="Nama Akun..." value="<?= $profil['Nama']; ?>" autocomplete="off" autofocus>
+                                                    </div>
+
+                                                    <label for="nama_lengkap" class="text-primary fs-6 mb-1">
+                                                        Nama Lengkap
+                                                    </label>
+                                                    <div class="mb-3">
+                                                        <input type="text" class="form-control" name="nama_lengkap" placeholder="Nama Lengkap..." value="<?= $profil['nama_lengkap']; ?>" autocomplete="off">
                                                     </div>
 
                                                     <label for="email_akun" class="text-primary fs-6 mb-1">
                                                         Email Akun
                                                     </label>
                                                     <div class="mb-3">
-                                                        <input type="email" class="form-control" name="email_akun" autocomplete="off" placeholder="Alamat Email...">
+                                                        <input type="email" class="form-control" name="email_akun" autocomplete="off" value="<?= $profil['email']; ?>" placeholder="Alamat Email...">
                                                     </div>
 
                                                     <label for="password_akun" class="text-primary fs-6 mb-1">
