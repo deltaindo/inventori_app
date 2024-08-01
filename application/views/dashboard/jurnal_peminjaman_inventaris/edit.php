@@ -34,7 +34,6 @@
                                                 </option>
                                             <?php endforeach; ?>
                                     </select>
-                                    <input type="text" class="form-control" name="nama_karyawan" value="<?= $pinjam_inventaris['id_karyawan']; ?>" hidden>
                                 </div>
 
                                 <label for="nama_alat" class="text-primary fs-6 mb-1">
@@ -73,7 +72,7 @@
                                             <label for="jumlah_pinjam" class="text-primary fs-6 mb-1">
                                                 Jumlah Peminjaman
                                             </label>
-                                            <input type="number" class="form-control" name="jumlah_pinjam" value="<?= $pinjam_inventaris['jumlah_pinjam']; ?>" disabled>
+                                            <input type="number" class="form-control" name="jumlah_pinjam" value="<?= $pinjam_inventaris['jumlah_pinjam']; ?>" readonly>
                                         </div>
                                     </div>
                                 </div>

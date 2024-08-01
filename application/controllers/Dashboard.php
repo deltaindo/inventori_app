@@ -4492,7 +4492,7 @@ class Dashboard extends CI_Controller
                         $this->db->where('id_jurnal_barang', $id_jurnal_barang);
                         $this->db->update('jurnal_stok_barang', $data_update);
 
-                        $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Jurnal Peminjaman Inventaris berhasil disimpan</div>');
+                        $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Jurnal Peminjaman Inventaris berhasil disimpan</div>');
                         redirect('dashboard/jurnal_peminjaman_inventaris');
                     }
                 }
@@ -4540,16 +4540,50 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
             redirect('dashboard/jurnal_peminjaman_inventaris');
         } else {
-            $data = [
-                'tanggal_kembali'   => $this->input->post('tanggal_kembali'),
-                'kondisi_kembali'   => $this->input->post('kondisi_kembali'),
-                'status'            => 'Dikembalikan',
-            ];
-    
-            $this->db->where('id', $id);
-            $this->db->update('jurnal_pinjam_inventaris', $data);
-            $this->session->set_flashdata('message', '<div class="alert alert-success" role="alert">Data Jurnal Peminjaman Inventaris berhasil disimpan</div>');
-            redirect('dashboard/jurnal_peminjaman_inventaris');
+            $jumlah_assets           = $this->input->post('jumlah_pinjam');
+            $id_jurnal_barang_masuk  = $this->input->post('nama_alat');
+
+            $this->db->select('id_jurnal_barang');
+            $this->db->from('jurnal_barang_masuk');
+            $this->db->where('id', $id_jurnal_barang_masuk);
+            $query = $this->db->get();
+            $jurnal_barang = $query->row();
+
+            if ($jurnal_barang) {
+                $id_jurnal_barang = $jurnal_barang->id_jurnal_barang;
+
+                $this->db->select('*');
+                $this->db->from('jurnal_stok_barang');
+                $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                $query_stok = $this->db->get();
+                $stok_barang = $query_stok->row();
+
+                if ($stok_barang) {
+                    $jumlah_keluar_baru = $stok_barang->jumlah_keluar - $jumlah_assets;
+                    $stok_akhir_baru    = $stok_barang->stok_akhir + $jumlah_assets;
+
+                    $data = [
+                        'tanggal_kembali'   => $this->input->post('tanggal_kembali'),
+                        'kondisi_kembali'   => $this->input->post('kondisi_kembali'),
+                        'status'            => 'Dikembalikan',
+                    ];
+            
+                    $this->db->where('id', $id);
+                    $this->db->update('jurnal_pinjam_inventaris', $data);
+
+                    $data_update = [
+                        'tanggal_update'  => date('Y-m-d H:i:s'),
+                        'jumlah_keluar'   => $jumlah_keluar_baru,
+                        'stok_akhir'      => $stok_akhir_baru
+                    ];
+
+                    $this->db->where('id_jurnal_barang', $id_jurnal_barang);
+                    $this->db->update('jurnal_stok_barang', $data_update);
+
+                    $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Data Jurnal Peminjaman Inventaris berhasil disimpan</div>');
+                    redirect('dashboard/jurnal_peminjaman_inventaris');
+                }
+            }
         }
     }
 }

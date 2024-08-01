@@ -5,16 +5,6 @@ require 'vendor/autoload.php';
 
 class Auth extends CI_Controller
 {
-
-    public function __construct()
-    {
-        parent::__construct();
-
-        // variabel global
-        $this->kantor           = $this->session->userdata('id_kantor');
-        $this->nama_kantor      = $this->db->get_where('master_kantor', ['id' => $this->kantor])->row()->nama_kantor;
-    }
-
     /**
      * Index function that loads the form validation library,
      * sets rules for email and password validation,
@@ -92,7 +82,11 @@ class Auth extends CI_Controller
     public function akun_saya()
     {
         $data['tittle'] = 'Akun Saya | Inventori App';
-        $data['profil'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+
+        $this->kantor           = $this->session->userdata('id_kantor');
+        $this->nama_kantor      = $this->db->get_where('master_kantor', ['id' => $this->kantor])->row()->nama_kantor;
+
+        $data['profil']         = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
 
         $this->load->view('template/header', $data);
         $this->load->view('template/sidebar');
