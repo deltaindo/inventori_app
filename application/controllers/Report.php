@@ -28,6 +28,11 @@ class Report extends CI_Controller
         $this->kantor           = $this->session->userdata('id_kantor');
     }
 
+    /**
+     * Generates a report of jurnal barang masuk and downloads it as an Excel file.
+     *
+     * @return void
+     */
     public function report_jurnal_masuk_barang()
     {
         $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total, jurnal_barang_masuk.keterangan as deskripsi');
@@ -128,6 +133,17 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generate a report of inventory items in Excel format.
+     *
+     * This function retrieves data from the database and generates an Excel spreadsheet
+     * containing information about inventory items. The report includes details such
+     * as the item's code, product code, name, brand, specifications, date of entry,
+     * employee name, department, date of assignment, number of assets, inventory
+     * description, and return date.
+     *
+     * @return void
+     */
     public function report_inventaris_barang()
     {
         $this->db->select('
@@ -237,6 +253,16 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generates a report of the inventory journal for a specific warehouse.
+     *
+     * This function retrieves the inventory journal data for a specific warehouse
+     * and generates an Excel report of the data. The report includes the following
+     * columns: No, Kode Barang, Nama Barang, Merek, Jenis Assets, Lokasi, Kantor,
+     * Spesifikasi, Jumlah Masuk, Jumlah Keluar, Stok Akhir, and Tanggal Update.
+     *
+     * @return void
+     */
     public function report_jurnal_stok_barang()
     {
         $this->db->select('
@@ -361,6 +387,49 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generates a report of the history of inventory and exports it as an Excel file.
+     *
+     * This function retrieves data from the database and populates an Excel spreadsheet
+     * with the following information:
+     * - Barang Masuk (Item Code)
+     * - Nama Barang (Product Name)
+     * - Nama Merek (Brand Name)
+     * - Spesifikasi (Specification)
+     * - Karyawan (Employee)
+     * - Divisi (Division)
+     * - Tanggal Assign (Assignment Date)
+     * - Kondisi Awal (Initial Condition)
+     * - Jumlah Assets (Number of Assets)
+     * - Status Assets (Asset Status)
+     * - Keterangan Inventaris (Inventory Description)
+     * - Jenis Pakai (Type of Use)
+     * - Tanggal Return (Return Date)
+     * - Kondisi Akhir (Final Condition)
+     *
+     * The data is retrieved from the following tables:
+     * - jurnal_inventaris
+     * - history_assets
+     * - master_karyawan
+     * - master_divisi
+     * - jurnal_barang_masuk
+     * - jurnal_barang
+     * - master_barang
+     * - master_merek
+     * - master_satuan
+     * - master_lokasi
+     * - master_kantor
+     *
+     * The report is filtered by the current kantor (office) ID.
+     *
+     * The report is ordered by the jurnal_inventaris.id in descending order.
+     *
+     * The generated Excel file is downloaded with the filename
+     * "Report_History_Inventaris_YYYYMMDD_HHMMSS.xlsx".
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     public function report_history_inventaris()
     {
         $this->db->select('
@@ -481,6 +550,11 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generate a report of assets inventory and download it as an Excel file.
+     *
+     * @return void
+     */
     public function report_assets_inventaris()
     {
         $this->db->select('
@@ -583,6 +657,16 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Exports data from the 'master_lokasi' table as an Excel file.
+     *
+     * This function retrieves data from the 'master_lokasi' table and its related
+     * table 'master_kantor'. It joins the tables based on the 'id_kantor' column
+     * and applies a filter to only retrieve data for the current kantor. The data
+     * is then populated into an Excel spreadsheet and downloaded as a file.
+     *
+     * @return void
+     */
     public function export_excel_lokasi()
     {
         $this->db->select('master_lokasi.id, master_kantor.nama_kantor, master_lokasi.nama_lokasi, master_lokasi.keterangan');
@@ -653,6 +737,19 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generates an Excel report of the master barang data.
+     *
+     * This function retrieves the master barang data from the database and generates an Excel report.
+     * The report includes the following columns:
+     * - No: The serial number of the barang.
+     * - Nama Barang: The name of the barang.
+     *
+     * The report is downloaded as an Excel file with the filename "Report_Data_Barang_YYYYMMDD_HHMMSS.xlsx",
+     * where YYYYMMDD_HHMMSS is the current date and time in the format YYYYMMDD_HHMMSS.
+     *
+     * @return void
+     */
     public function report_excel_barang()
     {
         $this->db->order_by('id', 'DESC');
@@ -715,6 +812,11 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generates an Excel report of the master satuan data and downloads it.
+     *
+     * @return void
+     */
     public function report_excel_satuan()
     {
         $this->db->order_by('id', 'DESC');
@@ -779,6 +881,23 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generates an Excel report of the master merek data and prompts the user to download it.
+     *
+     * This function retrieves the master merek data from the database, sorts it in descending order by the 'id' column,
+     * and stores it in the '$data' variable. It then creates a new Spreadsheet object and sets the active sheet's title
+     * to 'Report Data Master Merek'. The function sets the title header with the text 'Report Data Master Merek' in bold
+     * and centered. It sets the header cells with the labels 'No', 'Nama Merek', and 'Keterangan'. The header cells are
+     * styled with bold font and a background color. The function populates the data from the '$data' variable into the
+     * spreadsheet, starting from the cell 'A3'. The data is populated row by row, with the 'No' column incrementing by 1
+     * for each row. The function applies a thin border style to all cells in the spreadsheet. The function sets the
+     * auto size for all columns in the spreadsheet. The function generates a filename with the current date and time in
+     * the format 'YYYYMMDD_HHMMSS' and sets the headers for download. Finally, the function saves the spreadsheet as an
+     * Excel file and prompts the user to download it.
+     *
+     * @throws None
+     * @return void
+     */
     public function report_excel_merek()
     {
         $this->db->order_by('id', 'DESC');
@@ -843,6 +962,30 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generates an Excel report of the master category data and prompts the user to download it.
+     *
+     * This function retrieves the master category data from the database, sorts it in descending order by ID,
+     * and stores it in the `$data['report_kategori']` array. It then creates a new Spreadsheet object,
+     * sets the title of the sheet to "Report Data Master Kategori", and sets the title header to "Report Data Master Kategori"
+     * in bold, 15-point font, and centered horizontally. The header also spans across columns A to C.
+     * The function then sets the header row with the column names "No", "Nama Kategori", and "Keterangan".
+     * The header row is styled with bold font and a background color of gray.
+     *
+     * The function populates the data rows starting from row 3 with the category data.
+     * Each row contains the category number, name, and description.
+     * The data rows are styled with a thin border.
+     *
+     * The function sets the auto size for all columns.
+     *
+     * The function generates a filename with the current date and time in the format "YYYYMMDD_HHMMSS.xlsx".
+     *
+     * The function sets the appropriate headers for downloading the Excel file and saves the Spreadsheet object
+     * to the output stream. Finally, the function exits the script.
+     *
+     * @throws \PhpOffice\PhpSpreadsheet\Exception
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     */
     public function report_excel_kategori()
     {
         $this->db->order_by('id', 'DESC');
@@ -907,6 +1050,11 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generates a report of journal items for a specific office location and exports it as an Excel file.
+     *
+     * @return void
+     */
     public function report_jurnal_barang()
     {
         $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,jurnal_barang.keterangan, master_barang.nama_barang, master_lokasi.nama_lokasi, master_kantor.nama_kantor, master_merek.nama_merek, master_kategori.nama_kategori, master_satuan.nama_satuan');
@@ -992,6 +1140,17 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generate a report of jurnal alat peraga (equipment) in Excel format.
+     *
+     * This function retrieves data from the database and creates an Excel spreadsheet
+     * containing the report. The report includes information such as the code of the
+     * equipment, the code of the item, the name of the item, the brand, the specifications,
+     * the destination of allocation, the date of purchase, the date of calibration,
+     * the expiration date of calibration, the quantity, and the description.
+     *
+     * @return void
+     */
     public function report_jurnal_alat_peraga()
     {
         $this->db->select('
@@ -1097,6 +1256,11 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generates a report of jurnal alat peserta and exports it as an Excel file.
+     *
+     * @return void
+     */
     public function report_jurnal_alat_peserta()
     {
         $this->db->select('
@@ -1196,6 +1360,16 @@ class Report extends CI_Controller
         exit;
     }
 
+    /**
+     * Generate a report of the office supplies journal for the current office.
+     *
+     * This function retrieves data from the database and generates an Excel spreadsheet
+     * containing the information of the office supplies journal. The report includes
+     * the following columns: No, Kode ATK, Kode Barang, Nama Barang, Merek, Spesifikasi,
+     * Nama Karyawan, Divisi, Tanggal Pengambilan, Jumlah Pengambilan, and Keterangan.
+     *
+     * @return void
+     */
     public function report_jurnal_alat_tulis_kantor()
     {
             $this->db->select('
@@ -1300,6 +1474,21 @@ class Report extends CI_Controller
             exit;
     }
 
+    /**
+     * Generates a report of peminjaman inventaris in an Excel spreadsheet.
+     *
+     * This function retrieves data from the database tables jurnal_pinjam_inventaris,
+     * jurnal_barang_masuk, master_karyawan, master_divisi, jurnal_barang, master_barang,
+     * master_merek, master_satuan, and master_lokasi. The data is then used to populate
+     * an Excel spreadsheet with the following columns: No, Kode Peminjaman, Kode Barang,
+     * Nama Barang, Merk, Spesifikasi, Nama Karyawan, Divisi, Tujuan Pinjam,
+     * Tanggal Pinjam, Jumlah Pinjam, Kondisi Pinjam, Tanggal Kembali, Kondisi Kembali,
+     * Status, and Kata Keterangan.
+     *
+     * The generated spreadsheet is then downloaded as a file named 'Report_Jurnal_Peminjaman_Inventaris_{currentDateTime}.xlsx'.
+     *
+     * @return void
+     */
     public function report_jurnal_peminjaman_inventaris()
     {
         $this->db->select('

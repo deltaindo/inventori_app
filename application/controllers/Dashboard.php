@@ -3670,6 +3670,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Retrieves a list of journal entries for educational equipment.
+     *
+     * @return void
+     */
     public function jurnal_alat_peraga()
     {
         $data['tittle'] = 'List Jurnal Alat Peraga | Inventori App';
@@ -3706,6 +3711,15 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Add a new Jurnal Alat Peraga.
+     *
+     * This function retrieves the necessary data for adding a new Jurnal Alat Peraga from the database.
+     * It selects the Jurnal Barang Masuk data with the specified conditions and joins it with other tables.
+     * The retrieved data is then passed to the views for rendering.
+     *
+     * @return void
+     */
     public function tambah_jurnal_alat_peraga()
     {
         $data['tittle'] = 'Tambah Jurnal Alat Peraga | Inventori App';
@@ -3727,6 +3741,17 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Save the journal of the weapon.
+     *
+     * This function validates the input data and saves the journal of the weapon.
+     * It checks if the required fields are filled and if the weapon stock is sufficient.
+     * If the validation fails, it redirects to the weapon journal page with an error message.
+     * If the validation passes, it retrieves the weapon journal entry and updates the weapon stock.
+     * Finally, it redirects to the weapon journal page with a success message.
+     *
+     * @return void
+     */
     public function simpan_jurnal_alat_peraga()
     {
         $this->load->library('form_validation');
@@ -3794,6 +3819,17 @@ class Dashboard extends CI_Controller
         }
     }
 
+    /**
+     * Edit a Jurnal Alat Peraga.
+     *
+     * This function retrieves the Jurnal Alat Peraga data with the given ID from the database.
+     * It also retrieves a list of available items for the Jurnal Alat Peraga form.
+     * The retrieved data and items are then passed to the views for rendering.
+     *
+     * @param int $id The ID of the Jurnal Alat Peraga to be edited.
+     * @throws None
+     * @return void
+     */
     public function edit_jurnal_alat_peraga($id)
     {
         $data['tittle'] = 'Edit Jurnal Alat Peraga | Inventori App';
@@ -3817,6 +3853,12 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates a jurnal_alat_peraga record based on the provided id.
+     *
+     * @param int $id The id of the record to update.
+     * @return void
+     */
     public function update_jurnal_alat_peraga($id)
     {
         $this->load->library('form_validation');
@@ -3898,6 +3940,11 @@ class Dashboard extends CI_Controller
         }
     }
 
+    /**
+     * Retrieves the list of journal entries for participant equipment from the database and displays them on the dashboard.
+     *
+     * @return void
+     */
     public function jurnal_alat_peserta()
     {
         $data['tittle'] = 'List Jurnal Alat Peserta | Inventori App';
@@ -3932,6 +3979,11 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Retrieves data from the database to display a list of journal entries for equipment used by participants.
+     *
+     * @return void
+     */
     public function tambah_jurnal_alat_peserta()
     {
         $data['tittle'] = 'Tambah Jurnal Alat Peserta | Inventori App';
@@ -3953,6 +4005,22 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves the journal of equipment for participants.
+     *
+     * This function validates the form input and saves the journal of equipment
+     * for participants in the database. It checks if the required fields are
+     * filled and if the amount of equipment to be withdrawn is less than or
+     * equal to the available stock. If the validation fails, it displays an
+     * error message and redirects to the 'dashboard/jurnal_alat_peserta'
+     * page. If the validation passes, it inserts the journal data into the
+     * 'jurnal_alat_peserta' table and updates the 'jurnal_stok_barang'
+     * table accordingly. Finally, it displays a success message and redirects
+     * to the 'dashboard/jurnal_alat_peserta' page.
+     *
+     * @return void
+     * @throws None
+     */
     public function simpan_jurnal_alat_peserta()
     {
         $this->load->library('form_validation');
@@ -4017,6 +4085,16 @@ class Dashboard extends CI_Controller
         }
     }
 
+    /**
+     * Edit Jurnal Alat Peserta.
+     *
+     * This function retrieves the data of a specific jurnal alat peserta from the database
+     * and loads the edit view for the jurnal alat peserta.
+     *
+     * @param int $id The ID of the jurnal alat peserta to be edited.
+     * @throws None
+     * @return void
+     */
     public function edit_jurnal_alat_peserta($id)
     {
         $data['tittle'] = 'Edit Jurnal Alat Peserta | Inventori App';
@@ -4040,6 +4118,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates the jurnal alat peserta with the given ID.
+     *
+     * @param int $id The ID of the jurnal alat peserta to update.
+     * @throws None
+     * @return void
+     */
     public function update_jurnal_alat_peserta($id)
     {
         $this->load->library('form_validation');
@@ -4116,6 +4201,17 @@ class Dashboard extends CI_Controller
         }
     }
 
+    /**
+     * Retrieves a list of journals for office writing tools.
+     *
+     * This function selects and joins multiple tables to retrieve a list of journals
+     * for office writing tools. It includes information such as the journal ID,
+     * code, product name, brand name, unit name, employee name, division name,
+     * specification, and date of retrieval. The list is filtered based on the
+     * current office location and sorted in descending order by journal ID.
+     *
+     * @return void
+     */
     public function jurnal_alat_tulis_kantor()
     {
         $data['tittle'] = 'List Jurnal Alat Tulis Kantor';
@@ -4153,6 +4249,14 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new item to the inventory of office supplies.
+     *
+     * This function retrieves a list of employees and a list of items from the database,
+     * and then loads a view to display the form for adding a new item.
+     *
+     * @return void
+     */
     public function tambah_alat_tulis_kantor()
     {
         $data['tittle'] = 'Tambah Jurnal Alat Tulis Kantor';
@@ -4181,6 +4285,17 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Save the journal of office supplies.
+     *
+     * This function validates the input data and saves the journal of office supplies.
+     * It checks if the required fields are filled and if the selected item has enough stock.
+     * If the validation fails, it redirects back to the 'jurnal_alat_tulis_kantor' page with an error message.
+     * If the validation passes, it retrieves the ID of the selected item from the database and updates the stock accordingly.
+     * Finally, it redirects back to the 'jurnal_alat_tulis_kantor' page with a success message.
+     *
+     * @return void
+     */
     public function simpan_jurnal_alat_tulis_kantor()
     {
         $this->load->library('form_validation');
@@ -4245,6 +4360,12 @@ class Dashboard extends CI_Controller
         }
     }
 
+    /**
+     * Edit a journal of office writing tools.
+     *
+     * @param int $id The ID of the journal to be edited.
+     * @return void
+     */
     public function edit_alat_tulis_kantor($id)
     {
         $data['tittle'] = 'Edit Jurnal Alat Tulis Kantor';
@@ -4274,6 +4395,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates the Jurnal Alat Tulis Kantor with the given ID.
+     *
+     * @param int $id The ID of the Jurnal Alat Tulis Kantor to update.
+     * @throws None
+     * @return void
+     */
     public function update_jurnal_alat_tulis_kantor($id)
     {
         $this->load->library('form_validation');
@@ -4348,6 +4476,11 @@ class Dashboard extends CI_Controller
         }
     }
 
+    /**
+     * Retrieves the list of inventory loan records and displays them.
+     *
+     * @return void
+     */
     public function jurnal_peminjaman_inventaris()
     {
         $data['tittle'] = 'Jurnal Peminjaman Inventaris';
@@ -4390,6 +4523,14 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Adds a new inventory loan.
+     *
+     * Retrieves the list of employees and items available for loan from the database
+     * and displays them in the 'dashboard/jurnal_peminjaman_inventaris/add' view.
+     *
+     * @return void
+     */
     public function tambah_peminjaman_inventaris()
     {
         $data['tittle'] = 'Tambah Peminjaman Inventaris | Inventori App';
@@ -4418,6 +4559,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Saves a journal of inventory borrowing.
+     *
+     * This function validates the form data and checks if the borrowing amount is within the available stock. If the data is valid and the borrowing amount is within the stock, it inserts the data into the 'jurnal_pinjam_inventaris' table and updates the 'jurnal_stok_barang' table. If the borrowing amount exceeds the stock, it redirects to the 'dashboard/jurnal_peminjaman_inventaris' page with an error message. If the data is invalid, it redirects to the same page with an error message.
+     *
+     * @return void
+     */
     public function simpan_jurnal_peminjaman_inventaris()
     {
         $this->load->library('form_validation');
@@ -4486,6 +4634,12 @@ class Dashboard extends CI_Controller
         }
     }
 
+    /**
+     * Retrieves the data for the pengembalian_peminjaman_inventaris view and loads the necessary views.
+     *
+     * @param int $id The ID of the jurnal_pinjam_inventaris record to retrieve.
+     * @return void
+     */
     public function pengembalian_peminjaman_inventaris($id)
     {
         $data['tittle'] = 'Pengembalian Peminjaman Inventaris | Inventori App';
@@ -4516,6 +4670,13 @@ class Dashboard extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates the jurnal_peminjaman_inventaris record with the given ID.
+     *
+     * @param int $id The ID of the record to be updated.
+     * @return void
+     * @throws None
+     */
     public function update_jurnal_peminjaman_inventaris($id)
     {
         $this->load->library('form_validation');

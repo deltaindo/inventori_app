@@ -79,6 +79,11 @@ class Auth extends CI_Controller
         redirect('auth');
     }
 
+    /**
+     * Retrieves the user's account information and displays it on the 'Akun Saya' page.
+     *
+     * @return void
+     */
     public function akun_saya()
     {
         $data['tittle'] = 'Akun Saya | Inventori App';
@@ -94,6 +99,18 @@ class Auth extends CI_Controller
         $this->load->view('template/footer');
     }
 
+    /**
+     * Updates the user account information.
+     *
+     * This function validates the input fields for 'nama_akun', 'nama_lengkap', and 'email_akun'.
+     * If the validation fails, it sets a flash message with the validation errors and redirects to 'auth/akun_saya'.
+     * If the validation succeeds, it updates the user account information in the 'user' table.
+     * If the 'password_akun' field is not provided, it updates the 'Nama', 'nama_lengkap', and 'email' fields.
+     * If the 'password_akun' field is provided, it updates the 'Nama', 'nama_lengkap', 'email', and 'password' fields.
+     * After the update, it sets a flash message with a success message and redirects to 'auth/logout'.
+     *
+     * @return void
+     */
     public function update_akun()
     {
         $this->load->library('form_validation');
