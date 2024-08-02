@@ -95,13 +95,6 @@
                                         </select>
                                     </div>
 
-                                    <label for="foto_barang" class="text-primary fs-6 mb-1">
-                                        Foto
-                                    </label>
-                                    <div class="mb-1">
-                                        <input type="file" name="foto_barang" class="form-control-sm">
-                                    </div>
-
                                     <label for="keterangan_barang" class="text-primary fs-6 mb-1">
                                         Keterangan
                                         [

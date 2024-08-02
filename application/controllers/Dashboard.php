@@ -2439,13 +2439,6 @@ class Dashboard extends CI_Controller
      */
     public function simpan_jurnal_barang()
     {
-        $config['upload_path'] = './images/barang/';
-        $config['allowed_types'] = 'gif|jpg|png|jpeg';
-        $config['max_size'] = 2048; // 2MB
-        $config['encrypt_name'] = TRUE;
-
-        $this->load->library('upload', $config);
-
         $this->form_validation->set_rules('id_barang', 'Item Name', 'required');
         $this->form_validation->set_rules('id_lokasi', 'Location Name', 'required');
         $this->form_validation->set_rules('id_satuan', 'Unit Name', 'required');
@@ -2458,15 +2451,6 @@ class Dashboard extends CI_Controller
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . $error . '</div>');
             redirect('dashboard/jurnal_barang');
         } else {
-
-            if (!$this->upload->do_upload('foto_barang')) {
-                $error = $this->upload->display_errors();
-                $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . $error . '</div>');
-                redirect('dashboard/jurnal_barang');
-            } else {
-                $upload_data = $this->upload->data();
-                $file_name = $upload_data['file_name'];
-
                 $data = [
                     'kode_barang'   => 'BRG-' . substr(uniqid(), -3),
                     'id_barang'     => $this->input->post('id_barang'),
@@ -2474,14 +2458,12 @@ class Dashboard extends CI_Controller
                     'id_satuan'     => $this->input->post('id_satuan'),
                     'id_kategori'   => $this->input->post('id_kategori'),
                     'id_merek'      => $this->input->post('id_merek'),
-                    'foto_barang'   => $file_name,
                     'keterangan'    => $this->input->post('keterangan_barang'),
                 ];
 
                 $this->db->insert('jurnal_barang', $data);
                 $this->session->set_flashdata('pesan', '<div class="alert alert-success" role="alert">Jurnal Barang Berhasil di tambahkan</div>');
                 redirect('dashboard/jurnal_barang');
-            }
         }
     }
 
