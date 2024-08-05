@@ -1715,7 +1715,7 @@ class Dashboard extends CI_Controller
         $this->load->library('form_validation');
         $this->form_validation->set_rules('id_kantor', 'Offcie Name', 'required');
         $this->form_validation->set_rules('nama_lokasi', 'Location Name', 'required');
-        $this->form_validation->set_rules('keterangan', 'Description Location', 'required');
+        $this->form_validation->set_rules('keterangan_lokasi', 'Description Location', 'required');
 
         if ($this->form_validation->run() == FALSE) {
             $this->session->set_flashdata('pesan', '<div class="alert alert-danger" role="alert">' . validation_errors() . '</div>');
