@@ -602,6 +602,9 @@ class Report extends CI_Controller
      */
     public function report_assets_inventaris()
     {
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
         $this->db->select('
             jurnal_barang_masuk.kode_barang_masuk,
             jurnal_barang.kode_barang,
@@ -612,7 +615,8 @@ class Report extends CI_Controller
             jurnal_barang_masuk.jenis_pakai,
             jurnal_barang_masuk.status_barang,
             jurnal_barang_masuk.jumlah_masuk,
-            master_satuan.nama_satuan
+            master_satuan.nama_satuan,
+            jurnal_barang_masuk.created_at
         ');
 
         $this->db->from('jurnal_barang_masuk');
@@ -622,6 +626,12 @@ class Report extends CI_Controller
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->where('master_lokasi.id_kantor', $this->kantor);
+
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_barang_masuk.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_barang_masuk.created_at <', $tanggal_akhir);
+        }
+
         $this->db->group_start();
         $this->db->where('jurnal_barang_masuk.jenis_pakai', 'Inventaris');
         $this->db->or_where('jurnal_barang_masuk.jenis_pakai', 'Peminjaman');
@@ -634,10 +644,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Assets Inventaris');
 
         // Set title header
-        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A1:K1');
         $sheet->setCellValue('A1', 'Report Assets Inventaris');
-        $sheet->getStyle('A1:J1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:J1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:K1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -650,11 +660,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('H2', 'Jenis Pakai');
         $sheet->setCellValue('I2', 'Status Barang');
         $sheet->setCellValue('J2', 'Jumlah Masuk');
+        $sheet->setCellValue('K2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:J2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:J2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:J2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:K2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:K2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:K2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -670,6 +681,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('H' . $baris, $item['jenis_pakai']);
             $sheet->setCellValue('I' . $baris, $item['status_barang']);
             $sheet->setCellValue('J' . $baris, $item['jumlah_masuk'] . ' ' . $item['nama_satuan']);
+            $sheet->setCellValue('K' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -681,10 +693,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:J' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:K' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'J') as $columnID) {
+        foreach (range('A', 'K') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
