@@ -466,6 +466,9 @@ class Report extends CI_Controller
      */
     public function report_history_inventaris()
     {
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
         $this->db->select('
                             jurnal_inventaris.id,
                             master_barang.nama_barang,
@@ -482,7 +485,8 @@ class Report extends CI_Controller
                             jurnal_inventaris.keterangan as keterangan_inventaris,
                             jurnal_barang_masuk.jenis_pakai,
                             jurnal_barang_masuk.kode_barang_masuk as kode_barang,
-                            jurnal_barang.keterangan as spesifikasi
+                            jurnal_barang.keterangan as spesifikasi,
+                            jurnal_inventaris.created_at
         ');
         $this->db->from('jurnal_inventaris');
         $this->db->join('history_assets', 'history_assets.id_jurnal_inventaris = jurnal_inventaris.id');
@@ -498,6 +502,11 @@ class Report extends CI_Controller
 
         $this->db->where('master_kantor.id', $this->kantor);
 
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_inventaris.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_inventaris.created_at <', $tanggal_akhir);
+        }
+
         $this->db->order_by('jurnal_inventaris.id', 'DESC');
         $data['history_inventaris'] = $this->db->get()->result_array();
 
@@ -506,10 +515,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report History Inventaris');
 
         // Set title header
-        $sheet->mergeCells('A1:O1');
+        $sheet->mergeCells('A1:P1');
         $sheet->setCellValue('A1', 'Report History Inventaris');
-        $sheet->getStyle('A1:O1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:O1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:P1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:P1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -527,11 +536,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('M2', 'Jenis Pakai');
         $sheet->setCellValue('N2', 'Tanggal Return');
         $sheet->setCellValue('O2', 'Kondisi Akhir');
+        $sheet->setCellValue('P2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:O2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:O2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:O2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:P2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:P2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:P2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -552,6 +562,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('M' . $baris, $item['jenis_pakai']);
             $sheet->setCellValue('N' . $baris, $item['tanggal_return'] == Null ? '-' : $item['tanggal_return']);
             $sheet->setCellValue('O' . $baris, $item['kondisi_akhir'] == Null ? '-' : $item['kondisi_akhir']);
+            $sheet->setCellValue('P' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -563,10 +574,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:O' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:P' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'O') as $columnID) {
+        foreach (range('A', 'P') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
