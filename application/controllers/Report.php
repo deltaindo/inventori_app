@@ -35,7 +35,10 @@ class Report extends CI_Controller
      */
     public function report_jurnal_masuk_barang()
     {
-        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total, jurnal_barang_masuk.keterangan as deskripsi');
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
+        $this->db->select('jurnal_barang_masuk.id,jurnal_barang_masuk.kode_barang_masuk,master_barang.nama_barang,master_kategori.nama_kategori,master_lokasi.nama_lokasi,master_kantor.nama_kantor,master_merek.nama_merek,jurnal_barang_masuk.tanggal_masuk,jurnal_barang_masuk.jenis_pakai,jurnal_barang_masuk.status_barang, jurnal_barang_masuk.jumlah_masuk,master_satuan.nama_satuan, jurnal_barang.keterangan, jurnal_barang_masuk.harga_barang, jurnal_barang_masuk.total, jurnal_barang_masuk.keterangan as deskripsi, jurnal_barang_masuk.created_at');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
@@ -45,6 +48,12 @@ class Report extends CI_Controller
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('jurnal_barang_masuk', 'jurnal_barang.id = jurnal_barang_masuk.id_jurnal_barang');
         $this->db->where('master_kantor.id', $this->kantor);
+
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_barang_masuk.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_barang_masuk.created_at <', $tanggal_akhir);
+        }
+
         $this->db->order_by('jurnal_barang_masuk.id', 'DESC');
         $data['jurnal_barang_masuk'] = $this->db->get()->result_array();
 
@@ -53,10 +62,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Jurnal Barang Masuk');
 
         // Set title header
-        $sheet->mergeCells('A1:O1');
+        $sheet->mergeCells('A1:P1');
         $sheet->setCellValue('A1', 'Report Jurnal Barang Masuk');
-        $sheet->getStyle('A1:O1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:O1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:P1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:P1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -74,11 +83,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('M2', 'Harga Asset');
         $sheet->setCellValue('N2', 'Total Harga Asset');
         $sheet->setCellValue('O2', 'Keterangan');
+        $sheet->setCellValue('P2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:O2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:O2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:O2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:P2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:P2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:P2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -101,6 +111,7 @@ class Report extends CI_Controller
             $sheet->getStyle('M' . $baris)->getNumberFormat()->setFormatCode('Rp #,##');
             $sheet->setCellValue('N' . $baris, $item['total']);
             $sheet->getStyle('N' . $baris)->getNumberFormat()->setFormatCode('Rp #,##');
+            $sheet->setCellValue('P' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -112,10 +123,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:O' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:P' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'O') as $columnID) {
+        foreach (range('A', 'P') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -146,6 +157,9 @@ class Report extends CI_Controller
      */
     public function report_inventaris_barang()
     {
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
         $this->db->select('
                             jurnal_inventaris.id,
                             jurnal_inventaris.kode_inventaris,
@@ -160,7 +174,8 @@ class Report extends CI_Controller
                             jurnal_inventaris.tanggal_assign,
                             jurnal_inventaris.jumlah_assets,
                             jurnal_inventaris.keterangan,
-                            jurnal_inventaris.tanggal_return
+                            jurnal_inventaris.tanggal_return,
+                            jurnal_inventaris.created_at
         ');
         $this->db->from('jurnal_inventaris');
         $this->db->join('master_karyawan', 'jurnal_inventaris.id_karyawan = master_karyawan.id', 'left');
@@ -171,6 +186,12 @@ class Report extends CI_Controller
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id', 'left');
         $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id', 'left');
         $this->db->where('master_divisi.id_kantor', $this->kantor);
+
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_inventaris.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_inventaris.created_at <=', $tanggal_akhir);
+        }
+
         $this->db->order_by('jurnal_inventaris.id', 'DESC');
         $data['inventaris'] = $this->db->get()->result_array();
 
@@ -179,10 +200,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Jurnal Inventaris Barang');
 
         // Set title header
-        $sheet->mergeCells('A1:M1');
+        $sheet->mergeCells('A1:N1');
         $sheet->setCellValue('A1', 'Report Jurnal Inventaris Barang');
-        $sheet->getStyle('A1:M1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:M1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:N1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:N1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -198,11 +219,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('K2', 'Jumlah Assets');
         $sheet->setCellValue('L2', 'Keterangan Inventaris');
         $sheet->setCellValue('M2', 'Tanggal Return');
+        $sheet->setCellValue('N2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:M2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:M2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:M2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:N2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:N2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:N2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -221,6 +243,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('K' . $baris, $item['jumlah_assets'] . ' ' . $item['nama_satuan']);
             $sheet->setCellValue('L' . $baris, $item['keterangan']);
             $sheet->setCellValue('M' . $baris, $item['tanggal_return'] == null ? '-' : $item['tanggal_return']);
+            $sheet->setCellValue('N' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -232,10 +255,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:M' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:N' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'M') as $columnID) {
+        foreach (range('A', 'N') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -265,6 +288,9 @@ class Report extends CI_Controller
      */
     public function report_jurnal_stok_barang()
     {
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
         $this->db->select('
                             jurnal_stok_barang.id, 
                             jurnal_barang.kode_barang, 
@@ -278,7 +304,8 @@ class Report extends CI_Controller
                             jurnal_stok_barang.jumlah_keluar, 
                             jurnal_stok_barang.stok_akhir, 
                             jurnal_stok_barang.tanggal_update,
-                            jurnal_barang.keterangan
+                            jurnal_barang.keterangan,
+                            jurnal_stok_barang.created_at
         ');
 
         $this->db->from('jurnal_stok_barang');
@@ -307,6 +334,11 @@ class Report extends CI_Controller
             jurnal_stok_barang.tanggal_update
         ');
 
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_stok_barang.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_stok_barang.created_at <', $tanggal_akhir);
+        }
+
         $this->db->order_by('jurnal_stok_barang.id', 'DESC');
         $data['jurnal_stok'] = $this->db->get()->result_array();
 
@@ -315,10 +347,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Jurnal Stok Barang');
 
         // Set title header
-        $sheet->mergeCells('A1:L1');
+        $sheet->mergeCells('A1:M1');
         $sheet->setCellValue('A1', 'Report Jurnal Stok Barang');
-        $sheet->getStyle('A1:L1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:M1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:M1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -333,11 +365,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('J2', 'Jumlah Keluar');
         $sheet->setCellValue('K2', 'Stok Akhir');
         $sheet->setCellValue('L2', 'Tanggal Update');
+        $sheet->setCellValue('M2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:L2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:L2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:L2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:M2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:M2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:M2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -355,6 +388,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('J' . $baris, $item['jumlah_keluar'] . ' ' . $item['nama_satuan']);
             $sheet->setCellValue('K' . $baris, $item['stok_akhir'] . ' ' . $item['nama_satuan']);
             $sheet->setCellValue('L' . $baris, $item['tanggal_update'] == null ? '-' : $item['tanggal_update']);
+            $sheet->setCellValue('M' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -366,10 +400,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:L' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:M' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'L') as $columnID) {
+        foreach (range('A', 'M') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -1057,7 +1091,10 @@ class Report extends CI_Controller
      */
     public function report_jurnal_barang()
     {
-        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,jurnal_barang.keterangan, master_barang.nama_barang, master_lokasi.nama_lokasi, master_kantor.nama_kantor, master_merek.nama_merek, master_kategori.nama_kategori, master_satuan.nama_satuan');
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
+        $this->db->select('jurnal_barang.id,jurnal_barang.kode_barang,jurnal_barang.keterangan, master_barang.nama_barang, master_lokasi.nama_lokasi, master_kantor.nama_kantor, master_merek.nama_merek, master_kategori.nama_kategori, master_satuan.nama_satuan, jurnal_barang.created_at');
         $this->db->from('jurnal_barang');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
@@ -1066,6 +1103,12 @@ class Report extends CI_Controller
         $this->db->join('master_kategori', 'jurnal_barang.id_kategori = master_kategori.id');
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->where('master_kantor.id', $this->kantor);
+
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_barang.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_barang.created_at <', $tanggal_akhir);
+        }
+
         $this->db->order_by('jurnal_barang.id', 'DESC');
         $data['report_jurnal_barang'] = $this->db->get()->result_array();
 
@@ -1074,10 +1117,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Jurnal Barang');
 
         // Set title header
-        $sheet->mergeCells('A1:I1');
+        $sheet->mergeCells('A1:J1');
         $sheet->setCellValue('A1', 'Report Jurnal Barang');
-        $sheet->getStyle('A1:I1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:I1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:J1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:J1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -1089,11 +1132,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('G2', 'Satuan');
         $sheet->setCellValue('H2', 'Kategori');
         $sheet->setCellValue('I2', 'Spesifikasi');
+        $sheet->setCellValue('J2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:I2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:I2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:I2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:J2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:J2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:J2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -1108,6 +1152,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('G' . $baris, $item['nama_satuan']);
             $sheet->setCellValue('H' . $baris, $item['nama_kategori']);
             $sheet->setCellValue('I' . $baris, $item['keterangan']);
+            $sheet->setCellValue('J' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -1119,10 +1164,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:I' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:J' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'I') as $columnID) {
+        foreach (range('A', 'J') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -1153,6 +1198,9 @@ class Report extends CI_Controller
      */
     public function report_jurnal_alat_peraga()
     {
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
         $this->db->select('
                             jurnal_alat_peraga.id,
                             jurnal_alat_peraga.kode_alat_peraga,
@@ -1166,7 +1214,8 @@ class Report extends CI_Controller
                             jurnal_alat_peraga.tanggal_kalibrasi,
                             jurnal_alat_peraga.masa_berlaku_kalibrasi,
                             jurnal_alat_peraga.jumlah,
-                            jurnal_alat_peraga.keterangan
+                            jurnal_alat_peraga.keterangan,
+                            jurnal_alat_peraga.created_at
         ');
         $this->db->from('jurnal_alat_peraga');
         $this->db->join('jurnal_barang_masuk', 'jurnal_alat_peraga.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
@@ -1176,6 +1225,12 @@ class Report extends CI_Controller
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->where('master_lokasi.id_kantor', $this->kantor);
+
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_alat_peraga.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_alat_peraga.created_at <', $tanggal_akhir);
+        }
+
         $this->db->order_by('jurnal_alat_peraga.id', 'DESC');
         $data['alat_peraga'] = $this->db->get()->result_array();
 
@@ -1184,10 +1239,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Jurnal Alat Peraga');
 
         // Set title header
-        $sheet->mergeCells('A1:L1');
+        $sheet->mergeCells('A1:M1');
         $sheet->setCellValue('A1', 'Report Jurnal Alat Peraga');
-        $sheet->getStyle('A1:L1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:M1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:M1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -1202,11 +1257,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('J2', 'Masa Kalibrasi');
         $sheet->setCellValue('K2', 'Jumlah');
         $sheet->setCellValue('L2', 'Keterangan');
+        $sheet->setCellValue('M2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:L2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:L2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:L2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:M2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:M2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:M2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -1224,6 +1280,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('J' . $baris, $item['masa_berlaku_kalibrasi']);
             $sheet->setCellValue('K' . $baris, $item['jumlah'] . ' ' . $item['nama_satuan']);
             $sheet->setCellValue('L' . $baris, $item['keterangan']);
+            $sheet->setCellValue('M' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -1235,10 +1292,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:L' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:M' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'L') as $columnID) {
+        foreach (range('A', 'M') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -1263,6 +1320,9 @@ class Report extends CI_Controller
      */
     public function report_jurnal_alat_peserta()
     {
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
         $this->db->select('
                             jurnal_alat_peserta.id,
                             jurnal_alat_peserta.kode_alat_peserta,
@@ -1274,7 +1334,8 @@ class Report extends CI_Controller
                             jurnal_alat_peserta.tujuan_barang_keluar,
                             jurnal_alat_peserta.tanggal_keluar,
                             jurnal_alat_peserta.jumlah,
-                            jurnal_alat_peserta.keterangan
+                            jurnal_alat_peserta.keterangan,
+                            jurnal_alat_peserta.created_at
         ');
         $this->db->from('jurnal_alat_peserta');
         $this->db->join('jurnal_barang_masuk', 'jurnal_alat_peserta.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
@@ -1284,6 +1345,12 @@ class Report extends CI_Controller
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->where('master_lokasi.id_kantor', $this->kantor);
+
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_alat_peserta.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_alat_peserta.created_at <', $tanggal_akhir);
+        }
+
         $this->db->order_by('jurnal_alat_peserta.id', 'DESC');
         $data['alat_peserta'] = $this->db->get()->result_array();
 
@@ -1292,10 +1359,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Jurnal Alat Perserta');
 
         // Set title header
-        $sheet->mergeCells('A1:J1');
+        $sheet->mergeCells('A1:K1');
         $sheet->setCellValue('A1', 'Report Jurnal Alat Peserta');
-        $sheet->getStyle('A1:J1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:J1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:K1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -1308,11 +1375,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('H2', 'Tanggal Keluar');
         $sheet->setCellValue('I2', 'Jumlah Keluar');
         $sheet->setCellValue('J2', 'Keterangan');
+        $sheet->setCellValue('K2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:J2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:J2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:J2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:K2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:K2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:K2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -1328,6 +1396,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('H' . $baris, $item['tanggal_keluar']);
             $sheet->setCellValue('I' . $baris, $item['jumlah'] . ' ' . $item['nama_satuan']);
             $sheet->setCellValue('J' . $baris, $item['keterangan']);
+            $sheet->setCellValue('K' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -1339,10 +1408,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:J' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:K' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'J') as $columnID) {
+        foreach (range('A', 'K') as $columnID) {
             $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 
@@ -1372,6 +1441,9 @@ class Report extends CI_Controller
      */
     public function report_jurnal_alat_tulis_kantor()
     {
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
             $this->db->select('
                             jurnal_alat_tulis_kantor.id,
                             jurnal_alat_tulis_kantor.kode_alat_tulis_kantor,
@@ -1384,7 +1456,8 @@ class Report extends CI_Controller
                             jurnal_barang.keterangan as spesifikasi,
                             jurnal_alat_tulis_kantor.tanggal_pengambilan,
                             jurnal_alat_tulis_kantor.jumlah_pengambilan,
-                            jurnal_alat_tulis_kantor.keterangan
+                            jurnal_alat_tulis_kantor.keterangan,
+                            jurnal_alat_tulis_kantor.created_at
             ');
             $this->db->from('jurnal_alat_tulis_kantor');
             $this->db->join('jurnal_barang_masuk', 'jurnal_alat_tulis_kantor.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
@@ -1396,6 +1469,12 @@ class Report extends CI_Controller
             $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
             $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
             $this->db->where('master_lokasi.id_kantor', $this->kantor);
+
+            if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+                $this->db->where('jurnal_alat_tulis_kantor.created_at >=', $tanggal_awal);
+                $this->db->where('jurnal_alat_tulis_kantor.created_at <', $tanggal_akhir);
+            }
+
             $this->db->order_by('jurnal_alat_tulis_kantor.id', 'DESC');
             $data['alat_tulis_kantor'] = $this->db->get()->result_array();
 
@@ -1404,10 +1483,10 @@ class Report extends CI_Controller
             $sheet->setTitle('Report Jurnal Alat Tulis Kantor');
 
             // Set title header
-            $sheet->mergeCells('A1:K1');
+            $sheet->mergeCells('A1:L1');
             $sheet->setCellValue('A1', 'Report Jurnal Alat Tulis Kantor');
-            $sheet->getStyle('A1:K1')->getFont()->setBold(true)->setSize(15);
-            $sheet->getStyle('A1:K1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('A1:L1')->getFont()->setBold(true)->setSize(15);
+            $sheet->getStyle('A1:L1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
             // Set header
             $sheet->setCellValue('A2', 'No');
@@ -1421,11 +1500,12 @@ class Report extends CI_Controller
             $sheet->setCellValue('I2', 'Tanggal Pengambilan');
             $sheet->setCellValue('J2', 'Jumlah Pengambilan');
             $sheet->setCellValue('K2', 'Keterangan');
+            $sheet->setCellValue('L2', 'Create Data');
 
             // Apply bold style and background color to header
-            $sheet->getStyle('A2:K2')->getFont()->setBold(true)->setSize(12);;
-            $sheet->getStyle('A2:K2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-            $sheet->getStyle('A2:K2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+            $sheet->getStyle('A2:L2')->getFont()->setBold(true)->setSize(12);;
+            $sheet->getStyle('A2:L2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+            $sheet->getStyle('A2:L2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
             // Populate data
             $baris = 3;
@@ -1442,6 +1522,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('I' . $baris, $item['tanggal_pengambilan']);
             $sheet->setCellValue('J' . $baris, $item['jumlah_pengambilan'] . ' ' . $item['nama_satuan']);
             $sheet->setCellValue('K' . $baris, $item['keterangan']);
+            $sheet->setCellValue('L' . $baris, $item['created_at']);
             $baris++;
             }
 
@@ -1453,10 +1534,10 @@ class Report extends CI_Controller
                     ],
                 ],
             ];
-            $sheet->getStyle('A2:K' . ($baris - 1))->applyFromArray($styleArray);
+            $sheet->getStyle('A2:L' . ($baris - 1))->applyFromArray($styleArray);
 
             // Set auto size for all columns
-            foreach (range('A', 'K') as $columnID) {
+            foreach (range('A', 'L') as $columnID) {
                 $sheet->getColumnDimension($columnID)->setAutoSize(true);
             }
 
@@ -1491,6 +1572,9 @@ class Report extends CI_Controller
      */
     public function report_jurnal_peminjaman_inventaris()
     {
+        $tanggal_awal   = $this->input->post('tanggal_awal');
+        $tanggal_akhir  = date('Y-m-d', strtotime($this->input->post('tanggal_akhir') . ' +1 day'));
+
         $this->db->select('
                 jurnal_pinjam_inventaris.id,
                 jurnal_pinjam_inventaris.kode_pinjam_inventaris,
@@ -1509,6 +1593,7 @@ class Report extends CI_Controller
                 jurnal_pinjam_inventaris.kondisi_kembali,
                 jurnal_pinjam_inventaris.status,
                 jurnal_pinjam_inventaris.keterangan,
+                jurnal_pinjam_inventaris.created_at
         ');
         $this->db->from('jurnal_pinjam_inventaris');
         $this->db->join('jurnal_barang_masuk', 'jurnal_pinjam_inventaris.id_jurnal_barang_masuk = jurnal_barang_masuk.id');
@@ -1520,6 +1605,12 @@ class Report extends CI_Controller
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id');
         $this->db->join('master_lokasi', 'jurnal_barang.id_lokasi = master_lokasi.id');
         $this->db->where('master_lokasi.id_kantor', $this->kantor);
+
+        if (!empty($tanggal_awal) && !empty($tanggal_akhir)) {
+            $this->db->where('jurnal_pinjam_inventaris.created_at >=', $tanggal_awal);
+            $this->db->where('jurnal_pinjam_inventaris.created_at <', $tanggal_akhir);
+        }
+
         $this->db->order_by('jurnal_pinjam_inventaris.id', 'DESC');
         $data['pinjam_inventaris'] = $this->db->get()->result_array();
 
@@ -1528,10 +1619,10 @@ class Report extends CI_Controller
         $sheet->setTitle('Report Peminjaman Inventaris');
 
         // Set title header
-        $sheet->mergeCells('A1:P1');
+        $sheet->mergeCells('A1:Q1');
         $sheet->setCellValue('A1', 'Report Peminjaman Inventaris');
-        $sheet->getStyle('A1:P1')->getFont()->setBold(true)->setSize(15);
-        $sheet->getStyle('A1:P1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:Q1')->getFont()->setBold(true)->setSize(15);
+        $sheet->getStyle('A1:Q1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
         // Set header
         $sheet->setCellValue('A2', 'No');
@@ -1550,11 +1641,12 @@ class Report extends CI_Controller
         $sheet->setCellValue('N2', 'Kondisi Kembali');
         $sheet->setCellValue('O2', 'Status');
         $sheet->setCellValue('P2', 'Keterangan');
+        $sheet->setCellValue('Q2', 'Create Data');
 
         // Apply bold style and background color to header
-        $sheet->getStyle('A2:P2')->getFont()->setBold(true)->setSize(12);;
-        $sheet->getStyle('A2:P2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
-        $sheet->getStyle('A2:P2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
+        $sheet->getStyle('A2:Q2')->getFont()->setBold(true)->setSize(12);;
+        $sheet->getStyle('A2:Q2')->getFill()->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID);
+        $sheet->getStyle('A2:Q2')->getFill()->getStartColor()->setARGB('FFB0B0B0'); // Warna abu-abu
 
         // Populate data
         $baris = 3;
@@ -1576,6 +1668,7 @@ class Report extends CI_Controller
             $sheet->setCellValue('N' . $baris, $item['kondisi_kembali'] == null ? '-' : $item['kondisi_kembali']);
             $sheet->setCellValue('O' . $baris, $item['status']);
             $sheet->setCellValue('P' . $baris, $item['keterangan']);
+            $sheet->setCellValue('Q' . $baris, $item['created_at']);
             $baris++;
         }
 
@@ -1587,10 +1680,10 @@ class Report extends CI_Controller
                 ],
             ],
         ];
-        $sheet->getStyle('A2:P' . ($baris - 1))->applyFromArray($styleArray);
+        $sheet->getStyle('A2:Q' . ($baris - 1))->applyFromArray($styleArray);
 
         // Set auto size for all columns
-        foreach (range('A', 'P') as $columnID) {
+        foreach (range('A', 'Q') as $columnID) {
         $sheet->getColumnDimension($columnID)->setAutoSize(true);
         }
 

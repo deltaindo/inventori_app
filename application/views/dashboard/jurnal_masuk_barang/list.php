@@ -2,16 +2,23 @@
     <div class="content-wrapper">
         <div class="row">
             <div class="col-sm-12 mt-2">
-                <div class="home-tab">
-                    <div class="d-sm-flex align-items-center justify-content-between border-bottom">
-                        <div class="btn-wrapper">
-                            <a href="<?= base_url('report/report_jurnal_masuk_barang'); ?>" class="btn btn-success text-white me-0" type="button">
+                <form action="<?= base_url('report/report_jurnal_masuk_barang'); ?>" method="post">
+                    <div class="row border-bottom">
+                        <div class="col-auto mb-1">
+                            <input type="date" id="tanggal_awal" name="tanggal_awal" class="form-control">
+                        </div>
+                        <div class="col-auto mb-1">
+                            <input type="date" id="tanggal_akhir" name="tanggal_akhir" class="form-control">
+                        </div>
+                        <div class="col-auto mb-1">
+                            <button type="submit" class="btn btn-sm btn-success text-white">
                                 <i class="ti-cloud-down"></i>
                                 Export Excel
-                            </a>
+                            </button>
                         </div>
                     </div>
-                </div>
+                </form>
+
                 <div class="row tabel-produk mt-2">
                     <div class="col-lg-12 grid-margin stretch-card">
                         <div class="card">
