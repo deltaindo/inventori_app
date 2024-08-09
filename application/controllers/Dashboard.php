@@ -8,6 +8,9 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 date_default_timezone_set('Asia/Jakarta');
 
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Writer\PngWriter;
+
 class Dashboard extends CI_Controller
 {
     public $gudang;
@@ -3638,6 +3641,7 @@ class Dashboard extends CI_Controller
         $data['tittle'] = 'Report Assets Inventaris | Inventori App';
 
         $this->db->select('
+            jurnal_barang_masuk.id,
             jurnal_barang_masuk.kode_barang_masuk,
             jurnal_barang.kode_barang,
             master_barang.nama_barang,
@@ -4732,5 +4736,20 @@ class Dashboard extends CI_Controller
                 }
             }
         }
+    }
+
+    public function download_qrcode($id)
+    {   
+        $data['barang_masuk'] = $this->db->order_by('id', 'DESC');
+        $data['kantor'] = $this->db->where('id', $id)->get('master_kantor')->result_array();
+
+        $data = base_url('inventaris/detail/' . $id);
+        $filepath = './images/qrcode/' . $id . '.png';
+        $qrCode = new QrCode($data);
+        $writer = new PngWriter();
+        $result = $writer->write($qrCode);
+        $result->saveToFile($filepath);
+        $this->load->helper('download');
+        force_download($filepath, NULL);
     }
 }

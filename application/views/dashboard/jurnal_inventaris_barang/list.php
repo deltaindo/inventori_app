@@ -132,7 +132,6 @@
                                                             <?php else : ?>
                                                                 -
                                                             <?php endif; ?>
-
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>

@@ -61,6 +61,9 @@
                                                     <th>
                                                         Jumlah Masuk
                                                     </th>
+                                                    <th>
+                                                        Action
+                                                    </th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -96,6 +99,15 @@
                                                         </td>
                                                         <td>
                                                             <?= $asset["jumlah_masuk"] . ' ' . $asset["nama_satuan"]; ?>
+                                                        </td>
+                                                        <td>
+                                                            <?php if ($asset['jenis_pakai'] === 'Inventaris') : ?>
+                                                                <a href="<?= base_url('dashboard/download_qrcode/' . $asset['id']); ?>" class="btn btn-lg btn-primary">
+                                                                QRCode
+                                                            </a>
+                                                            <?php else : ?>
+                                                                -
+                                                            <?php endif; ?>
                                                         </td>
                                                     </tr>
                                                 <?php endforeach; ?>
