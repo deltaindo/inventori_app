@@ -32,16 +32,11 @@ class Inventaris extends CI_Controller
         $this->db->select('
             jurnal_inventaris.id,
             jurnal_inventaris.id_jurnal_barang_masuk,
-            jurnal_inventaris.kode_inventaris,
-            jurnal_barang.kode_barang,
-            master_barang.nama_barang,
             master_satuan.nama_satuan,
-            master_merek.nama_merek,
-            jurnal_barang.keterangan as spesifikasi,
-            jurnal_barang_masuk.tanggal_masuk,
             master_karyawan.nama_karyawan,
             master_divisi.nama_divisi,
             jurnal_inventaris.tanggal_assign,
+            jurnal_inventaris.tanggal_return,
             jurnal_inventaris.jumlah_assets,
             jurnal_inventaris.status_assets,
             jurnal_inventaris.kondisi_asset,
@@ -54,7 +49,6 @@ class Inventaris extends CI_Controller
         $this->db->join('jurnal_barang', 'jurnal_barang_masuk.id_jurnal_barang = jurnal_barang.id', 'left');
         $this->db->join('master_barang', 'jurnal_barang.id_barang = master_barang.id', 'left');
         $this->db->join('master_satuan', 'jurnal_barang.id_satuan = master_satuan.id', 'left');
-        $this->db->join('master_merek', 'jurnal_barang.id_merek = master_merek.id', 'left');
 
         $this->db->where('jurnal_inventaris.id_jurnal_barang_masuk', $id);
         $data['items'] = $this->db->get()->result_array();

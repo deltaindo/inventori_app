@@ -24,7 +24,7 @@
                 Detail Barang Masuk
             </div>
             <div class="card-body">
-                <table class="table table-bordered">
+                <table class="table table-bordered table-striped">
                     <tr>
                         <th>Barang Masuk</th>
                         <td><?= $assets === null ? '-' : $assets['kode_barang_masuk']; ?></td>
@@ -54,32 +54,29 @@
                         </td>
                     </tr>
                     <tr>
-                        <th>Jenis Pakai</th>
+                        <th>Jenis Pemakaian</th>
                         <td>
                             <?= $assets === null ? '-' : $assets['jenis_pakai']; ?>
                         </td>
                     </tr>
                 </table>
 
-                <!-- Detail Data Aset -->
             <div class="card mt-4">
                 <div class="card-header bg-dark text-white">
-                    Detail Pengguna
+                    History Detail Pengguna
                 </div>
                 <div class="card-body table-responsive">
-                    <table class="table table-bordered">
-                        <thead>
+                    <table class="table table-striped">
+                        <thead class="thead-dark">
                             <tr>
-                                <th>No.</th>
-                                <th>Karyawan</th>
-                                <th>Divisi</th>
+                                <th>Nomor Urut</th>
+                                <th>Nama Karyawan</th>
+                                <th>Nama Divisi</th>
                                 <th>Tanggal Assign</th>
-                                <th>Kondisi Awal</th>
+                                <th>Catatan History</th>
                                 <th>Jumlah Assets</th>
                                 <th>Status Assets</th>
-                                <th>Keterangan Inventaris</th>
                                 <th>Tanggal Return</th>
-                                <th>Kondisi Akhir</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,15 +84,13 @@
                             <?php foreach ($items as $item) : ?>
                                 <tr>
                                     <td><?= $i++; ?></td>
-                                    <td><?= $item['nama_karyawan'] ?></td>
-                                    <td><?= $item['nama_divisi'] ?></td>
-                                    <td><?= $item['tanggal_assign'] ?></td>
-                                    <td><?= $item['kondisi_asset'] ?></td>
-                                    <td>1 Unit</td>
-                                    <td>Baru</td>
-                                    <td>Asset dalam kondisi layak digunakan.</td>
-                                    <td>2024-07-24</td>
-                                    <td>Asset dalam kondisi layak digunakan.</td>
+                                    <td><?= $item === null ? '-' : $item['nama_karyawan'] ?></td>
+                                    <td><?= $item === null ? '-' : $item['nama_divisi'] ?></td>
+                                    <td><?= $item === null ? '-' : $item['tanggal_assign'] ?></td>
+                                    <td><?= $item === null ? '-' : $item['kondisi_asset'] ?></td>
+                                    <td><?= $item === null ? '-' : $item['jumlah_assets'] . ' ' . $item['nama_satuan'] ?></td>
+                                    <td><?= $item['status_assets'] === Null ? '-' : $item['status_assets'] ?></td>
+                                    <td><?= $item['tanggal_return'] === Null ? '-' : $item['tanggal_return'] ?></td>
                                 </tr>
                             <?php endforeach; ?>
                         </tbody>

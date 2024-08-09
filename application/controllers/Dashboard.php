@@ -4740,11 +4740,9 @@ class Dashboard extends CI_Controller
 
     public function download_qrcode($id)
     {   
-        $data['barang_masuk'] = $this->db->order_by('id', 'DESC');
-        $data['kantor'] = $this->db->where('id', $id)->get('master_kantor')->result_array();
-
-        $data = base_url('inventaris/detail/' . $id);
-        $filepath = './images/qrcode/' . $id . '.png';
+        $barang_masuk   = $this->db->where('id', $id)->get('jurnal_barang_masuk')->row_array();
+        $data           = base_url('inventaris/detail/' . $id);
+        $filepath       = './images/qrcode/' . $barang_masuk['kode_barang_masuk'] . '.png';
         $qrCode = new QrCode($data);
         $writer = new PngWriter();
         $result = $writer->write($qrCode);
